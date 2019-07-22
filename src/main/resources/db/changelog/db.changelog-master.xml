@@ -1,0 +1,22 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="initial-user-table-creation" author="Chriserus">
+        <createTable tableName="user">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)"/>
+        </createTable>
+        <addAutoIncrement columnDataType="int"
+                columnName="id"
+                tableName="user"/>
+    </changeSet>
+    <changeSet id="something" author="Chriserus">
+        <insert tableName="user">
+            <column name="username" value="Chriserus"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
