@@ -11,8 +11,8 @@
             <column name="username" type="varchar(255)"/>
         </createTable>
         <addAutoIncrement columnDataType="int"
-                columnName="id"
-                tableName="user"/>
+                          columnName="id"
+                          tableName="user"/>
     </changeSet>
     <changeSet id="something" author="Chriserus">
         <insert tableName="user">
