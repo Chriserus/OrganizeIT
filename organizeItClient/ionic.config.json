@@ -1,0 +1,7 @@
+{
+  "name": "organizeItClient",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

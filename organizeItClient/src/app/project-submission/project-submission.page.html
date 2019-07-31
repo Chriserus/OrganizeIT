@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Submit new project</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-content>
+            <ion-item>
+              <ion-label position="stacked">Title</ion-label>
+              <ion-input type="text" id="title"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Description</ion-label>
+              <ion-input type="text" id="description"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Owner</ion-label>
+              <ion-input type="text" id="owner"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Technologies</ion-label>
+              <ion-input type="text" id="technologies"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Maximum team members</ion-label>
+              <ion-input type="number" id="maxMembers"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Members</ion-label>
+              <ion-input type="text" id="members"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-button (click)="addProject()">
+                <ion-icon slot="start" name="Add"></ion-icon>
+                Submit project
+              </ion-button>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
