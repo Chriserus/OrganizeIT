@@ -16,8 +16,8 @@ const routes: Routes = [
     loadChildren: './list/list.module#ListPageModule'
   },
   {
-    path: 'project-submission',
-    loadChildren: './project-submission/project-submission.module#ProjectSubmissionPageModule'
+    path: 'submission',
+    loadChildren: './project/submission/submission.module#SubmissionPageModule'
   },
   { path: 'agenda', loadChildren: './agenda/agenda.module#AgendaPageModule' },
   { path: 'board', loadChildren: './board/board.module#BoardPageModule' },

@@ -22,7 +22,7 @@ export class AppComponent {
     },
     {
       title: 'Add project',
-      url: '/project-submission',
+      url: '/submission',
       icon: 'add'
     },
     {
