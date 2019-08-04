@@ -18,6 +18,9 @@
         <insert tableName="user">
             <column name="username" value="Chriserus"/>
         </insert>
+        <insert tableName="user">
+            <column name="username" value="John"/>
+        </insert>
     </changeSet>
     <changeSet id="projectTablePrototype" author="Chriserus">
         <createTable tableName="project">
@@ -41,7 +44,7 @@
         <insert tableName="project">
             <column name="title" value="Worst project ever"/>
             <column name="description" value="Lobortis mattis aliquam faucibus purus in massa tempor nec feugiat. Sit amet purus gravida quis blandit turpis. Mi sit amet mauris commodo quis imperdiet massa."/>
-            <column name="owner_id" value="15"/>
+            <column name="owner_id" value="2"/>
         </insert>
     </changeSet>
     <changeSet id="addingColumnsToProjectAndUser" author="Chriserus">
