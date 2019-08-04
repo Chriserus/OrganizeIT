@@ -10,8 +10,12 @@
 </ion-header>
 
 <ion-content>
+  <ion-card>
+      If you don't have an account, please <a routerLink='/register'>
+      register</a> first!
+  </ion-card>
   <ion-card class="welcome-card">
-    <img src="/assets/OLD_BANNER.png" alt=""/>
+    <img src="/assets/banner.png" alt=""/>
     <ion-card-header>
       <ion-card-subtitle>Get Started</ion-card-subtitle>
       <ion-card-title>Welcome to Ionic</ion-card-title>
@@ -23,19 +27,18 @@
   </ion-card>
   <ion-card>
     <ion-card-content>
-      <ion-button>Submit new project</ion-button>
+      <ion-button [routerDirection]="'root'" [routerLink]="['/project-submission']">Submit new project</ion-button>
       <ion-button>Join existing project</ion-button>
     </ion-card-content>
   </ion-card>
   <ion-slides>
     <ion-slide>
       <ion-card>
-        <img class= "center" src="./../assets/shapes.svg"/>
+        <img class="center" src="assets/shapes.svg" alt=""/>
         <ion-card-header>
           <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
           <ion-card-title>Card Title</ion-card-title>
         </ion-card-header>
-
         <ion-card-content>
           Keep close to Nature's heart... and break clear away, once in awhile,
           and climb a mountain or spend a week in the woods. Wash your spirit clean.
@@ -44,12 +47,11 @@
     </ion-slide>
     <ion-slide>
       <ion-card>
-        <img class= "center" src="./../assets/shapes.svg"/>
+        <img class="center" src="/assets/shapes.svg" alt=""/>
         <ion-card-header>
           <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
           <ion-card-title>Card Title</ion-card-title>
         </ion-card-header>
-
         <ion-card-content>
           Keep close to Nature's heart... and break clear away, once in awhile,
           and climb a mountain or spend a week in the woods. Wash your spirit clean.
@@ -58,7 +60,7 @@
     </ion-slide>
     <ion-slide>
       <ion-card>
-        <img class= "center" src="./../assets/shapes.svg"/>
+        <img class="center" src="/assets/shapes.svg" alt=""/>
         <ion-card-header>
           <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
           <ion-card-title>Card Title</ion-card-title>

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Project} from './project.model';
+import {Project} from '../interfaces/project.model';
 
 @Component({
   selector: 'app-project-submission',
@@ -16,8 +16,7 @@ export class ProjectSubmissionPage implements OnInit {
   ngOnInit() {
   }
 
-  addProject() {
-
+  registerProject(form) {
+    // TODO: Implement project registering service
   }
-
 }

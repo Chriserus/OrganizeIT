@@ -2,27 +2,29 @@
   <ion-split-pane>
     <ion-menu type="overlay">
       <ion-header>
-        <ion-toolbar>
+        <ion-toolbar color="primary">
           <ion-title>Menu</ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-content>
         <ion-list>
-          <ion-item>
+          <ion-item> <!-- TODO: Show this only when user is logged in -->
             <ion-avatar slot="start">
-              <ion-img src="./../assets/sampleAvatar.svg"></ion-img>
+              <ion-img src="/assets/sampleAvatar.svg"></ion-img>
             </ion-avatar>
-            <ion-label>
+            <ion-label> <!-- TODO: Show user details -->
               <h3>Name Surname</h3>
               <p>Project</p>
             </ion-label>
           </ion-item>
+          <ion-item> <!-- TODO: Show this only when user is logged out -->
+            <ion-button [routerDirection]="'root'" [routerLink]="['/login']">Login</ion-button>
+            <ion-button [routerDirection]="'root'" [routerLink]="['/register']">Register</ion-button>
+          </ion-item>
           <ion-menu-toggle auto-hide="false" *ngFor="let page of appPages">
             <ion-item [routerDirection]="'root'" [routerLink]="[page.url]">
               <ion-icon slot="start" [name]="page.icon"></ion-icon>
-              <ion-label>
-                {{page.title}}
-              </ion-label>
+              <ion-label>{{page.title}}</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>

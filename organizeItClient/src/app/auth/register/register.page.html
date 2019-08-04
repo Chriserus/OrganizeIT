@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        Create your account!
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form #form="ngForm" (ngSubmit)="register(form)">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="stacked">Name</ion-label>
+                <ion-input name="name" type="text" ngModel required></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="stacked">Email</ion-label>
+                <ion-input name="email" type="email" ngModel required></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="stacked">Password</ion-label>
+                <ion-input name="password" type="password" ngModel required></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="stacked">Repeat password</ion-label>
+                <ion-input name="confirm" type="password" ngModel required></ion-input>
+              </ion-item>
+              <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Register</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
