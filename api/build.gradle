@@ -6,7 +6,8 @@ plugins {
 
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'java'
-apply plugin: 'java-library'
+apply plugin: 'application'
+mainClassName = 'com.capgemini.organizeIT.OrganizeItApplication'
 
 
 group = 'com.capgemini'
@@ -18,14 +19,17 @@ repositories {
 }
 
 dependencies {
+    compile project(':core')
+    compile project(':infrastructure')
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.liquibase:liquibase-core'
     runtimeOnly 'mysql:mysql-connector-java'
+//    testCompile project(':core')
+//    testCompile project(':infrastructure')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.199'
-    compile project(':infrastructure')
-    compile project(':core')
+
 }

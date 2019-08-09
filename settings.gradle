@@ -1,5 +1,3 @@
 rootProject.name = 'organizeIT'
 
-include 'api'
-include 'core'
-include 'infrastructure'
+include 'api', 'core', 'infrastructure'
