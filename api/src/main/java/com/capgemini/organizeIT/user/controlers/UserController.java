@@ -2,13 +2,12 @@ package com.capgemini.organizeIT.user.controlers;
 
 import com.capgemini.organizeIT.user.services.UserService;
 import com.capgemini.organizeIT.user.entities.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class UserController {
 
     private final UserService userService;
@@ -17,13 +16,19 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/api/users")
     public List<User> allUsers() {
         return userService.findAll();
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/api/users/ids/{id}")
     public User user(@PathVariable final Long id) {
         return userService.findById(id);
     }
+
+    @GetMapping("/api/users/usernames/{username}")
+    public User userByEmail(@PathVariable final String username) {
+        return userService.findByUsername(username);
+    }
+
 }

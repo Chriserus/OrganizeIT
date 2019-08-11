@@ -30,7 +30,7 @@
             <column name="title" type="varchar(255)"/>
             <column name="description" type="varchar(255)"/>
             <column name="owner_id" type="int">
-                <constraints nullable="false" foreignKeyName="fk_user" references="user(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_owner" references="user(id)"/>
             </column>
         </createTable>
         <addAutoIncrement columnDataType="int"
@@ -38,12 +38,14 @@
                           tableName="project"/>
         <insert tableName="project">
             <column name="title" value="Best project ever"/>
-            <column name="description" value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sapien pellentesque habitant morbi tristique."/>
+            <column name="description"
+                    value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sapien pellentesque habitant morbi tristique."/>
             <column name="owner_id" value="1"/>
         </insert>
         <insert tableName="project">
             <column name="title" value="Worst project ever"/>
-            <column name="description" value="Lobortis mattis aliquam faucibus purus in massa tempor nec feugiat. Sit amet purus gravida quis blandit turpis. Mi sit amet mauris commodo quis imperdiet massa."/>
+            <column name="description"
+                    value="Lobortis mattis aliquam faucibus purus in massa tempor nec feugiat. Sit amet purus gravida quis blandit turpis. Mi sit amet mauris commodo quis imperdiet massa."/>
             <column name="owner_id" value="2"/>
         </insert>
     </changeSet>
@@ -55,5 +57,44 @@
         <addColumn tableName="user">
             <column name="password" type="varchar(255)"/>
         </addColumn>
+    </changeSet>
+    <changeSet id="addingColumnsAndDataToUser" author="Chriserus">
+        <addColumn tableName="user">
+            <column name="email" type="varchar(255)"/>
+        </addColumn>
+        <insert tableName="user">
+            <column name="username" value="Jan Kowalski"/>
+            <column name="email" value="jan.kowalski@capgemini.com"/>
+            <column name="password" value="pass"/>
+        </insert>
+    </changeSet>
+    <changeSet id="deleteEmailColumnAdjustUsernameColumn" author="Chriserus">
+        <update tableName="user">
+            <column name="username" value="krzysztof.borowiecki@capgemini.com"/>
+            <where>id = '1'</where>
+        </update>
+        <update tableName="user">
+            <column name="username" value="jan.kowalski@capgemini.com"/>
+            <where>id = '3'</where>
+        </update>
+    </changeSet>
+    <changeSet id="rolesTable" author="Chriserus">
+        <createTable tableName="role">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="userRolesTable" author="Chriserus">
+        <createTable tableName="user_roles">
+            <column name="users_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_user" references="user(id)"/>
+            </column>
+            <column name="roles_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_role" references="role(id)"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>

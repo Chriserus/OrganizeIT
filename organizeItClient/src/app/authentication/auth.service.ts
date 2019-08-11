@@ -14,6 +14,11 @@ export class AuthService {
     return null;
   }
 
+  logout(): Observable<string>{
+    // TODO: Implement logout functionality frontend
+    return null;
+  }
+
   register(form): Observable<string> {
     // TODO: Implement register functionality frontend
     return null;

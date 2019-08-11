@@ -22,8 +22,8 @@ const routes: Routes = [
   { path: 'agenda', loadChildren: './agenda/agenda.module#AgendaPageModule' },
   { path: 'board', loadChildren: './board/board.module#BoardPageModule' },
   { path: 'archive', loadChildren: './archive/archive.module#ArchivePageModule' },
-  { path: 'register', loadChildren: './auth/register/register.module#RegisterPageModule' },
-  { path: 'login', loadChildren: './auth/login/login.module#LoginPageModule' }
+  { path: 'register', loadChildren: './authentication/register/register.module#RegisterPageModule' },
+  { path: 'login', loadChildren: './authentication/login/login.module#LoginPageModule' }
 ];
 
 @NgModule({
