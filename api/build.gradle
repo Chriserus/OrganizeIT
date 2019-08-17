@@ -26,6 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.liquibase:liquibase-core'
     runtimeOnly 'mysql:mysql-connector-java'
+    compile group: 'org.apache.logging.log4j', name: 'log4j', version: '2.12.1', ext: 'pom'
 //    testCompile project(':core')
 //    testCompile project(':infrastructure')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
