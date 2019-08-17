@@ -3,21 +3,21 @@ package com.capgemini.organizeIT.user.services;
 
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.repositories.UserRepository;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.logging.Logger;
-
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
+
+    public UserDetailsServiceImpl(final UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -3,11 +3,15 @@ package com.capgemini.organizeIT.user.entities;
 import com.capgemini.organizeIT.role.entities.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Data
+@EqualsAndHashCode(exclude = "roles")
+@ToString(exclude = "roles")
 @Entity
 public class User {
 
@@ -18,14 +22,14 @@ public class User {
     private String password;
     @Transient
     private String passwordConfirm;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
-    @JoinTable(name="user_roles",
-            joinColumns={@JoinColumn(name="fk_user")},
-            inverseJoinColumns={@JoinColumn(name="fk_role")})
+    @JoinTable(name = "user_roles",
+            joinColumns = {@JoinColumn(name = "users_id")},
+            inverseJoinColumns = {@JoinColumn(name = "roles_id")})
     private Set<Role> roles;
 
-    public User(){
+    public User() {
 
     }
 
