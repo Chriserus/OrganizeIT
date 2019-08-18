@@ -34,15 +34,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     //Basic authentication using form login (default) and logout on /logout
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/**").authenticated()
                 .antMatchers("/", "/home").access("hasRole('USER')")
                 .antMatchers("/api/users").hasRole("ADMIN")
                 .antMatchers("/api/projects").hasRole("USER")
                 .and()
                 // some more method calls
-                .formLogin();
-        http.logout();
+                .formLogin()
+                .and()
+                .logout();
     }
-
     //Basic in memory authentication
 //    @Autowired
 //    public void configureGlobal(AuthenticationManagerBuilder auth)
@@ -52,4 +53,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                .withUser("admin").password("{noop}pass").roles("USER","ADMIN");
 //        ;
 //    }
+
 }
