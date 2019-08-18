@@ -3,8 +3,6 @@ import {ProjectService} from '../project/project.service';
 import {Project} from '../interfaces/project.model';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {AuthService} from "../authentication/auth.service";
-import {NavController} from "@ionic/angular";
 
 
 @Component({
@@ -17,7 +15,7 @@ export class HomePage implements OnInit, OnDestroy {
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
 
-  constructor(public rest: ProjectService, public authService: AuthService, public navCtrl: NavController) {
+  constructor(public projectService: ProjectService) {
   }
 
   ngOnInit() {
@@ -31,14 +29,9 @@ export class HomePage implements OnInit, OnDestroy {
 
   getProjects() {
     this.projects = [];
-    this.rest.getProjects().pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
+    this.projectService.getProjects().pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
       console.log(projects);
       this.projects = projects;
     });
-  }
-
-  logout() {
-    this.authService.logout();
-    location.reload()
   }
 }

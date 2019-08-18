@@ -13,7 +13,7 @@ export class ProjectService {
   }
 
   getProjects(): Observable<Project[]> {
-    return this.http.get<Project[]>(this.PROJECTS_URL);
+    return this.http.get<Project[]>(this.PROJECTS_URL, {responseType: 'json'});
     // TODO do some error handling
   }
 }

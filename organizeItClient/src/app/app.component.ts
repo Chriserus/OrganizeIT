@@ -1,14 +1,15 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 import {Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
+import {AuthService} from "./authentication/auth.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements  OnInit{
   public appPages = [
     {
       title: 'Home',
@@ -42,10 +43,15 @@ export class AppComponent {
     }
   ];
 
+  private username: string = "";
+  private name: string = "";
+  private surname: string = "";
+
   constructor(
       private platform: Platform,
       private splashScreen: SplashScreen,
-      private statusBar: StatusBar
+      private statusBar: StatusBar,
+      private authService: AuthService
   ) {
     this.initializeApp();
   }
@@ -55,5 +61,22 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+  }
+
+  logout() {
+    this.authService.logout();
+    location.reload()
+  }
+
+  ngOnInit(): void {
+    this.authService.getUsername().subscribe(
+        (response: any) => {
+          console.log(response);
+          this.username = response;
+        },
+        (error: any) => {
+          console.log(error)
+        });
+    console.log(this.username);
   }
 }

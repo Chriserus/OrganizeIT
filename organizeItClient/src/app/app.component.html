@@ -13,7 +13,7 @@
               <ion-img src="/assets/sampleAvatar.svg"></ion-img>
             </ion-avatar>
             <ion-label> <!-- TODO: Show user details -->
-              <h3>Name Surname</h3>
+              <h3>{{username}}</h3>
               <p>Project</p>
             </ion-label>
           </ion-item>
@@ -21,6 +21,7 @@
             <ion-item> <!-- TODO: Show this only when user is logged out -->
               <ion-button [routerDirection]="'root'" [routerLink]="['/login']">Login</ion-button>
               <ion-button [routerDirection]="'root'" [routerLink]="['/register']">Register</ion-button>
+              <ion-button (click)="logout()">Logout</ion-button>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false" *ngFor="let page of appPages">
