@@ -45,7 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // some more method calls
                 .formLogin()
                 .loginProcessingUrl("/api/login")
-                .usernameParameter("username")
+                .usernameParameter("email")
                 .passwordParameter("password")
                 .and()
                 .logout().logoutUrl("/api/logout")

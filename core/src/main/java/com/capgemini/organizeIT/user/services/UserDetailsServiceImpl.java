@@ -5,13 +5,11 @@ import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.repositories.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,18 +25,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
 
-        if(user == null) {
-            log.error("User with login: {} not found", username);
-            throw new UsernameNotFoundException(username);
+        if (user == null) {
+            log.error("User with email: {} not found", email);
+            throw new UsernameNotFoundException(email);
         }
 
         List<GrantedAuthority> auth = user.getRoles().stream().map(authority -> new SimpleGrantedAuthority(authority.getName())).collect(Collectors.toList());
-        log.info("Logged in as: {} with Roles: {}", username, auth);
+        log.info("Logged in as: {} with Roles: {}", email, auth);
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
+                user.getEmail(),
                 user.getPassword(),
                 true, // enabled. Use whatever condition you like
                 true, // accountNonExpired. Use whatever condition you like

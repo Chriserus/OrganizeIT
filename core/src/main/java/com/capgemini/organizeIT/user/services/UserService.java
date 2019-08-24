@@ -36,11 +36,11 @@ public class UserService {
         return user.get();
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     public boolean emailAlreadyExists(User user){
-        return userRepository.findByUsername(user.getUsername()) != null;
+        return userRepository.findByEmail(user.getEmail()) != null;
     }
 }

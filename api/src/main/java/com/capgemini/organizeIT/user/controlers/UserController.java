@@ -29,20 +29,20 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @GetMapping("/api/users/usernames/{username}/")
-    public User userByEmail(@PathVariable final String username) {
-        log.info(username);
-        return userService.findByUsername(username);
+    @GetMapping("/api/users/emails/{email}/")
+    public User userByEmail(@PathVariable final String email) {
+        log.info(email);
+        return userService.findByEmail(email);
     }
 
-    @GetMapping("/api/username")
+    @GetMapping("/api/email")
     public String currentUserName(Principal principal) {
         return principal.getName();
     }
 
     @PostMapping("/api/register")
-    public User register(@RequestBody User newUser){
-        if(userService.emailAlreadyExists(newUser)){
+    public User register(@RequestBody User newUser) {
+        if (userService.emailAlreadyExists(newUser)) {
             return null;
         }
         return userService.save(newUser);

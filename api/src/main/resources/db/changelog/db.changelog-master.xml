@@ -3,108 +3,102 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
-    <changeSet id="initial-user-table-creation" author="Chriserus">
+    <changeSet id="createUserTable" author="Chriserus">
         <createTable tableName="user">
             <column name="id" type="int">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="username" type="varchar(255)"/>
+            <column name="first_name" type="varchar(255)"/>
+            <column name="last_name" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="password" type="varchar(255)"/>
+            <column name="created" type="datetime"/>
+            <column name="modified" type="datetime"/>
         </createTable>
         <addAutoIncrement columnDataType="int"
                           columnName="id"
                           tableName="user"/>
     </changeSet>
-    <changeSet id="something" author="Chriserus">
-        <insert tableName="user">
-            <column name="username" value="Chriserus"/>
-        </insert>
-        <insert tableName="user">
-            <column name="username" value="John"/>
-        </insert>
-    </changeSet>
-    <changeSet id="projectTablePrototype" author="Chriserus">
+    <changeSet id="createProjectTable" author="Chriserus">
         <createTable tableName="project">
             <column name="id" type="int">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="title" type="varchar(255)"/>
-            <column name="description" type="varchar(255)"/>
-            <column name="owner_id" type="int">
+            <column name="description" type="text"/>
+            <column name="owner" type="int">
                 <constraints nullable="false" foreignKeyName="fk_owner" references="user(id)"/>
             </column>
+            <column name="created" type="datetime"/>
+            <column name="modified" type="datetime"/>
         </createTable>
         <addAutoIncrement columnDataType="int"
                           columnName="id"
                           tableName="project"/>
-        <insert tableName="project">
-            <column name="title" value="Best project ever"/>
-            <column name="description"
-                    value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sapien pellentesque habitant morbi tristique."/>
-            <column name="owner_id" value="1"/>
-        </insert>
-        <insert tableName="project">
-            <column name="title" value="Worst project ever"/>
-            <column name="description"
-                    value="Lobortis mattis aliquam faucibus purus in massa tempor nec feugiat. Sit amet purus gravida quis blandit turpis. Mi sit amet mauris commodo quis imperdiet massa."/>
-            <column name="owner_id" value="2"/>
-        </insert>
     </changeSet>
-    <changeSet id="addingColumnsToProjectAndUser" author="Chriserus">
-        <renameColumn columnDataType="int"
-                      newColumnName="owner"
-                      oldColumnName="owner_id"
-                      tableName="project"/>
-        <addColumn tableName="user">
-            <column name="password" type="varchar(255)"/>
-        </addColumn>
-    </changeSet>
-    <changeSet id="addingColumnsAndDataToUser" author="Chriserus">
-        <addColumn tableName="user">
-            <column name="email" type="varchar(255)"/>
-        </addColumn>
-        <insert tableName="user">
-            <column name="username" value="Jan Kowalski"/>
-            <column name="email" value="jan.kowalski@capgemini.com"/>
-            <column name="password" value="pass"/>
-        </insert>
-    </changeSet>
-    <changeSet id="deleteEmailColumnAdjustUsernameColumn" author="Chriserus">
-        <update tableName="user">
-            <column name="username" value="krzysztof.borowiecki@capgemini.com"/>
-            <where>id = '1'</where>
-        </update>
-        <update tableName="user">
-            <column name="username" value="jan.kowalski@capgemini.com"/>
-            <where>id = '3'</where>
-        </update>
-    </changeSet>
-    <changeSet id="rolesTable" author="Chriserus">
+    <changeSet id="createRoleTable" author="Chriserus">
         <createTable tableName="role">
             <column name="id" type="int">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)"/>
         </createTable>
+        <addAutoIncrement columnDataType="int"
+                          columnName="id"
+                          tableName="role"/>
     </changeSet>
-
-    <changeSet id="userRolesTable" author="Chriserus">
-        <createTable tableName="user_roles">
-            <column name="users_id" type="int">
+    <changeSet id="createUserRoleTable" author="Chriserus">
+        <createTable tableName="user_role">
+            <column name="user_id" type="int">
                 <constraints nullable="false" foreignKeyName="fk_user" references="user(id)"/>
             </column>
-            <column name="roles_id" type="int">
+            <column name="role_id" type="int">
                 <constraints nullable="false" foreignKeyName="fk_role" references="role(id)"/>
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="addUpdateAndCreatedTimestamps" author="Chriserus">
-        <addColumn tableName="user">
-            <column name="created" type="datetime"/>
-            <column name="modified" type="datetime"/>
-        </addColumn>
-        <addColumn tableName="project">
-            <column name="created" type="datetime"/>
-            <column name="modified" type="datetime"/>
-        </addColumn>
+    <changeSet id="insertSampleData" author="Chriserus">
+        <insert tableName="user">
+            <column name="first_name" value="Chris"/>
+            <column name="last_name" value="Borowiecki"/>
+            <column name="email" value="chris.borowiecki@capgemini.com"/>
+            <column name="password" value="{noop}admin"/>
+        </insert>
+        <insert tableName="user">
+            <column name="first_name" value="John"/>
+            <column name="last_name" value="Smith"/>
+            <column name="email" value="john.smith@capgemini.com"/>
+            <column name="password" value="{noop}user"/>
+        </insert>
+        <insert tableName="project">
+            <column name="title" value="Best project ever"/>
+            <column name="description"
+                    value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sapien pellentesque habitant morbi tristique."/>
+            <column name="owner" value="1"/>
+        </insert>
+        <insert tableName="project">
+            <column name="title" value="Worst project ever"/>
+            <column name="description"
+                    value="Lobortis mattis aliquam faucibus purus in massa tempor nec feugiat. Sit amet purus gravida quis blandit turpis. Mi sit amet mauris commodo quis imperdiet massa."/>
+            <column name="owner" value="2"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="1"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="2"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="user_id" value="2"/>
+            <column name="role_id" value="2"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

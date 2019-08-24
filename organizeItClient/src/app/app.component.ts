@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
     }
   ];
 
-  private username: string = "";
+  private email: string = "";
   private name: string = "";
   private surname: string = "";
 
@@ -71,11 +71,11 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.authService.getCurrentUser().subscribe(
         (response: any) => {
-          this.username = response;
+          this.email = response;
         },
         (error: any) => {
           console.log(error)
         });
-    console.log(this.username);
+    console.log(this.email);
   }
 }
