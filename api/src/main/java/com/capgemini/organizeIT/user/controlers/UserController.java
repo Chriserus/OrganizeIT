@@ -1,5 +1,6 @@
 package com.capgemini.organizeIT.user.controlers;
 
+import com.capgemini.organizeIT.role.services.RoleService;
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.services.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -14,9 +16,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
-    public UserController(final UserService userService) {
+    public UserController(final UserService userService, final RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping("/api/users")
@@ -45,11 +49,11 @@ public class UserController {
         return userService.findByEmail(principal.getName());
     }
 
-    @PostMapping("/api/register")
+    @PostMapping(value = "/api/register", consumes = "application/json", produces = "application/json")
     public User register(@RequestBody User newUser) {
-        if (userService.emailAlreadyExists(newUser)) {
-            return null;
-        }
+        newUser.setRoles(Set.of(roleService.findByName("ROLE_USER"))); //TODO: Create default role mechanism
+        newUser.setPassword("{noop}" + newUser.getPassword()); //TODO: Encode password on this step
+        log.info(newUser);
         return userService.save(newUser);
     }
 

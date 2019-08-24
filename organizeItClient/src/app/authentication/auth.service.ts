@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {NavController} from "@ionic/angular";
 import {User} from "../interfaces/user.model";
 
@@ -34,16 +34,23 @@ export class AuthService {
   }
 
   register(form: any) {
-    let formData: FormData = new FormData();
-    formData.append('firstName', form.firstName);
-    formData.append('lastName', form.lastName);
-    formData.append('email', form.email);
-    formData.append('password', form.password);
-    formData.append('passwordConfirm', form.passwordConfirm);
-    return this.http.post(this.REGISTER_URL, formData, {responseType: 'text'});
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        responseType: 'json'
+      })
+    };
+
+    let jsonData = {
+      'firstName': form.firstName,
+      'lastName': form.lastName,
+      'email': form.email,
+      'password': form.password
+    };
+    return this.http.post(this.REGISTER_URL, jsonData, httpOptions);
   }
 
-  getByUsername(email: string) {
+  getByEmail(email: string) {
     return this.http.get<User>(this.USER_BY_USERNAME_URL + email + "/", {responseType: 'json'});
   }
 }

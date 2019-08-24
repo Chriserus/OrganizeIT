@@ -16,37 +16,26 @@ export class RegisterPage implements OnInit {
   }
 
   register(form) {
-    // this.usernameTaken(form.value.email).subscribe(x => {
-    //
-    // });
-
     //TODO: Pass Observable and in subscribe I will have synchronized calls
-
     if (form.value.password != form.value.passwordConfirm) {
       console.log('Password do not Match'); //TODO: Inform user about it
-    } else if (this.emailTaken(form.value.email)) {
-      console.log('Username already taken'); //TODO: Inform user about it
-    } else {
-      console.log(form.value);
-      // this.authService.register(form.value).subscribe(
-      //     (response: any) => {
-      //       console.log(response)
-      //       this.router.navigateByUrl("home");
-      //     },
-      //     (error: any) => {
-      //       console.log(error)
-      //     });
+      return;
     }
-  }
-
-  emailTaken(email: string) {
-    //TODO: Make this method so that if will wait for result
-    let user = null;
-    // await this.authService.getByUsername(username).subscribe(data => {
-    //   user = data;
-    //   console.log(data);
-    // });
-    console.log(user);
-    return user;
+    this.authService.getByEmail(form.value.email).subscribe(data => {
+      console.log(data);
+      if (data === null) {
+        console.log("Registering user with email: " + form.value.email); //TODO: Inform user about it
+        this.authService.register(form.value).subscribe(
+            (response: any) => {
+              console.log(response)
+              this.router.navigateByUrl("home");
+            },
+            (error: any) => {
+              console.log(error)
+            });
+      } else if (data.email === form.value.email) {
+        console.log("Email already exists in database!") //TODO: Inform user about it
+      }
+    });
   }
 }
