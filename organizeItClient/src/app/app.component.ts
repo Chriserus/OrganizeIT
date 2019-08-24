@@ -4,6 +4,7 @@ import {Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AuthService} from "./authentication/auth.service";
+import {User} from "./interfaces/user.model";
 
 @Component({
   selector: 'app-root',
@@ -43,9 +44,8 @@ export class AppComponent implements OnInit {
     }
   ];
 
-  private email: string = "";
-  private name: string = "";
-  private surname: string = "";
+  private loggedInUser: User;
+  private displayName: string;
 
   constructor(
       private platform: Platform,
@@ -71,11 +71,12 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.authService.getCurrentUser().subscribe(
         (response: any) => {
-          this.email = response;
+          this.loggedInUser = response;
+          console.log(this.loggedInUser);
+          this.displayName = this.loggedInUser.firstName + " " + this.loggedInUser.lastName; //TODO: Add it to interface? Use in project owner display too
         },
         (error: any) => {
           console.log(error)
         });
-    console.log(this.email);
   }
 }

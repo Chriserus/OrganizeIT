@@ -24,7 +24,7 @@ export class RegisterPage implements OnInit {
 
     if (form.value.password != form.value.passwordConfirm) {
       console.log('Password do not Match'); //TODO: Inform user about it
-    } else if (this.usernameTaken(form.value.email)) {
+    } else if (this.emailTaken(form.value.email)) {
       console.log('Username already taken'); //TODO: Inform user about it
     } else {
       console.log(form.value);
@@ -39,7 +39,7 @@ export class RegisterPage implements OnInit {
     }
   }
 
-  async usernameTaken(username: string) {
+  emailTaken(email: string) {
     //TODO: Make this method so that if will wait for result
     let user = null;
     // await this.authService.getByUsername(username).subscribe(data => {

@@ -11,14 +11,14 @@ export class AuthService {
   readonly LOGIN_URL = '/api/login';
   readonly REGISTER_URL = '/api/register';
   readonly LOGOUT_URL = '/api/logout';
-  readonly LOGGED_IN_USER_URL = '/api/email';
+  readonly LOGGED_IN_USER_URL = '/api/user';
   readonly USER_BY_USERNAME_URL = '/api/users/emails/';
 
   constructor(private http: HttpClient, public navCtrl: NavController) {
   }
 
   getCurrentUser() {
-    return this.http.get(this.LOGGED_IN_USER_URL, {responseType: 'text'});
+    return this.http.get(this.LOGGED_IN_USER_URL, {responseType: 'json'});
   }
 
   login(form: any) {
@@ -35,6 +35,8 @@ export class AuthService {
 
   register(form: any) {
     let formData: FormData = new FormData();
+    formData.append('firstName', form.firstName);
+    formData.append('lastName', form.lastName);
     formData.append('email', form.email);
     formData.append('password', form.password);
     formData.append('passwordConfirm', form.passwordConfirm);

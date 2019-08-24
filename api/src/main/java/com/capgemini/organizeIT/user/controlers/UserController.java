@@ -40,6 +40,11 @@ public class UserController {
         return principal.getName();
     }
 
+    @GetMapping("/api/user")
+    public User currentUser(Principal principal) {
+        return userService.findByEmail(principal.getName());
+    }
+
     @PostMapping("/api/register")
     public User register(@RequestBody User newUser) {
         if (userService.emailAlreadyExists(newUser)) {
