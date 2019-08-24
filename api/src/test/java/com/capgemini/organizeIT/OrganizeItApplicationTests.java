@@ -30,7 +30,7 @@ public class OrganizeItApplicationTests {
     @Before
     public void createTestUser() {
         testUser = new User();
-        testUser.setUsername("TestUsername");
+        testUser.setEmail("test.email@organization.com");
         userService.save(testUser);
     }
 
@@ -41,7 +41,7 @@ public class OrganizeItApplicationTests {
 
     @Test
     public void shouldContainTestUser() {
-        List<String> users = userService.findAll().stream().map(User::getUsername).collect(Collectors.toList());
-        assertTrue(users.contains(testUser.getUsername()));
+        List<String> users = userService.findAll().stream().map(User::getEmail).collect(Collectors.toList());
+        assertTrue(users.contains(testUser.getEmail()));
     }
 }
