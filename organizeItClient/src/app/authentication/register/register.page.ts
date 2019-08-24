@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 
@@ -9,15 +9,44 @@ import {AuthService} from '../auth.service';
 })
 export class RegisterPage implements OnInit {
 
-  constructor(private  authService: AuthService, private  router: Router) { }
+  constructor(private  authService: AuthService, private  router: Router) {
+  }
 
   ngOnInit() {
   }
 
   register(form) {
-    this.authService.register(form.value).subscribe((res) => {
-      this.router.navigateByUrl('home');
-    });
+    // this.usernameTaken(form.value.email).subscribe(x => {
+    //
+    // });
+
+    //TODO: Pass Observable and in subscribe I will have synchronized calls
+
+    if (form.value.password != form.value.passwordConfirm) {
+      console.log('Password do not Match'); //TODO: Inform user about it
+    } else if (this.usernameTaken(form.value.email)) {
+      console.log('Username already taken'); //TODO: Inform user about it
+    } else {
+      console.log(form.value);
+      // this.authService.register(form.value).subscribe(
+      //     (response: any) => {
+      //       console.log(response)
+      //       this.router.navigateByUrl("home");
+      //     },
+      //     (error: any) => {
+      //       console.log(error)
+      //     });
+    }
   }
 
+  async usernameTaken(username: string) {
+    //TODO: Make this method so that if will wait for result
+    let user = null;
+    // await this.authService.getByUsername(username).subscribe(data => {
+    //   user = data;
+    //   console.log(data);
+    // });
+    console.log(user);
+    return user;
+  }
 }

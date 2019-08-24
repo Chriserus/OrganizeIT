@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
-import {NavController} from "@ionic/angular";
 
 @Component({
   selector: 'app-login',
@@ -10,7 +9,7 @@ import {NavController} from "@ionic/angular";
 })
 export class LoginPage implements OnInit {
 
-  constructor(private  authService: AuthService, private  navCtrl: NavController) {
+  constructor(private  authService: AuthService, private  router: Router) {
   }
 
   ngOnInit() {
@@ -20,11 +19,11 @@ export class LoginPage implements OnInit {
     this.authService.login(form.value).subscribe(
         (response: any) => {
           console.log(response)
-          this.navCtrl.navigateForward("home");
+          this.router.navigateByUrl("home");
         },
         (error: any) => {
           console.log(error)
-    });
+        });
   }
 
 }

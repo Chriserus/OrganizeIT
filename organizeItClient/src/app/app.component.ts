@@ -9,7 +9,7 @@ import {AuthService} from "./authentication/auth.service";
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent implements  OnInit{
+export class AppComponent implements OnInit {
   public appPages = [
     {
       title: 'Home',
@@ -68,10 +68,9 @@ export class AppComponent implements  OnInit{
     location.reload()
   }
 
-  ngOnInit(): void {
-    this.authService.getUsername().subscribe(
+  ngOnInit() {
+    this.authService.getCurrentUser().subscribe(
         (response: any) => {
-          console.log(response);
           this.username = response;
         },
         (error: any) => {

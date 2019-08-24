@@ -20,8 +20,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void save(User user) {
-        userRepository.save(user);
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     public void delete(User user) {
@@ -37,7 +37,10 @@ public class UserService {
     }
 
     public User findByUsername(String username) {
-        User user = userRepository.findByUsername(username);
-        return user;
+        return userRepository.findByUsername(username);
+    }
+
+    public boolean emailAlreadyExists(User user){
+        return userRepository.findByUsername(user.getUsername()) != null;
     }
 }

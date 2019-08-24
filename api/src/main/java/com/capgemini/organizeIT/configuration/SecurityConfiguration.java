@@ -38,6 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/", "/home").access("hasRole('USER')")
                 .antMatchers("/api/users").hasRole("ADMIN")
+                .antMatchers("/api/users/*").hasRole("USER")
                 .antMatchers("/api/projects").hasRole("USER")
                 .antMatchers("/**").authenticated()
                 .and()
@@ -50,6 +51,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logout().logoutUrl("/api/logout")
                 .and()
                 .csrf().disable();
+        // TODO: Dodać application-local.properties jako profil i w ustawieniach intellij odpalać z tym profilem. w nim można wyłączyć spring security - on ma priorytet nad application.properties
+        //spring.security.enabled = false? aktywne profile w inntelij
     }
     //Basic in memory authentication
 //    @Autowired

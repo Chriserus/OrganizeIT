@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
 import {HttpClient} from "@angular/common/http";
 import {NavController} from "@ionic/angular";
-import {Project} from "../interfaces/project.model";
+import {User} from "../interfaces/user.model";
 
 @Injectable({
   providedIn: 'root'
@@ -10,17 +9,19 @@ import {Project} from "../interfaces/project.model";
 export class AuthService {
 
   readonly LOGIN_URL = '/api/login';
+  readonly REGISTER_URL = '/api/register';
   readonly LOGOUT_URL = '/api/logout';
   readonly LOGGED_IN_USER_URL = '/api/username';
+  readonly USER_BY_USERNAME_URL = '/api/users/usernames/';
 
   constructor(private http: HttpClient, public navCtrl: NavController) {
   }
 
-  getUsername(): Observable<any>{
+  getCurrentUser() {
     return this.http.get(this.LOGGED_IN_USER_URL, {responseType: 'text'});
   }
 
-  login(form: any): Observable<any> {
+  login(form: any) {
     let formData: FormData = new FormData();
     formData.append('username', form.email);
     formData.append('password', form.password);
@@ -32,8 +33,15 @@ export class AuthService {
     this.http.post(this.LOGOUT_URL, {}, {responseType: 'text'}).subscribe();
   }
 
-  register(form): Observable<string> {
-    // TODO: Implement register functionality frontend
-    return null;
+  register(form: any) {
+    let formData: FormData = new FormData();
+    formData.append('username', form.email);
+    formData.append('password', form.password);
+    formData.append('passwordConfirm', form.passwordConfirm);
+    return this.http.post(this.REGISTER_URL, formData, {responseType: 'text'});
+  }
+
+  getByUsername(email: string) {
+    return this.http.get<User>(this.USER_BY_USERNAME_URL + email + "/", {responseType: 'json'});
   }
 }

@@ -20,10 +20,6 @@
           <ion-row>
             <ion-col>
               <ion-item>
-                <ion-label position="stacked">Name</ion-label>
-                <ion-input name="name" type="text" ngModel required></ion-input>
-              </ion-item>
-              <ion-item>
                 <ion-label position="stacked">Email</ion-label>
                 <ion-input name="email" type="email" ngModel required></ion-input>
               </ion-item>
@@ -33,7 +29,7 @@
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Repeat password</ion-label>
-                <ion-input name="confirm" type="password" ngModel required></ion-input>
+                <ion-input name="passwordConfirm" type="password" ngModel required></ion-input>
               </ion-item>
               <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Register</ion-button>
             </ion-col>

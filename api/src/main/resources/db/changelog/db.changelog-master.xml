@@ -97,4 +97,14 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="addUpdateAndCreatedTimestamps" author="Chriserus">
+        <addColumn tableName="user">
+            <column name="created" type="datetime"/>
+            <column name="modified" type="datetime"/>
+        </addColumn>
+        <addColumn tableName="project">
+            <column name="created" type="datetime"/>
+            <column name="modified" type="datetime"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
