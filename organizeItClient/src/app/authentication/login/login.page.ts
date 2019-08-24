@@ -19,7 +19,10 @@ export class LoginPage implements OnInit {
     this.authService.login(form.value).subscribe(
         (response: any) => {
           console.log(response)
-          this.router.navigateByUrl("home");
+          localStorage.setItem("loggedIn", "true");
+          this.router.navigateByUrl("home").then(() => {
+            window.location.reload();
+          });
         },
         (error: any) => {
           console.log(error)

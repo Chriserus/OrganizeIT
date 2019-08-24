@@ -1,16 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import {Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AuthService} from "./authentication/auth.service";
 import {User} from "./interfaces/user.model";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   public appPages = [
     {
       title: 'Home',
@@ -46,6 +48,8 @@ export class AppComponent implements OnInit {
 
   private loggedInUser: User;
   private displayName: string;
+  private unsubscribe: Subject<User> = new Subject();
+  private loggedIn: boolean;
 
   constructor(
       private platform: Platform,
@@ -69,14 +73,25 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.getCurrentUser().subscribe(
-        (response: any) => {
-          this.loggedInUser = response;
-          console.log(this.loggedInUser);
-          this.displayName = this.loggedInUser.firstName + " " + this.loggedInUser.lastName; //TODO: Add it to interface? Use in project owner display too
-        },
-        (error: any) => {
-          console.log(error)
-        });
+    if (JSON.parse(localStorage.getItem("loggedIn")) === true) {
+      this.authService.getCurrentUser().pipe(takeUntil(this.unsubscribe)).subscribe(
+          (response: any) => {
+            this.loggedInUser = response;
+            console.log(this.loggedInUser);
+            this.displayName = this.loggedInUser.firstName + " " + this.loggedInUser.lastName; //TODO: Add it to interface? Use in project owner display too
+            this.loggedIn = true;
+            localStorage.setItem("loggedIn", 'true');
+          },
+          (error: any) => {
+            console.log(error)
+            this.loggedIn = false;
+            localStorage.setItem("loggedIn", 'false');
+          });
+    }
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }

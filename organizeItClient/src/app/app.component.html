@@ -18,10 +18,12 @@
             </ion-label>
           </ion-item>
           <ion-menu-toggle auto-hide="false">
-            <ion-item> <!-- TODO: Show this only when user is logged out -->
+            <ion-item *ngIf="loggedIn">
+              <ion-button (click)="logout()">Logout</ion-button>
+            </ion-item>
+            <ion-item *ngIf="!loggedIn">
               <ion-button [routerDirection]="'root'" [routerLink]="['/login']">Login</ion-button>
               <ion-button [routerDirection]="'root'" [routerLink]="['/register']">Register</ion-button>
-              <ion-button (click)="logout()">Logout</ion-button>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false" *ngFor="let page of appPages">
