@@ -16,7 +16,6 @@ export class RegisterPage implements OnInit {
   }
 
   register(form) {
-    //TODO: Pass Observable and in subscribe I will have synchronized calls
     if (form.value.password != form.value.passwordConfirm) {
       console.log('Password do not Match'); //TODO: Inform user about it
       return;

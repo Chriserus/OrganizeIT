@@ -78,7 +78,7 @@ export class AppComponent implements OnInit, OnDestroy {
           (response: any) => {
             this.loggedInUser = response;
             console.log(this.loggedInUser);
-            this.displayName = this.loggedInUser.firstName + " " + this.loggedInUser.lastName; //TODO: Add it to interface? Use in project owner display too
+            this.displayName = this.loggedInUser.firstName + " " + this.loggedInUser.lastName;
             this.loggedIn = true;
             localStorage.setItem("loggedIn", 'true');
           },

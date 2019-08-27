@@ -4,6 +4,7 @@ import com.capgemini.organizeIT.role.services.RoleService;
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.services.UserService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -17,10 +18,12 @@ public class UserController {
 
     private final UserService userService;
     private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(final UserService userService, final RoleService roleService) {
+    public UserController(final UserService userService, final RoleService roleService, final PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/api/users")
@@ -52,7 +55,7 @@ public class UserController {
     @PostMapping(value = "/api/register", consumes = "application/json", produces = "application/json")
     public User register(@RequestBody User newUser) {
         newUser.setRoles(Set.of(roleService.findByName("ROLE_USER"))); //TODO: Create default role mechanism
-        newUser.setPassword("{noop}" + newUser.getPassword()); //TODO: Encode password on this step
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         log.info(newUser);
         return userService.save(newUser);
     }

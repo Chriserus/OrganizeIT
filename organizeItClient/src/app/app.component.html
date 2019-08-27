@@ -8,7 +8,8 @@
       </ion-header>
       <ion-content>
         <ion-list>
-          <ion-item> <!-- TODO: Show this only when user is logged in -->
+          <ion-menu-toggle auto-hide="false">
+          <ion-item *ngIf="loggedIn">
             <ion-avatar slot="start">
               <ion-img src="/assets/sampleAvatar.svg"></ion-img>
             </ion-avatar>
@@ -17,7 +18,6 @@
               <p>Project</p>
             </ion-label>
           </ion-item>
-          <ion-menu-toggle auto-hide="false">
             <ion-item *ngIf="loggedIn">
               <ion-button (click)="logout()">Logout</ion-button>
             </ion-item>

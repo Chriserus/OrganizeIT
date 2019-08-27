@@ -41,11 +41,4 @@ public class User {
     public User() {
 
     }
-    //TODO: Is this constructor necessary?
-    public User(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-    }
 }
