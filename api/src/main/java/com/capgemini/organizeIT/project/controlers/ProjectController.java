@@ -2,12 +2,12 @@ package com.capgemini.organizeIT.project.controlers;
 
 import com.capgemini.organizeIT.project.entities.Project;
 import com.capgemini.organizeIT.project.services.ProjectService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Log4j2
 @RestController
 @CrossOrigin
 public class ProjectController {
@@ -18,8 +18,14 @@ public class ProjectController {
     }
 
     @GetMapping("/api/projects")
-    public List<Project> allProjects() {
-        return projectService.findAll();
+    public List<Project> findAllProjects() {
+        return projectService.findAllSortByDateNewFirst();
+    }
+
+    @PostMapping(value = "/api/projects", consumes = "application/json", produces = "application/json")
+    public Project register(@RequestBody Project newProject) {
+        log.info(newProject);
+        return projectService.save(newProject);
     }
 
 }

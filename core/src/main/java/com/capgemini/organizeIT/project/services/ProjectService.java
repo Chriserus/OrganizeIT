@@ -2,6 +2,7 @@ package com.capgemini.organizeIT.project.services;
 
 import com.capgemini.organizeIT.project.entities.Project;
 import com.capgemini.organizeIT.project.repositories.ProjectRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,5 +18,13 @@ public class ProjectService {
 
     public List<Project> findAll() {
         return projectRepository.findAll();
+    }
+
+    public List<Project> findAllSortByDateNewFirst() {
+        return projectRepository.findAll(Sort.by(Sort.Direction.DESC, "created"));
+    }
+
+    public Project save(Project project) {
+        return projectRepository.save(project);
     }
 }

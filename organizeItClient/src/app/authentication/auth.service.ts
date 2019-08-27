@@ -14,7 +14,7 @@ export class AuthService {
   readonly LOGGED_IN_USER_URL = '/api/user';
   readonly USER_BY_USERNAME_URL = '/api/users/emails/';
 
-  constructor(private http: HttpClient, public navCtrl: NavController) {
+  constructor(private http: HttpClient) {
   }
 
   getCurrentUser() {

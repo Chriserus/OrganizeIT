@@ -35,25 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         List<GrantedAuthority> auth = user.getRoles().stream().map(authority -> new SimpleGrantedAuthority(authority.getName())).collect(Collectors.toList());
         log.info("Logged in as: {} with Roles: {}", email, auth);
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                true, // enabled. Use whatever condition you like
-                true, // accountNonExpired. Use whatever condition you like
-                true, // credentialsNonExpired. Use whatever condition you like
-                true, // accountNonLocked. Use whatever condition you like
-                auth);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+                true, true, true, true, auth);
     }
-
-//    @Transactional(readOnly = true)
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user = userRepository.findByUsername(username);
-//        if (user == null) {
-//            throw new UsernameNotFoundException("User not found.");
-//        }
-//        log.info("Logged in as: {}", username);
-//        log.info("User password is: {}", user.getPassword());
-//        return new PdfUserDetails(user);
-//    }
 }

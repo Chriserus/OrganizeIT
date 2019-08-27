@@ -39,8 +39,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
-
-    //Basic authentication using form login (default) and logout on /logout
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/", "/home").access("hasRole('USER')")
@@ -63,14 +61,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // TODO: Dodać application-local.properties jako profil i w ustawieniach intellij odpalać z tym profilem. w nim można wyłączyć spring security - on ma priorytet nad application.properties
         //spring.security.enabled = false? aktywne profile w inntelij
     }
-    //Basic in memory authentication
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth)
-//            throws Exception {
-//        auth.inMemoryAuthentication()
-//                .withUser("user").password("{noop}pass").roles("USER").and()
-//                .withUser("admin").password("{noop}pass").roles("USER","ADMIN");
-//        ;
-//    }
-
 }

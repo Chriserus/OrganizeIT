@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Project} from '../interfaces/project.model';
+import {AuthService} from "../authentication/auth.service";
+import {User} from "../interfaces/user.model";
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +10,26 @@ import {Project} from '../interfaces/project.model';
 export class ProjectService {
   readonly PROJECTS_URL = '/api/projects';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
   }
 
-  getProjects(): Observable<Project[]> {
+  getProjects() {
     return this.http.get<Project[]>(this.PROJECTS_URL, {responseType: 'json'});
-    // TODO do some error handling
+  }
+
+  addProject(form: any, owner: User) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        responseType: 'json'
+      })
+    };
+    let jsonData = {
+      'title': form.value.title,
+      'description': form.value.description,
+      'owner': owner
+    };
+    console.log(jsonData);
+    return this.http.post(this.PROJECTS_URL, jsonData, httpOptions);
   }
 }

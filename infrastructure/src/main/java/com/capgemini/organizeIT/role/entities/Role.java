@@ -13,12 +13,11 @@ import java.util.Set;
 @ToString(exclude = "users")
 @Entity
 public class Role {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
     @ManyToMany(mappedBy = "roles")
-    private Set<User> users;     //TODO: Possible to remove this set from Role
+    private Set<User> users;
 }

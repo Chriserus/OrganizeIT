@@ -39,8 +39,4 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
-    public boolean emailAlreadyExists(User user){
-        return userRepository.findByEmail(user.getEmail()) != null;
-    }
 }

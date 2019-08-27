@@ -15,7 +15,7 @@ import java.util.Set;
 @CrossOrigin
 @Log4j2
 public class UserController {
-
+    private static final String DEFAULT_ROLE = "ROLE_USER";
     private final UserService userService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
@@ -54,7 +54,7 @@ public class UserController {
 
     @PostMapping(value = "/api/register", consumes = "application/json", produces = "application/json")
     public User register(@RequestBody User newUser) {
-        newUser.setRoles(Set.of(roleService.findByName("ROLE_USER"))); //TODO: Create default role mechanism
+        newUser.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         log.info(newUser);
         return userService.save(newUser);
