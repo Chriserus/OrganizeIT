@@ -1,27 +1,21 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-back-button defaultHref="home"></ion-back-button>
     </ion-buttons>
-    <ion-title>
-      List
-    </ion-title>
+    <ion-title>List</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let item of items">
-      <ion-icon [name]="item.icon" slot="start"></ion-icon>
-      {{item.title}}
-      <div class="item-note" slot="end">
-        {{item.note}}
-      </div>
-    </ion-item>
-  </ion-list>
-  <!--
-    <div *ngIf="selectedItem" padding>
-      You navigated here from <b>{{selectedItem.title }}</b>
-    </div>
-  -->
+  <ion-card *ngFor="let project of projects">
+      <ion-card-header>
+        <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
+        <ion-card-title>{{project.title}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        {{project.description}}
+      </ion-card-content>
+    <ion-card-subtitle>Created: {{project.created}}</ion-card-subtitle> <!-- TODO: Convert to readable time and date-->
+  </ion-card>
 </ion-content>

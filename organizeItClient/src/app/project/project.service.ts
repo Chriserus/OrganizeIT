@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Project} from '../interfaces/project.model';
-import {AuthService} from "../authentication/auth.service";
 import {User} from "../interfaces/user.model";
 
 @Injectable({
@@ -10,7 +9,7 @@ import {User} from "../interfaces/user.model";
 export class ProjectService {
   readonly PROJECTS_URL = '/api/projects';
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private http: HttpClient) {
   }
 
   getProjects() {

@@ -1,39 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Project} from "../interfaces/project.model";
+import {Subject} from "rxjs";
+import {ProjectService} from "../project/project.service";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-list',
   templateUrl: 'list.page.html',
   styleUrls: ['list.page.scss']
 })
-export class ListPage implements OnInit {
-  private selectedItem: any;
-  private icons = [
-    'flask',
-    'wifi',
-    'beer',
-    'football',
-    'basketball',
-    'paper-plane',
-    'american-football',
-    'boat',
-    'bluetooth',
-    'build'
-  ];
-  public items: Array<{ title: string; note: string; icon: string }> = [];
-  constructor() {
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
-    }
+export class ListPage implements OnInit, OnDestroy {
+  projects: Project[] = [];
+  private unsubscribe: Subject<Project[]> = new Subject();
+
+  constructor(public projectService: ProjectService) {
   }
 
   ngOnInit() {
+    if (JSON.parse(localStorage.getItem("loggedIn")) === true) {
+      this.getProjects();
+    }
   }
-  // add back when alpha.4 is out
-  // navigate(item) {
-  //   this.router.navigate(['/list', JSON.stringify(item)]);
-  // }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
+  getProjects() {
+    this.projects = [];
+    this.projectService.getProjects().pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
+      console.log(projects);
+      this.projects = projects;
+    });
+  }
 }
