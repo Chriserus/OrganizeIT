@@ -37,9 +37,9 @@
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Repeat password</ion-label>
-                <ion-input name="passwordConfirm" type="password" ngModel required></ion-input>
+                <ion-input name="passwordConfirm" type="password" ngModel required (keyup.enter)="register(form)"></ion-input>
               </ion-item>
-              <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Register</ion-button>
+              <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" (keydown.enter)="register(form)" expand="block">Register</ion-button>
             </ion-col>
           </ion-row>
         </ion-grid>

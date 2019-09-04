@@ -30,7 +30,7 @@ export class AuthService {
 
 
   logout() {
-    this.http.post(this.LOGOUT_URL, {}, {responseType: 'text'}).subscribe();
+    return this.http.post(this.LOGOUT_URL, {}, {responseType: 'text'});
   }
 
   register(form: any) {

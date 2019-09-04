@@ -24,9 +24,9 @@
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Password</ion-label>
-                <ion-input name="password" type="password" ngModel required></ion-input>
+                <ion-input name="password" type="password" ngModel required (keyup.enter)="login(form)"></ion-input>
               </ion-item>
-              <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Login</ion-button>
+              <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Login</ion-button>
               If you don't have an account, please <a routerLink='/register'>
               register</a> first!
             </ion-col>

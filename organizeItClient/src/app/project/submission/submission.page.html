@@ -22,8 +22,8 @@
                 <ion-input name="title" type="text" ngModel required></ion-input>
               </ion-item>
               <ion-item>
-                <ion-label position="stacked">Description</ion-label>
-                <ion-input name="description" type="text" ngModel required></ion-input>
+                <ion-label position="stacked">Description</ion-label><!-- TODO: Move method call to the lowest input field -->
+                <ion-input name="description" type="text" ngModel required (keyup.enter)="registerProject(form)"></ion-input>
               </ion-item>
 <!--              <ion-item>-->
 <!--                <ion-label position="stacked">Owner</ion-label>-->
@@ -41,7 +41,7 @@
 <!--                <ion-label position="stacked">Members</ion-label>-->
 <!--                <ion-input name="members" type="text" ngModel required></ion-input>-->
 <!--              </ion-item>-->
-              <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Submit</ion-button>
+              <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Submit</ion-button>
             </form>
           </ion-card-content>
         </ion-card>
