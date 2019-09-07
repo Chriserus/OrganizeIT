@@ -51,7 +51,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/**").authenticated()
                 .and()
-                // some more method calls
                 .formLogin()
                 .loginProcessingUrl("/api/login")
                 .usernameParameter("email")
