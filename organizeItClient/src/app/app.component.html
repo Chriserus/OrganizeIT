@@ -13,9 +13,9 @@
               <ion-avatar slot="start">
                 <ion-img src="/assets/sampleAvatar.svg"></ion-img>
               </ion-avatar>
-              <ion-label> <!-- TODO: Show user details -->
+              <ion-label>
                 <h3>{{displayName}}</h3>
-                <p>Project</p>
+                <ion-button [routerDirection]="'root'" [routerLink]="['/profile']">My profile</ion-button>
               </ion-label>
             </ion-item>
             <ion-item *ngIf="loggedIn">

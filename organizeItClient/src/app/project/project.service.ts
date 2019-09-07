@@ -7,13 +7,17 @@ import {User} from "../interfaces/user.model";
   providedIn: 'root'
 })
 export class ProjectService {
-  readonly PROJECTS_URL = '/api/projects';
+  readonly PROJECTS_URL = '/api/projects/';
 
   constructor(private http: HttpClient) {
   }
 
   getProjects() {
     return this.http.get<Project[]>(this.PROJECTS_URL, {responseType: 'json'});
+  }
+
+  getProjectsByOwnerEmail(ownerEmail: string) {
+    return this.http.get<Project[]>(this.PROJECTS_URL + ownerEmail + "/", {responseType: 'json'});
   }
 
   addProject(form: any, owner: User) {

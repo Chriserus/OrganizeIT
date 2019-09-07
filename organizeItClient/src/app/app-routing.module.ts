@@ -23,7 +23,8 @@ const routes: Routes = [
   { path: 'board', loadChildren: './board/board.module#BoardPageModule' },
   { path: 'archive', loadChildren: './archive/archive.module#ArchivePageModule' },
   { path: 'register', loadChildren: './authentication/register/register.module#RegisterPageModule' },
-  { path: 'login', loadChildren: './authentication/login/login.module#LoginPageModule' }
+  { path: 'login', loadChildren: './authentication/login/login.module#LoginPageModule' },
+  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' }
 ];
 
 @NgModule({

@@ -2,6 +2,7 @@ package com.capgemini.organizeIT.project.services;
 
 import com.capgemini.organizeIT.project.entities.Project;
 import com.capgemini.organizeIT.project.repositories.ProjectRepository;
+import com.capgemini.organizeIT.user.entities.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +27,9 @@ public class ProjectService {
 
     public Project save(Project project) {
         return projectRepository.save(project);
+    }
+
+    public List<Project> findAllByOwner(User owner){
+        return projectRepository.findAllByOwner(owner);
     }
 }

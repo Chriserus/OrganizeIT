@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {NavController} from "@ionic/angular";
 import {User} from "../interfaces/user.model";
 
 @Injectable({

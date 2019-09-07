@@ -100,10 +100,11 @@ export class AppComponent implements OnInit, OnDestroy {
             console.log(this.loggedInUser);
             this.displayName = this.loggedInUser.firstName + " " + this.loggedInUser.lastName;
             this.loggedIn = true;
+            localStorage.setItem("loggedInUserEmail", this.loggedInUser.email);
             localStorage.setItem("loggedIn", 'true');
           },
           (error: any) => {
-            console.log(error)
+            console.log(error);
             this.loggedIn = false;
             localStorage.setItem("loggedIn", 'false');
           });
