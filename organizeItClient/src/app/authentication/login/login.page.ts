@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 import {ToastService} from "../../shared/toast.service";
 import {SubmitService} from "../../shared/submit.service";
+import {Messages} from "../../shared/Messages";
 
 @Component({
   selector: 'app-login',
@@ -10,9 +11,6 @@ import {SubmitService} from "../../shared/submit.service";
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage extends SubmitService implements OnInit {
-  //TODO: Messages properties
-  private loggingInSuccessMessage = "Logged in successfully!";
-  private loggingInErrorMessage = "Login failed, wrong user credentials";
 
   constructor(private authService: AuthService, private router: Router, private toastService: ToastService) {
     super();
@@ -27,7 +25,7 @@ export class LoginPage extends SubmitService implements OnInit {
           (response: any) => {
             console.log(response);
             localStorage.setItem("loggedIn", "true");
-            this.toastService.showTemporarySuccessMessage(this.loggingInSuccessMessage).then(() => {
+            this.toastService.showTemporarySuccessMessage(Messages.logInSuccess).then(() => {
               this.router.navigateByUrl("home").then(() => {
                 window.location.reload();
               });
@@ -35,7 +33,12 @@ export class LoginPage extends SubmitService implements OnInit {
           },
           (error: any) => {
             console.log(error);
-            this.toastService.showTemporaryErrorMessage(this.loggingInErrorMessage);
+            if (error.status === 404) {
+              this.toastService.showTemporaryErrorMessage(Messages.wrongCredentials);
+            }
+            else if (error.status === 504) {
+              this.toastService.showTemporaryErrorMessage(Messages.serverUnavailable);
+            }
           });
     }
   }

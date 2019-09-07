@@ -22,12 +22,13 @@ export class SubmissionPage extends SubmitService implements OnInit {
   }
 
   registerProject(form) {
-    if(!this.isButtonDisabled('submitButton')) {
+    if (!this.isButtonDisabled('submitButton')) {
       this.authService.getCurrentUser().subscribe(
           (response: any) => {
             this.projectService.addProject(form, response).subscribe(
                 (response: any) => {
                   console.log(response);
+                  form.reset();
                   this.router.navigateByUrl("home");
                 })
           });

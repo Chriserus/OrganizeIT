@@ -9,6 +9,7 @@ import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 import {ToastService} from "./shared/toast.service";
 import {Router} from "@angular/router";
+import {Messages} from "./shared/Messages";
 
 @Component({
   selector: 'app-root',
@@ -52,9 +53,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private displayName: string;
   private unsubscribe: Subject<User> = new Subject();
   private loggedIn: boolean;
-  //TODO: Messages properties
-  private loggedOutSuccessMessage = "Logged out successfully!";
-  private loggedOutErrorMessage = "Logging out unsuccessful!";
 
   constructor(
       private platform: Platform,
@@ -77,7 +75,7 @@ export class AppComponent implements OnInit, OnDestroy {
   logout() {
     this.authService.logout().subscribe(response => {
       console.log(response);
-      this.toastService.showTemporarySuccessMessage(this.loggedOutSuccessMessage).then(() => {
+      this.toastService.showTemporarySuccessMessage(Messages.loggedOutSuccessMessage).then(() => {
         this.determineUserLoggedIn();
         this.router.navigateByUrl("login").then(() => {
           window.location.reload();
@@ -85,7 +83,7 @@ export class AppComponent implements OnInit, OnDestroy {
       });
     }, error => {
       console.log(error);
-      this.toastService.showTemporaryErrorMessage(this.loggedOutErrorMessage);
+      this.toastService.showTemporaryErrorMessage(Messages.loggedOutErrorMessage);
       this.determineUserLoggedIn();
     });
   }

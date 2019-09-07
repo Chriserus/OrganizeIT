@@ -59,5 +59,4 @@ public class UserController {
         log.info(newUser);
         return userService.save(newUser);
     }
-
 }

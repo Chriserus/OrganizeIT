@@ -25,6 +25,7 @@
                 <ion-label position="stacked">Description</ion-label><!-- TODO: Move method call to the lowest input field -->
                 <ion-input name="description" type="text" ngModel required (keyup.enter)="registerProject(form)"></ion-input>
               </ion-item>
+              <!-- TODO: Add max members fields and technologies -->
 <!--              <ion-item>-->
 <!--                <ion-label position="stacked">Owner</ion-label>-->
 <!--                <ion-input name="owner" type="text" ngModel required></ion-input>-->
@@ -42,7 +43,6 @@
 <!--                <ion-input name="members" type="text" ngModel required></ion-input>-->
 <!--              </ion-item>-->
               <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Submit</ion-button>
-              <!-- TODO: Clean input after submission -->
             </form>
           </ion-card-content>
         </ion-card>
