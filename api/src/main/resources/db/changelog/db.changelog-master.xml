@@ -101,4 +101,9 @@
             <column name="role_id" value="2"/>
         </insert>
     </changeSet>
+    <changeSet id="addProjectMaxMembersColumn" author="Chriserus">
+        <addColumn tableName="project">
+            <column name="max_members" type="int"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

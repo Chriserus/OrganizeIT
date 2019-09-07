@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Project} from '../../interfaces/project.model';
 import {ProjectService} from "../project.service";
 import {Router} from "@angular/router";
 import {AuthService} from "../../authentication/auth.service";
@@ -11,9 +10,6 @@ import {SubmitService} from "../../shared/submit.service";
   styleUrls: ['./submission.page.scss'],
 })
 export class SubmissionPage extends SubmitService implements OnInit {
-
-  project: Project;
-
   constructor(private projectService: ProjectService, private authService: AuthService, private  router: Router) {
     super();
   }
@@ -25,6 +21,9 @@ export class SubmissionPage extends SubmitService implements OnInit {
     if (!this.isButtonDisabled('submitButton')) {
       this.authService.getCurrentUser().subscribe(
           (response: any) => {
+            if (form.value.maxMembers === 0) {
+              form.value.maxMembers = 1;
+            }
             this.projectService.addProject(form, response).subscribe(
                 (response: any) => {
                   console.log(response);

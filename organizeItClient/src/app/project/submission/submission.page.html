@@ -22,27 +22,24 @@
                 <ion-input name="title" type="text" ngModel required></ion-input>
               </ion-item>
               <ion-item>
-                <ion-label position="stacked">Description</ion-label><!-- TODO: Move method call to the lowest input field -->
-                <ion-input name="description" type="text" ngModel required (keyup.enter)="registerProject(form)"></ion-input>
+                <ion-label position="stacked">Description</ion-label>
+                <!-- TODO: Move method call to the lowest input field -->
+                <ion-input name="description" type="text" autocorrect="on" ngModel required
+                           (keyup.enter)="registerProject(form)"></ion-input>
               </ion-item>
-              <!-- TODO: Add max members fields and technologies -->
-<!--              <ion-item>-->
-<!--                <ion-label position="stacked">Owner</ion-label>-->
-<!--                <ion-input name="owner" type="text" ngModel required></ion-input>-->
-<!--              </ion-item>-->
-<!--              <ion-item>-->
-<!--                <ion-label position="stacked">Technologies</ion-label>-->
-<!--                <ion-input name="technologies" type="text" ngModel required></ion-input>-->
-<!--              </ion-item>-->
-<!--              <ion-item>-->
-<!--                <ion-label position="stacked">Maximum team members</ion-label>-->
-<!--                <ion-input name="maxMembers" type="number" ngModel required></ion-input>-->
-<!--              </ion-item>-->
-<!--              <ion-item>-->
-<!--                <ion-label position="stacked">Members</ion-label>-->
-<!--                <ion-input name="members" type="text" ngModel required></ion-input>-->
-<!--              </ion-item>-->
-              <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Submit</ion-button>
+              <ion-item>
+                <ion-label position="stacked">Maximum team members</ion-label>
+                <ion-input name="maxMembers" type="number" min="1" required ngModel="1"
+                           oninput="this.value = Math.abs(this.value)"
+                           (keyup.enter)="registerProject(form)"></ion-input>
+              </ion-item>
+              <!-- TODO: Add technologies field with chips and custom technologies -->
+              <!--              <ion-item>-->
+              <!--                <ion-label position="stacked">Technologies</ion-label>-->
+              <!--                <ion-input name="technologies" type="text" ngModel required></ion-input>-->
+              <!--              </ion-item>-->
+              <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Submit
+              </ion-button>
             </form>
           </ion-card-content>
         </ion-card>

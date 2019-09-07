@@ -26,7 +26,8 @@ export class ProjectService {
     let jsonData = {
       'title': form.value.title,
       'description': form.value.description,
-      'owner': owner
+      'owner': owner,
+      'maxMembers': form.value.maxMembers
     };
     console.log(jsonData);
     return this.http.post(this.PROJECTS_URL, jsonData, httpOptions);

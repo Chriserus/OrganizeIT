@@ -20,6 +20,7 @@ public class Project {
     @JoinColumn(name = "owner")
     private User owner;
     // TODO: add: private User[] or set of members;
+    private Integer maxMembers = 1;
     @CreationTimestamp
     private Date created;
     @UpdateTimestamp
