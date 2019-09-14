@@ -20,10 +20,10 @@ export class AuthService {
     return this.http.get(this.LOGGED_IN_USER_URL, {responseType: 'json'});
   }
 
-  login(form: any) {
+  login(email: string, password: string) {
     let formData: FormData = new FormData();
-    formData.append('email', form.email);
-    formData.append('password', form.password);
+    formData.append('email', email);
+    formData.append('password', password);
     return this.http.post(this.LOGIN_URL, formData, {responseType: 'text'});
   }
 

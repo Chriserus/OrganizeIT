@@ -93,6 +93,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private determineUserLoggedIn() {
+    console.log(localStorage.getItem("loggedIn"));
     if (JSON.parse(localStorage.getItem("loggedIn")) === true) {
       this.authService.getCurrentUser().pipe(takeUntil(this.unsubscribe)).subscribe(
           (response: any) => {
@@ -101,7 +102,6 @@ export class AppComponent implements OnInit, OnDestroy {
             this.displayName = this.loggedInUser.firstName + " " + this.loggedInUser.lastName;
             this.loggedIn = true;
             localStorage.setItem("loggedInUserEmail", this.loggedInUser.email);
-            localStorage.setItem("loggedIn", 'true');
           },
           (error: any) => {
             console.log(error);

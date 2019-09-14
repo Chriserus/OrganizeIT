@@ -21,10 +21,10 @@ export class LoginPage extends SubmitService implements OnInit {
 
   login(form) {
     if (!this.isButtonDisabled('submitButton')) {
-      this.authService.login(form.value).subscribe(
+      this.authService.login(form.value.email, form.value.password).subscribe(
           (response: any) => {
             console.log(response);
-            localStorage.setItem("loggedIn", "true");
+            localStorage.setItem("loggedIn", 'true');
             this.toastService.showTemporarySuccessMessage(Messages.logInSuccess).then(() => {
               this.router.navigateByUrl("home").then(() => {
                 window.location.reload();
@@ -35,8 +35,7 @@ export class LoginPage extends SubmitService implements OnInit {
             console.log(error);
             if (error.status === 404) {
               this.toastService.showTemporaryErrorMessage(Messages.wrongCredentials);
-            }
-            else if (error.status === 504) {
+            } else if (error.status === 504) {
               this.toastService.showTemporaryErrorMessage(Messages.serverUnavailable);
             }
           });
