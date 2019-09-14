@@ -31,9 +31,7 @@ public class UserService {
     //TODO: Protect it somehow
     public User findById(Long id) {
         Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty())
-            return null;
-        return user.get();
+        return user.orElse(null);
     }
 
     public User findByEmail(String email) {

@@ -33,8 +33,7 @@
                 {{project.description}}
                 <ion-item-divider>
                 </ion-item-divider>
-                <ion-card-subtitle>Created: {{project.created}}</ion-card-subtitle>
-                <!-- TODO: Convert to readable time and date-->
+                <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
               </ion-card-content>
             </ion-card>
           </ion-col>

@@ -1,5 +1,6 @@
 package com.capgemini.organizeIT.user.controlers;
 
+import com.capgemini.organizeIT.role.entities.Role;
 import com.capgemini.organizeIT.role.services.RoleService;
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.services.UserService;
@@ -8,8 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @CrossOrigin
@@ -54,7 +58,7 @@ public class UserController {
 
     @PostMapping(value = "/api/register", consumes = "application/json", produces = "application/json")
     public User register(@RequestBody User newUser) {
-        newUser.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
+        newUser.setRoles(Stream.of(roleService.findByName(DEFAULT_ROLE)).collect(Collectors.toSet()));
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         log.info(newUser);
         return userService.save(newUser);
