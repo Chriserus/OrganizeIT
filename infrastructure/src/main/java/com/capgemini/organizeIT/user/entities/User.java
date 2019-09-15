@@ -9,7 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -24,11 +24,12 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+    @JsonIgnore
     private String password;
     @CreationTimestamp
-    private LocalDateTime created;
+    private Date created;
     @UpdateTimestamp
-    private LocalDateTime modified;
+    private Date modified;
 
     @ManyToMany(fetch = FetchType.EAGER)
     // TODO: Eager is required, else: LazyInitializationException, bcs session is not active. Inverse control?

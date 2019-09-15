@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ToastController} from "@ionic/angular";
 
 @Injectable({
@@ -7,7 +7,8 @@ import {ToastController} from "@ionic/angular";
 export class ToastService {
   private errorToastDuration = 2000;
 
-  constructor(private toastController: ToastController){ }
+  constructor(private toastController: ToastController) {
+  }
 
   async showTemporaryErrorMessage(message: string) {
     const toast = await this.toastController.create({

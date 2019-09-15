@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "33891090895",
+    "firebase_url": "https://organizeit-89fe1.firebaseio.com",
+    "project_id": "organizeit",
+    "storage_bucket": "organizeit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33891090895:android:9ef95a39108dec550092ba",
+        "android_client_info": {
+          "package_name": "com.capgemini.organizeIT"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "33891090895-ptnti25fnj5f7il13qkd1hrspuvga9ui.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0Ipn5qeulj3-AicJ3hAHwgTXxpOYf7ec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "33891090895-ptnti25fnj5f7il13qkd1hrspuvga9ui.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

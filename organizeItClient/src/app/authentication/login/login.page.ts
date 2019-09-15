@@ -4,6 +4,7 @@ import {AuthService} from '../auth.service';
 import {ToastService} from "../../shared/toast.service";
 import {SubmitService} from "../../shared/submit.service";
 import {Messages} from "../../shared/Messages";
+import {NotificationService} from "../../notifications/notification.service";
 
 @Component({
   selector: 'app-login',
@@ -12,11 +13,16 @@ import {Messages} from "../../shared/Messages";
 })
 export class LoginPage extends SubmitService implements OnInit {
 
-  constructor(private authService: AuthService, private router: Router, private toastService: ToastService) {
+  constructor(private authService: AuthService, private router: Router, private toastService: ToastService,
+              private notificationService: NotificationService) {
     super();
   }
 
   ngOnInit() {
+  }
+
+  async notificationSetup(email: string) {
+    await this.notificationService.getToken(email);
   }
 
   login(form) {
@@ -25,6 +31,7 @@ export class LoginPage extends SubmitService implements OnInit {
           (response: any) => {
             console.log(response);
             localStorage.setItem("loggedIn", 'true');
+            this.notificationSetup(form.value.email);
             this.toastService.showTemporarySuccessMessage(Messages.logInSuccess).then(() => {
               this.router.navigateByUrl("home").then(() => {
                 window.location.reload();
