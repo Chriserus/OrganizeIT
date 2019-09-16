@@ -20,7 +20,7 @@ const routes: Routes = [
     loadChildren: './project/submission/submission.module#SubmissionPageModule'
   },
   { path: 'agenda', loadChildren: './agenda/agenda.module#AgendaPageModule' },
-  { path: 'board', loadChildren: './board/board.module#BoardPageModule' },
+  { path: 'board', loadChildren: './comment/board/board.module#BoardPageModule' },
   { path: 'archive', loadChildren: './archive/archive.module#ArchivePageModule' },
   { path: 'register', loadChildren: './authentication/register/register.module#RegisterPageModule' },
   { path: 'login', loadChildren: './authentication/login/login.module#LoginPageModule' },

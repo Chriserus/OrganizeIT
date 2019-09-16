@@ -106,4 +106,21 @@
             <column name="max_members" type="int"/>
         </addColumn>
     </changeSet>
+    <changeSet id="createCommentTable" author="Chriserus">
+        <createTable tableName="comment">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="content" type="text"/>
+            <column name="announcement" type="boolean"/>
+            <column name="author" type="int">
+                <constraints nullable="false" foreignKeyName="fk_author" references="user(id)"/>
+            </column>
+            <column name="created" type="datetime"/>
+            <column name="modified" type="datetime"/>
+        </createTable>
+        <addAutoIncrement columnDataType="int"
+                          columnName="id"
+                          tableName="comment"/>
+    </changeSet>
 </databaseChangeLog>
