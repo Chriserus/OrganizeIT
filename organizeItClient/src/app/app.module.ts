@@ -15,7 +15,7 @@ import {AngularFireModule} from "@angular/fire";
 import {AngularFirestoreModule} from "@angular/fire/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCUWkEKQrMSph8RA-4r6_ZD4SJUlK8YZyM",
+  apiKey: "",
   authDomain: "organizeit-89fe1.firebaseapp.com",
   databaseURL: "https://organizeit-89fe1.firebaseio.com",
   projectId: "organizeit",
