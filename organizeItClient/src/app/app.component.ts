@@ -53,7 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private loggedInUser: User;
   private displayName: string;
   private unsubscribe: Subject<User> = new Subject();
-  private loggedIn: boolean;
+  public loggedIn: boolean;
 
   constructor(
       private platform: Platform,
@@ -92,7 +92,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.notificationService.init();
     this.determineUserLoggedIn();
+    this.platform.ready().then(async () => {
+      await this.notificationService.requestPermission();
+    });
   }
 
   private determineUserLoggedIn() {

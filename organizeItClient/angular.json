@@ -106,6 +106,7 @@
             "styles": [],
             "scripts": [],
             "assets": [
+              "src/firebase-messaging-sw.js",
               {
                 "glob": "favicon.ico",
                 "input": "src/",
