@@ -6,7 +6,7 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AuthService} from "./authentication/auth.service";
 import {User} from "./interfaces/user.model";
 import {Subject} from "rxjs";
-import {takeUntil, tap} from "rxjs/operators";
+import {takeUntil} from "rxjs/operators";
 import {ToastService} from "./shared/toast.service";
 import {Router} from "@angular/router";
 import {Messages} from "./shared/Messages";
@@ -71,7 +71,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.notificationSetup();
     });
   }
 
@@ -92,8 +91,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    await this.notificationService.init();
     this.determineUserLoggedIn();
+    await this.notificationService.init();
   }
 
   ngAfterViewInit() {
@@ -124,13 +123,5 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-  }
-
-  private notificationSetup() {
-    this.notificationService.onNotifications().pipe(
-        tap(msg => {
-          this.toastService.showTemporarySuccessMessage(msg);
-        })
-    ).subscribe()
   }
 }
