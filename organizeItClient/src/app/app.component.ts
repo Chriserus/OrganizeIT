@@ -91,9 +91,12 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
-    this.notificationService.init();
+  async ngOnInit() {
+    await this.notificationService.init();
     this.determineUserLoggedIn();
+  }
+
+  ngAfterViewInit() {
     this.platform.ready().then(async () => {
       await this.notificationService.requestPermission();
     });
