@@ -18,6 +18,12 @@ repositories {
     mavenCentral()
 }
 
+bootJar {
+    into('static') {
+        from "${project(':organizeItClient').projectDir}/www"
+    }
+}
+
 dependencies {
     compile project(':core')
     compile project(':infrastructure')

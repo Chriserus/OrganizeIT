@@ -11,6 +11,7 @@ import {ToastService} from "./shared/toast.service";
 import {Router} from "@angular/router";
 import {Messages} from "./shared/Messages";
 import {NotificationService} from "./notifications/notification.service";
+import {AngularFireMessaging} from "@angular/fire/messaging";
 
 @Component({
   selector: 'app-root',
@@ -92,13 +93,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.determineUserLoggedIn();
-    await this.notificationService.init();
-  }
-
-  ngAfterViewInit() {
-    this.platform.ready().then(async () => {
-      await this.notificationService.requestPermission();
-    });
+    this.notificationService.askForPermissions();
   }
 
   private determineUserLoggedIn() {
@@ -111,6 +106,8 @@ export class AppComponent implements OnInit, OnDestroy {
             this.displayName = this.loggedInUser.firstName + " " + this.loggedInUser.lastName;
             this.loggedIn = true;
             localStorage.setItem("loggedInUserEmail", this.loggedInUser.email);
+            // TODO: Correct place to ask for permissions \/
+            // this.notificationService.askForPermissions();
           },
           (error: any) => {
             console.log(error);

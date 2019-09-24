@@ -20,6 +20,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
+              "src/combined-sw.js",
               "src/firebase-messaging-sw.js",
               {
                 "glob": "**/*",

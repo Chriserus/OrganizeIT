@@ -12,9 +12,10 @@ import {HttpClientModule} from '@angular/common/http';
 
 import {Firebase} from '@ionic-native/firebase/ngx';
 import {AngularFireModule} from "@angular/fire";
-import {AngularFirestoreModule} from "@angular/fire/firestore";
+import {AngularFirestore, AngularFirestoreModule} from "@angular/fire/firestore";
 import {environment} from "../environments/environment";
-import { ServiceWorkerModule } from '@angular/service-worker';
+import {ServiceWorkerModule} from '@angular/service-worker';
+import {AngularFireMessaging} from "@angular/fire/messaging";
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,12 +27,14 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('combined-sw.js', {enabled: environment.production})
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Firebase,
+    AngularFirestore,
+    AngularFireMessaging,
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
   ],
   bootstrap: [AppComponent]

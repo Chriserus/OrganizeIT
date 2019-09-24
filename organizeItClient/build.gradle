@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id "com.moowork.node" version "1.2.0"
+}
+
+node {
+    version = '10.15.3'
+    npmVersion = '6.4.1'
+    download = true
+}
+
+group = 'com.capgemini'
+version = '0.0.1-SNAPSHOT'
+
+
+//jar.dependsOn 'ionic build --prod'
+
+//jar.dependsOn 'npm_run_build'
+
+//jar {
+//    from 'www' into 'static'
+//}
