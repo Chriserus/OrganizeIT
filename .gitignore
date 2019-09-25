@@ -30,4 +30,4 @@ out/
 
 ### VS Code ###
 .vscode/
-/api/src/main/resources/static/**
+/api/src/main/resources/static/

@@ -79,6 +79,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.authService.logout().subscribe(response => {
       console.log(response);
       this.toastService.showTemporarySuccessMessage(Messages.loggedOutSuccessMessage).then(() => {
+        localStorage.setItem("loggedIn", 'false');
         this.determineUserLoggedIn();
         this.router.navigateByUrl("login").then(() => {
           window.location.reload();
