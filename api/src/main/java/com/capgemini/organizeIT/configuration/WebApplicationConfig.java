@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 public class WebApplicationConfig implements WebMvcConfigurer {
 
+    //TODO: Remove from backend and try to redirect via frontend when 404 is thrown
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/notFound").setViewName("forward:/index.html");

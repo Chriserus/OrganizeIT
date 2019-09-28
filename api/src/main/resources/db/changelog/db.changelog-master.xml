@@ -123,4 +123,14 @@
                           columnName="id"
                           tableName="comment"/>
     </changeSet>
+    <changeSet id="createUserProjectTable" author="Chriserus">
+        <createTable tableName="user_project">
+            <column name="user_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_member" references="user(id)"/>
+            </column>
+            <column name="project_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_project" references="project(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

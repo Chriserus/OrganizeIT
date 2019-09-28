@@ -34,4 +34,8 @@ export class ListPage implements OnInit, OnDestroy {
       this.projects = projects;
     });
   }
+
+  enroll(project: Project) {
+    // TODO: Implement enrollment functionality with notification sending (to owner)
+  }
 }

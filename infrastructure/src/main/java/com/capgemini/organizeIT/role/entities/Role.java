@@ -9,8 +9,8 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(exclude = "users")
-@ToString(exclude = "users")
+@EqualsAndHashCode
+@ToString
 @Entity
 public class Role {
     @Id
@@ -18,6 +18,9 @@ public class Role {
     private Long id;
     private String name;
 
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 }

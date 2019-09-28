@@ -2,11 +2,14 @@ package com.capgemini.organizeIT.project.entities;
 
 import com.capgemini.organizeIT.user.entities.User;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @Entity
@@ -19,7 +22,10 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;
-    // TODO: add: private User[] or set of members;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "projects")
+    private Set<User> members;
     private Integer maxMembers = 1;
     @CreationTimestamp
     private Date created;
