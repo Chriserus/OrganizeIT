@@ -2,11 +2,13 @@ package com.capgemini.organizeIT.project.controlers;
 
 import com.capgemini.organizeIT.project.entities.Project;
 import com.capgemini.organizeIT.project.services.ProjectService;
+import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.services.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Log4j2
 @RestController
@@ -31,9 +33,28 @@ public class ProjectController {
     }
 
     @PostMapping(value = "/api/projects", consumes = "application/json", produces = "application/json")
-    public Project register(@RequestBody Project newProject) {
-        log.info(newProject);
-        return projectService.save(newProject);
+    public Project register(@RequestBody Project project) {
+        log.info(project);
+        return projectService.save(project);
+    }
+
+    // TODO: Make it available only for project owner
+    @DeleteMapping("/api/projects/{id}")
+    public void deleteProject(@PathVariable Long id) {
+        log.info("Deleting project: {}", projectService.findById(id).orElse(null));
+        projectService.deleteById(id);
+    }
+
+    @PutMapping("/api/projects/{id}/{memberEmail}/")
+    public Project addMemberByEmail(@PathVariable Long id, @PathVariable String memberEmail) {
+        return projectService.findById(id).map(project -> {
+            log.info("Members before: {}", project.getMembers());
+            Set<User> members = project.getMembers();
+            members.add(userService.findByEmail(memberEmail));
+            project.setMembers(members);
+            log.info("Members after: {}", project.getMembers());
+            return projectService.save(project);
+        }).orElse(null);
     }
 
 }

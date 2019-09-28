@@ -24,7 +24,10 @@ public class Project {
     private User owner;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToMany(mappedBy = "projects")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "project_user",
+            joinColumns = {@JoinColumn(name = "project_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")})
     private Set<User> members;
     private Integer maxMembers = 1;
     @CreationTimestamp

@@ -36,4 +36,9 @@ export class ProjectService {
     console.log(jsonData);
     return this.http.post(this.PROJECTS_URL, jsonData, httpOptions);
   }
+
+  addMemberToProject(memberEmail: string, project: Project) {
+    console.log("Url: " + this.PROJECTS_URL + project.id + "/" + memberEmail + "/");
+    return this.http.put<Project>(this.PROJECTS_URL + project.id + "/" + memberEmail + "/", {}, {responseType: 'json'});
+  }
 }

@@ -7,7 +7,7 @@ export interface Project {
   owner: User;
   created?: string;
   modified?: string;
+  members: User[];
+  maxTeamMembers: number;
   // technologies: string[]; // TODO: introduce Technology type?
-  // maxTeamMembers: number;
-  // members: User[];
 }

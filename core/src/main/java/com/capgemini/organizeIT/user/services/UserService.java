@@ -28,10 +28,8 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    //TODO: Protect it somehow
     public User findById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
+        return userRepository.findById(id).orElse(null);
     }
 
     public User findByEmail(String email) {

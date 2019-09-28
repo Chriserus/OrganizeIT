@@ -41,13 +41,10 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles;
 
-    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @JoinTable(name = "user_project",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "project_id")})
+    @ManyToMany(mappedBy = "members")
     private Set<Project> projects;
 
     public User() {

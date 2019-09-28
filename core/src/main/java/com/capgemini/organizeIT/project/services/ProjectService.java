@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProjectService {
@@ -29,7 +30,15 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-    public List<Project> findAllByOwner(User owner){
+    public List<Project> findAllByOwner(User owner) {
         return projectRepository.findAllByOwner(owner);
+    }
+
+    public void deleteById(Long id) {
+        projectRepository.deleteById(id);
+    }
+
+    public Optional<Project> findById(Long id){
+        return projectRepository.findById(id);
     }
 }

@@ -123,13 +123,13 @@
                           columnName="id"
                           tableName="comment"/>
     </changeSet>
-    <changeSet id="createUserProjectTable" author="Chriserus">
-        <createTable tableName="user_project">
-            <column name="user_id" type="int">
-                <constraints nullable="false" foreignKeyName="fk_member" references="user(id)"/>
-            </column>
+    <changeSet id="createProjectUserTable" author="Chriserus">
+        <createTable tableName="project_user">
             <column name="project_id" type="int">
                 <constraints nullable="false" foreignKeyName="fk_project" references="project(id)"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_member" references="user(id)"/>
             </column>
         </createTable>
     </changeSet>
