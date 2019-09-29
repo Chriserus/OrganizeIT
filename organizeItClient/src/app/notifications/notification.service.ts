@@ -1,95 +1,56 @@
 import {Injectable} from '@angular/core';
 import '@firebase/messaging';
 import {AngularFireMessaging} from "@angular/fire/messaging";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
 
-  constructor(private angularFireMessaging: AngularFireMessaging) {
+  readonly PERMISSIONS_URL = "/api/permissions/";
+
+  constructor(private angularFireMessaging: AngularFireMessaging, private http: HttpClient) {
   }
 
-  // TODO: Send token to firebase database and identify users somehow -> save email and token?
+  addPermission(token: string) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        responseType: 'json'
+      })
+    };
+    let jsonData = {
+      'token': token
+    };
+    console.log(jsonData);
+    this.http.post(this.PERMISSIONS_URL + localStorage.getItem("loggedInUserEmail") + "/", jsonData, httpOptions).subscribe(
+        (response: any) => {
+          console.log(response);
+        },
+        (error: any) => {
+          console.log(error);
+        });
+  }
+
   askForPermissions() {
-    this.angularFireMessaging.requestToken
-        .subscribe(
-            (token) => {
-              console.log('Permission granted! Save to the server!', token);
-            },
-            (error) => {
-              console.error(error);
-            }
-        );
-
-    // this.platform.ready().then(async () => {
-    //   await this.notificationService.requestPermission();
-    // });
+    this.angularFireMessaging.getToken.subscribe(
+        oldToken => {
+          if (oldToken === null) {
+            this.angularFireMessaging.requestToken
+                .subscribe(
+                    newToken => {
+                      console.log('Permission granted! Save to the server!', newToken);
+                      this.addPermission(newToken);
+                    },
+                    error => {
+                      console.error(error);
+                    }
+                );
+          }
+        },
+        error => {
+          console.error(error);
+        });
   }
-
-  // init(): Promise<void> {
-  //   return new Promise<void>((resolve, reject) => {
-  //     navigator.serviceWorker.ready.then((registration) => {
-  //       // Don't crash an error if messaging not supported
-  //       if (!firebase.messaging.isSupported()) {
-  //         resolve();
-  //         return;
-  //       }
-  //
-  //       const messaging = firebase.messaging();
-  //
-  //       // Register the Service Worker
-  //       messaging.useServiceWorker(registration);
-  //
-  //       // Initialize your VAPI key
-  //       messaging.usePublicVapidKey(
-  //           environment.firebase.vapidKey
-  //       );
-  //
-  //       // Optional and not covered in the article
-  //       // Listen to messages when your app is in the foreground
-  //       messaging.onMessage((payload) => {
-  //         console.log(payload);
-  //       });
-  //       // Optional and not covered in the article
-  //       // Handle token refresh
-  //       messaging.onTokenRefresh(() => {
-  //         messaging.getToken().then(
-  //             (refreshedToken: string) => {
-  //               console.log(refreshedToken);
-  //             }).catch((err) => {
-  //           console.error(err);
-  //         });
-  //       });
-  //
-  //       resolve();
-  //     }, (err) => {
-  //       reject(err);
-  //     });
-  //   });
-  // }
-
-  // requestPermission(): Promise<void> {
-  //   return new Promise<void>(async (resolve) => {
-  //     if (!Notification) {
-  //       resolve();
-  //       return;
-  //     }
-  //     if (!firebase.messaging.isSupported()) {
-  //       resolve();
-  //       return;
-  //     }
-  //     try {
-  //       const messaging = firebase.messaging();
-  //       await Notification.requestPermission();
-  //
-  //       const token: string = await messaging.getToken();
-  //
-  //       console.log('User notifications token:', token);
-  //     } catch (err) {
-  //       // No notifications granted
-  //     }
-  //     resolve();
-  //   });
-  // }
 }

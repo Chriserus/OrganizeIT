@@ -94,7 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.determineUserLoggedIn();
-    this.notificationService.askForPermissions();
+    //this.notificationService.askForPermissions();
   }
 
   private determineUserLoggedIn() {
@@ -108,7 +108,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.loggedIn = true;
             localStorage.setItem("loggedInUserEmail", this.loggedInUser.email);
             // TODO: Correct place to ask for permissions \/
-            // this.notificationService.askForPermissions();
+            this.notificationService.askForPermissions();
           },
           (error: any) => {
             console.log(error);

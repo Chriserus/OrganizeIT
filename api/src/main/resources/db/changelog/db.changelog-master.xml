@@ -133,4 +133,20 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="createPermissionTable" author="Chriserus">
+        <createTable tableName="permission">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="holder" type="int">
+                <constraints nullable="false" foreignKeyName="fk_holder" references="user(id)"/>
+            </column>
+            <column name="token" type="varchar(255)"/>
+            <column name="created" type="datetime"/>
+            <column name="modified" type="datetime"/>
+        </createTable>
+        <addAutoIncrement columnDataType="int"
+                          columnName="id"
+                          tableName="permission"/>
+    </changeSet>
 </databaseChangeLog>
