@@ -5,6 +5,7 @@ import com.capgemini.organizeIT.permission.repositories.PermissionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PermissionService {
@@ -21,5 +22,9 @@ public class PermissionService {
 
     public Permission save(Permission permission) {
         return permissionRepository.save(permission);
+    }
+
+    public Set<Permission> findByEmail(String email){
+        return permissionRepository.findByHolder_Email(email);
     }
 }

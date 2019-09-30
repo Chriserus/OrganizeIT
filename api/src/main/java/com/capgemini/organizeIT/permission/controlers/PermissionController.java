@@ -1,14 +1,10 @@
 package com.capgemini.organizeIT.permission.controlers;
 
-import com.capgemini.organizeIT.comment.entities.Comment;
-import com.capgemini.organizeIT.comment.services.CommentService;
 import com.capgemini.organizeIT.permission.entities.Permission;
 import com.capgemini.organizeIT.permission.services.PermissionService;
 import com.capgemini.organizeIT.user.services.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Log4j2
 @RestController

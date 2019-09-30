@@ -58,7 +58,7 @@ public class UserController {
 
     @PostMapping(value = "/api/register", consumes = "application/json", produces = "application/json")
     public User register(@RequestBody User newUser) {
-        newUser.setRoles(Stream.of(roleService.findByName(DEFAULT_ROLE)).collect(Collectors.toSet()));
+        newUser.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         log.info(newUser);
         return userService.save(newUser);

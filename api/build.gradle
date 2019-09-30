@@ -12,7 +12,7 @@ mainClassName = 'com.capgemini.organizeIT.OrganizeItApplication'
 
 group = 'com.capgemini'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
@@ -33,6 +33,7 @@ dependencies {
     implementation 'org.liquibase:liquibase-core'
     runtimeOnly 'mysql:mysql-connector-java'
     compile group: 'org.apache.logging.log4j', name: 'log4j', version: '2.12.1', ext: 'pom'
+    compile group: 'org.json', name: 'json', version: '20190722'
 //    testCompile project(':core')
 //    testCompile project(':infrastructure')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
