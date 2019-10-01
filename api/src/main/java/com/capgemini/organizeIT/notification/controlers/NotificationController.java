@@ -15,6 +15,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
+import java.util.Set;
 
 @Log4j2
 @RestController
@@ -32,20 +33,21 @@ public class NotificationController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/api/permissions/{userEmail}/", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/api/notification/permission/{userEmail}/", consumes = "application/json", produces = "application/json")
     public Permission register(@RequestBody Permission permission, @PathVariable String userEmail) {
         User user = userService.findByEmail(userEmail);
         permission.setHolder(user);
-        registerTokenToTopic(permission.getToken(), user.getEmail());
+        registerTokenToTopic(Set.of(permission.getToken()), user.getId());
         log.info(permission);
         return permissionService.save(permission);
     }
 
     @PostMapping(value = "/api/notification/{userEmail}", consumes = "application/json", produces = "application/json")
     public void sendNotificationToUser(@RequestBody Map<String, String> notificationJson, @PathVariable String userEmail) {
-        sendNotificationWithBodyToRecipient(notificationJson, "/topics/" + userEmail);
+        sendNotificationWithBodyToRecipient(notificationJson, "/topics/" + userService.findByEmail(userEmail).getId());
     }
 
+    // TODO: Move below methods to service?
     /**
      * Method used to send notification to certain token or topic passed as recipient parameter
      *
@@ -56,6 +58,7 @@ public class NotificationController {
         JSONObject requestJson = new JSONObject();
         requestJson.put("notification", body);
         requestJson.put("to", recipient);
+        log.info(requestJson);
         try {
             postRequestToUrlWithAuthorization(requestJson, GOOGLE_API_URL);
         } catch (URISyntaxException | IOException | InterruptedException e) {
@@ -76,10 +79,11 @@ public class NotificationController {
     }
 
 
-    private void registerTokenToTopic(String token, String userEmail) {
+    private void registerTokenToTopic(Set<String> tokens, Long userEmail) {
         JSONObject requestJson = new JSONObject();
         requestJson.put("to", "/topics/" + userEmail);
-        requestJson.put("registration_tokens", token);
+        requestJson.put("registration_tokens", tokens);
+        log.info(requestJson);
         try {
             postRequestToUrlWithAuthorization(requestJson, TOPIC_REGISTRATION_URL);
         } catch (URISyntaxException | IOException | InterruptedException e) {

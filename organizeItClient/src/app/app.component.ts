@@ -118,6 +118,10 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+  sendTestNotification(){
+    this.notificationService.sendNotification();
+  }
+
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();

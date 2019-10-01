@@ -20,6 +20,7 @@
             </ion-item>
             <ion-item *ngIf="loggedIn">
               <ion-button (click)="logout()">Logout</ion-button>
+              <ion-button (click)="sendTestNotification()">Send notification to self</ion-button>
             </ion-item>
             <ion-item *ngIf="!loggedIn">
               <ion-button [routerDirection]="'root'" [routerLink]="['/login']">Login</ion-button>

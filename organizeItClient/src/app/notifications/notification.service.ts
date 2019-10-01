@@ -8,7 +8,8 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 })
 export class NotificationService {
 
-  readonly PERMISSIONS_URL = "/api/permissions/";
+  readonly NOTIFICATION_URL = "/api/notification/";
+  readonly NOTIFICATION_PERMISSION_URL = "/api/notification/permission/";
 
   constructor(private angularFireMessaging: AngularFireMessaging, private http: HttpClient) {
   }
@@ -17,14 +18,13 @@ export class NotificationService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        responseType: 'json'
+        responseType: 'application/json'
       })
     };
     let jsonData = {
       'token': token
     };
-    console.log(jsonData);
-    this.http.post(this.PERMISSIONS_URL + localStorage.getItem("loggedInUserEmail") + "/", jsonData, httpOptions).subscribe(
+    this.http.post(this.NOTIFICATION_PERMISSION_URL + localStorage.getItem("loggedInUserEmail") + "/", jsonData, httpOptions).subscribe(
         (response: any) => {
           console.log(response);
         },
@@ -51,6 +51,27 @@ export class NotificationService {
         },
         error => {
           console.error(error);
+        });
+  }
+
+  sendNotification() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        responseType: 'application/json'
+      })
+    };
+    let jsonData = {
+      "title": "Web Push Notifications",
+      "body": "Hey, " + localStorage.getItem("loggedInUserEmail"),
+      "click_action": "/profile"
+    };
+    this.http.post(this.NOTIFICATION_URL + localStorage.getItem("loggedInUserEmail") + "/", jsonData, httpOptions).subscribe(
+        (response: any) => {
+          console.log(response);
+        },
+        (error: any) => {
+          console.log(error);
         });
   }
 }
