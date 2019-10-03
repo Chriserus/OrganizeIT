@@ -11,7 +11,7 @@ import {ToastService} from "./shared/toast.service";
 import {Router} from "@angular/router";
 import {Messages} from "./shared/Messages";
 import {NotificationService} from "./notifications/notification.service";
-import {AngularFireMessaging} from "@angular/fire/messaging";
+import firebase from '@firebase/app';
 
 @Component({
   selector: 'app-root',
@@ -72,6 +72,14 @@ export class AppComponent implements OnInit, OnDestroy {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      const messaging = firebase.messaging();
+      messaging.onMessage(payload => {
+        console.log("Message received. ", payload);
+        const {title, ...options} = payload.notification;
+        navigator.serviceWorker.ready.then(registration => {
+          registration.showNotification(title, options);
+        });
+      });
     });
   }
 
@@ -94,7 +102,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.determineUserLoggedIn();
-    //this.notificationService.askForPermissions();
+    // this.notificationService.askForPermissions();
   }
 
   private determineUserLoggedIn() {
@@ -118,7 +126,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendTestNotification(){
+  sendTestNotification() {
     this.notificationService.sendNotification();
   }
 
