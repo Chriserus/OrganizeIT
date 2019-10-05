@@ -3,6 +3,7 @@ import {Project} from "../interfaces/project.model";
 import {Subject} from "rxjs";
 import {ProjectService} from "../project/project.service";
 import {takeUntil} from "rxjs/operators";
+import {NotificationService} from "../notifications/notification.service";
 
 @Component({
   selector: 'app-list',
@@ -13,7 +14,7 @@ export class ListPage implements OnInit, OnDestroy {
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
 
-  constructor(public projectService: ProjectService) {
+  constructor(private projectService: ProjectService, private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -41,13 +42,25 @@ export class ListPage implements OnInit, OnDestroy {
     this.projectService.addMemberToProject(localStorage.getItem("loggedInUserEmail"), project).subscribe(
         (response: any) => {
           console.log(response);
-          location.reload();
+          this.notificationService.sendNotification(project.owner.email, "Enrollment request",
+              "User " + localStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
+              (response: any) => {
+                console.log(response);
+                location.reload();
+              },
+              (error: any) => {
+                console.log(error);
+              });
         });
   }
 
   listMembers(project: Project) {
     let listOfMembers = [];
-    project.members.forEach(member => listOfMembers.push(member.firstName + " " + member.lastName));
+    project.members.filter(member => member.approved).forEach(member => listOfMembers.push(member.user.firstName + " " + member.user.lastName));
     return listOfMembers;
+  }
+
+  alreadyEnrolled(project: Project) {
+    return project.members.filter(member => member.user.email === localStorage.getItem("loggedInUserEmail")).pop() !== undefined;
   }
 }

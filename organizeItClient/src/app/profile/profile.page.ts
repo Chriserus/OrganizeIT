@@ -26,6 +26,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   getProjects() {
+    // TODO: Add "or member" to filtration (backend)
     this.projects = [];
     this.projectService.getProjectsByOwnerEmail(localStorage.getItem("loggedInUserEmail")).pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
       console.log(projects);

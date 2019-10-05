@@ -127,7 +127,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   sendTestNotification() {
-    this.notificationService.sendNotification();
+    this.notificationService.sendNotification(localStorage.getItem("loggedInUserEmail"),
+        "Test notification", "Test notification body").subscribe(
+        (response: any) => {
+          console.log(response);
+        },
+        (error: any) => {
+          console.log(error);
+        });
   }
 
   ngOnDestroy() {

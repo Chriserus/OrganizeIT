@@ -54,7 +54,7 @@ export class NotificationService {
         });
   }
 
-  sendNotification() {
+  sendNotification(userEmail: string, title: string, body: string) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -62,16 +62,10 @@ export class NotificationService {
       })
     };
     let jsonData = {
-      "title": "Web Push Notifications",
-      "body": "Hey, " + localStorage.getItem("loggedInUserEmail"),
+      "title": title,
+      "body": body,
       "click_action": "/profile"
     };
-    this.http.post(this.NOTIFICATION_URL + localStorage.getItem("loggedInUserEmail") + "/", jsonData, httpOptions).subscribe(
-        (response: any) => {
-          console.log(response);
-        },
-        (error: any) => {
-          console.log(error);
-        });
+    return this.http.post(this.NOTIFICATION_URL + userEmail + "/", jsonData, httpOptions);
   }
 }
