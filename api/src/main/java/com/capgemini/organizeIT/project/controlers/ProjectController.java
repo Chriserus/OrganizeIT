@@ -28,8 +28,8 @@ public class ProjectController {
     }
 
     @GetMapping("/api/projects/{ownerEmail}")
-    public List<Project> findAllProjectsByOwner(@PathVariable final String ownerEmail) {
-        return projectService.findAllByOwner(userService.findByEmail(ownerEmail));
+    public List<Project> findAllProjectsByOwnerOrMember(@PathVariable final String ownerEmail) {
+        return projectService.findAllThatContainUser(userService.findByEmail(ownerEmail));
     }
 
     @PostMapping(value = "/api/projects", consumes = "application/json", produces = "application/json")

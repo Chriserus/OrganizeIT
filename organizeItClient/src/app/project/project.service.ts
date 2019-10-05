@@ -16,8 +16,8 @@ export class ProjectService {
     return this.http.get<Project[]>(this.PROJECTS_URL, {responseType: 'json'});
   }
 
-  getProjectsByOwnerEmail(ownerEmail: string) {
-    return this.http.get<Project[]>(this.PROJECTS_URL + ownerEmail + "/", {responseType: 'json'});
+  getProjectsByOwnerOrMemberEmail(email: string) {
+    return this.http.get<Project[]>(this.PROJECTS_URL + email + "/", {responseType: 'json'});
   }
 
   addProject(form: any, owner: User) {

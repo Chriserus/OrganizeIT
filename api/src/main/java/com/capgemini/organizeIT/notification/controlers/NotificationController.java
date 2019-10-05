@@ -44,6 +44,7 @@ public class NotificationController {
 
     @PostMapping(value = "/api/notification/{userEmail}", consumes = "application/json", produces = "application/json")
     public void sendNotificationToUser(@RequestBody Map<String, String> notificationJson, @PathVariable String userEmail) {
+        log.info("Sending notification to: {}", userService.findByEmail(userEmail).getEmail());
         sendNotificationWithBodyToRecipient(notificationJson, "/topics/" + userService.findByEmail(userEmail).getId());
     }
 
