@@ -2,13 +2,12 @@ package com.capgemini.organizeIT.project.entities;
 
 import com.capgemini.organizeIT.user.entities.User;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -22,13 +21,8 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "project_user",
-            joinColumns = {@JoinColumn(name = "project_id")},
-            inverseJoinColumns = {@JoinColumn(name = "user_id")})
-    private Set<User> members;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private Set<ProjectUser> members = new HashSet<>();
     private Integer maxMembers = 1;
     @CreationTimestamp
     private Date created;

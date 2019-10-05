@@ -1,6 +1,6 @@
 package com.capgemini.organizeIT.user.entities;
 
-import com.capgemini.organizeIT.project.entities.Project;
+import com.capgemini.organizeIT.project.entities.ProjectUser;
 import com.capgemini.organizeIT.role.entities.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -15,8 +15,6 @@ import java.util.Set;
 
 @Data
 @Entity
-@ToString
-@EqualsAndHashCode
 public class User {
 
     @Id
@@ -40,14 +38,10 @@ public class User {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles;
-
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToMany(mappedBy = "members")
-    private Set<Project> projects;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<ProjectUser> projectUsers;
 
-    public User() {
-
-    }
 }

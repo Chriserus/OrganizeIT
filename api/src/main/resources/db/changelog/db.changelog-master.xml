@@ -129,7 +129,7 @@
                 <constraints nullable="false" foreignKeyName="fk_project" references="project(id)"/>
             </column>
             <column name="user_id" type="int">
-                <constraints nullable="false" foreignKeyName="fk_member" references="user(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_user" references="user(id)"/>
             </column>
         </createTable>
     </changeSet>
@@ -148,5 +148,12 @@
         <addAutoIncrement columnDataType="int"
                           columnName="id"
                           tableName="permission"/>
+    </changeSet>
+    <changeSet id="addApprovedColumnToProjectUserTable" author="Chriserus">
+        <addColumn tableName="project_user">
+            <column name="approved" type="boolean"/>
+            <column name="created" type="datetime"/>
+            <column name="modified" type="datetime"/>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>
