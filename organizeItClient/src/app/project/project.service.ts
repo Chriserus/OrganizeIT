@@ -8,6 +8,7 @@ import {User} from "../interfaces/user.model";
 })
 export class ProjectService {
   readonly PROJECTS_URL = '/api/projects/';
+  readonly PROJECT_MEMBERSHIP_URL = '/api/projects/membership/';
 
   constructor(private http: HttpClient) {
   }
@@ -38,7 +39,20 @@ export class ProjectService {
   }
 
   addMemberToProject(memberEmail: string, project: Project) {
-    console.log("Url: " + this.PROJECTS_URL + project.id + "/" + memberEmail + "/");
-    return this.http.put<Project>(this.PROJECTS_URL + project.id + "/" + memberEmail + "/", {}, {responseType: 'json'});
+    let memberAdditionUrl = this.PROJECT_MEMBERSHIP_URL + project.id + "/" + memberEmail + "/";
+    console.log("Url: " + memberAdditionUrl);
+    return this.http.post<Project>(memberAdditionUrl, {}, {responseType: 'json'});
+  }
+
+  approveMemberToProject(memberEmail: string, project: Project) {
+    let memberApprovalUrl = this.PROJECT_MEMBERSHIP_URL + project.id + "/" + memberEmail + "/";
+    console.log("Url: " + memberApprovalUrl);
+    return this.http.put<Project>(memberApprovalUrl, {}, {responseType: 'json'});
+  }
+
+  deleteMemberFromProject(memberEmail: string, project: Project) {
+    let memberDeletionUrl = this.PROJECT_MEMBERSHIP_URL + project.id + "/" + memberEmail + "/";
+    console.log("Url: " + memberDeletionUrl);
+    return this.http.delete<Project>(memberDeletionUrl, {responseType: 'json'});
   }
 }

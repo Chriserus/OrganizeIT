@@ -38,15 +38,31 @@ export class ProfilePage implements OnInit, OnDestroy {
     return project.members.filter(member => member.approved).map(member => member.user.firstName + " " + member.user.lastName);
   }
 
-  listPotentialMembers(project: Project){
+  listPotentialMembers(project: Project) {
     return project.members.filter(member => !member.approved);
   }
 
   acceptUserToProject(project: Project, potentialMember: ProjectUser) {
-    // TODO: Call backend method that changes approved to true on selected project
+    console.log("Accepting member: " + potentialMember.user.email + " to project: " + project.title);
+    this.projectService.approveMemberToProject(potentialMember.user.email, project).subscribe(
+        response => {
+          console.log(response);
+          location.reload();
+        },
+        error => {
+          console.log(error);
+        });
   }
 
   rejectUser(project: Project, potentialMember: ProjectUser) {
-    // TODO: Call backend method that deletes user connection with that project
+    console.log("Rejecting user: " + potentialMember.user.email + ", project: " + project.title);
+    this.projectService.deleteMemberFromProject(potentialMember.user.email, project).subscribe(
+        response => {
+          console.log(response);
+          location.reload();
+        },
+        error => {
+          console.log(error);
+        });
   }
 }

@@ -37,7 +37,6 @@ export class ListPage implements OnInit, OnDestroy {
   }
 
   enroll(project: Project) {
-    // TODO: Implement enrollment functionality with notification sending (to owner)
     console.log("Adding member: " + localStorage.getItem("loggedInUserEmail") + " to project: " + project.title);
     this.projectService.addMemberToProject(localStorage.getItem("loggedInUserEmail"), project).subscribe(
         (response: any) => {
