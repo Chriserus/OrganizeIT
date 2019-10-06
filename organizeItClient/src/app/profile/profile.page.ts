@@ -3,6 +3,7 @@ import {takeUntil} from "rxjs/operators";
 import {ProjectService} from "../project/project.service";
 import {Project} from "../interfaces/project.model";
 import {Subject} from "rxjs";
+import {ProjectUser} from "../interfaces/project-user";
 
 @Component({
   selector: 'app-profile',
@@ -34,8 +35,18 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   listMembers(project: Project) {
-    let listOfMembers = [];
-    project.members.filter(member => member.approved).forEach(member => listOfMembers.push(member.user.firstName + " " + member.user.lastName));
-    return listOfMembers;
+    return project.members.filter(member => member.approved).map(member => member.user.firstName + " " + member.user.lastName);
+  }
+
+  listPotentialMembers(project: Project){
+    return project.members.filter(member => !member.approved);
+  }
+
+  acceptUserToProject(project: Project, potentialMember: ProjectUser) {
+    // TODO: Call backend method that changes approved to true on selected project
+  }
+
+  rejectUser(project: Project, potentialMember: ProjectUser) {
+    // TODO: Call backend method that deletes user connection with that project
   }
 }

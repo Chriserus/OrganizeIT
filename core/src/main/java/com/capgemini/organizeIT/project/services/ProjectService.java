@@ -21,7 +21,7 @@ public class ProjectService {
     }
 
     public List<Project> findAllThatContainUser(User user) {
-        return projectRepository.findAll().stream()
+        return projectRepository.findAll(Sort.by(Sort.Direction.DESC, "created")).stream()
                 .filter(project -> projectContainsMember(user, project) || userIsProjectOwner(user, project))
                 .collect(Collectors.toList());
     }

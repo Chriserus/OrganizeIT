@@ -129,7 +129,7 @@
                 <constraints nullable="false" foreignKeyName="fk_project" references="project(id)"/>
             </column>
             <column name="user_id" type="int">
-                <constraints nullable="false" foreignKeyName="fk_user" references="user(id)"/>
+                <constraints nullable="false" foreignKeyName="fk_member" references="user(id)"/>
             </column>
         </createTable>
     </changeSet>
