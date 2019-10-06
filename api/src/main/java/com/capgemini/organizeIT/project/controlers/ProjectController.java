@@ -9,10 +9,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
-@RestController
 @CrossOrigin
+@RestController
 public class ProjectController {
     private final ProjectService projectService;
     private final UserService userService;
@@ -36,25 +37,25 @@ public class ProjectController {
     public Project register(@RequestBody Project project) {
         log.info(project);
         projectService.save(project);
-        return addMemberByEmail(project.getId(), project.getOwner().getEmail());
+        return addPotentialMemberByEmail(project.getId(), project.getOwner().getEmail());
     }
 
-    // TODO: Make it available only for project owner
+    // TODO: Make project management endpoints available only for project owner
     @DeleteMapping("/api/projects/{id}")
     public void deleteProject(@PathVariable Long id) {
         log.info("Deleting project: {}", projectService.findById(id).orElse(null));
         projectService.deleteById(id);
     }
 
-    @PutMapping("/api/projects/{id}/{memberEmail}/")
-    public Project addMemberByEmail(@PathVariable Long id, @PathVariable String memberEmail) {
-        return projectService.findById(id).map(project -> {
+    @PostMapping("/api/projects/membership/{projectId}/{memberEmail}/")
+    public Project addPotentialMemberByEmail(@PathVariable Long projectId, @PathVariable String memberEmail) {
+        return projectService.findById(projectId).map(project -> {
             log.info("Members before: {}", project.getMembers());
             User user = userService.findByEmail(memberEmail);
             ProjectUser projectUser = new ProjectUser();
             projectUser.setProject(project);
             projectUser.setUser(user);
-            if(user.getEmail().equals(project.getOwner().getEmail())){
+            if (user.getEmail().equals(project.getOwner().getEmail())) {
                 projectUser.setApproved(true);
             }
             project.getMembers().add(projectUser);
@@ -62,6 +63,36 @@ public class ProjectController {
             userService.save(user);
             return projectService.save(project);
         }).orElse(null);
+    }
 
+    @PutMapping("/api/projects/membership/{projectId}/{memberEmail}/")
+    public Project acceptPotentialProjectMember(@PathVariable Long projectId, @PathVariable String memberEmail) {
+        return projectService.findById(projectId).map(project -> {
+            User user = userService.findByEmail(memberEmail);
+            Optional<ProjectUser> optionalMember = extractOptionalMemberByEmail(memberEmail, project);
+            optionalMember.ifPresent(member -> {
+                member.setApproved(true);
+                project.getMembers().add(member);
+            });
+            userService.save(user);
+            return projectService.save(project);
+        }).orElse(null);
+    }
+
+    @DeleteMapping("/api/projects/membership/{projectId}/{memberEmail}/")
+    public Project removeProjectMember(@PathVariable Long projectId, @PathVariable String memberEmail) {
+        return projectService.findById(projectId).map(project -> {
+            User user = userService.findByEmail(memberEmail);
+            Optional<ProjectUser> optionalMember = extractOptionalMemberByEmail(memberEmail, project);
+            optionalMember.ifPresent(member ->
+                    log.info("Removing member: {} with result: {}", member.getUser().getEmail(), project.getMembers().remove(member)));
+            userService.save(user);
+            return projectService.save(project);
+        }).orElse(null);
+    }
+
+    private Optional<ProjectUser> extractOptionalMemberByEmail(@PathVariable String memberEmail, Project project) {
+        return project.getMembers().stream()
+                .filter(projectUser -> projectUser.getUser().equals(userService.findByEmail(memberEmail))).findFirst();
     }
 }

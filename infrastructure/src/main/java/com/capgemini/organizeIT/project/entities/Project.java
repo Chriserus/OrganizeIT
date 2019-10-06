@@ -21,7 +21,7 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProjectUser> members = new HashSet<>();
     private Integer maxMembers = 1;
     @CreationTimestamp
