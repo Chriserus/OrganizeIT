@@ -5,6 +5,8 @@ import {Project} from "../interfaces/project.model";
 import {Subject} from "rxjs";
 import {ProjectUser} from "../interfaces/project-user";
 import {NotificationService} from "../notifications/notification.service";
+import {AuthService} from "../authentication/auth.service";
+import {User} from "../interfaces/user.model";
 
 @Component({
   selector: 'app-profile',
@@ -14,12 +16,19 @@ import {NotificationService} from "../notifications/notification.service";
 export class ProfilePage implements OnInit, OnDestroy {
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
+  firstName: string;
+  lastName: string;
 
-  constructor(private projectService: ProjectService, private notificationService: NotificationService) {
+
+  constructor(private projectService: ProjectService, private notificationService: NotificationService, private authService: AuthService) {
   }
 
   ngOnInit() {
     this.getProjects();
+    this.authService.getCurrentUser().subscribe((response: User) => {
+      this.firstName = response.firstName;
+      this.lastName = response.lastName;
+    });
   }
 
   ngOnDestroy() {
@@ -77,6 +86,21 @@ export class ProfilePage implements OnInit, OnDestroy {
               (error: any) => {
                 console.log(error);
               });
+        },
+        error => {
+          console.log(error);
+        });
+  }
+
+  // TODO: When unchanged -> field is empty? Check it
+  updateUser(form) {
+    console.log(form.value);
+    if (form.value.firstName === undefined || form.value.lastName === undefined) {
+      return;
+    }
+    this.authService.updateInfo(form.value, localStorage.getItem("loggedInUserEmail")).subscribe(
+        response => {
+          console.log(response);
         },
         error => {
           console.log(error);

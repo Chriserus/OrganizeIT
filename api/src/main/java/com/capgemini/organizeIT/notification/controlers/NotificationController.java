@@ -80,9 +80,9 @@ public class NotificationController {
     }
 
 
-    private void registerTokenToTopic(Set<String> tokens, Long userEmail) {
+    private void registerTokenToTopic(Set<String> tokens, Long userId) {
         JSONObject requestJson = new JSONObject();
-        requestJson.put("to", "/topics/" + userEmail);
+        requestJson.put("to", "/topics/" + userId);
         requestJson.put("registration_tokens", tokens);
         log.info(requestJson);
         try {

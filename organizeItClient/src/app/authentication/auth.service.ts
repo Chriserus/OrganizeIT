@@ -12,6 +12,7 @@ export class AuthService {
   readonly LOGOUT_URL = '/api/logout';
   readonly LOGGED_IN_USER_URL = '/api/user';
   readonly USER_BY_USERNAME_URL = '/api/users/emails/';
+  readonly UPDATE_USER_INFO_URL = '/api/user/update/';
 
   constructor(private http: HttpClient) {
   }
@@ -47,6 +48,21 @@ export class AuthService {
       'password': form.password
     };
     return this.http.post(this.REGISTER_URL, jsonData, httpOptions);
+  }
+
+  updateInfo(form: any, email: string) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        responseType: 'json'
+      })
+    };
+
+    let jsonData = {
+      'firstName': form.firstName,
+      'lastName': form.lastName
+    };
+    return this.http.put(this.UPDATE_USER_INFO_URL + email + "/", jsonData, httpOptions);
   }
 
   getByEmail(email: string) {

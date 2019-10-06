@@ -34,6 +34,7 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     compile group: 'org.apache.logging.log4j', name: 'log4j', version: '2.12.1', ext: 'pom'
     compile group: 'org.json', name: 'json', version: '20190722'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.1.9.RELEASE'
 //    testCompile project(':core')
 //    testCompile project(':infrastructure')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

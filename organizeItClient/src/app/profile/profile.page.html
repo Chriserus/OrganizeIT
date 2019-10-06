@@ -10,14 +10,6 @@
 <ion-content>
   <ion-card>
     <ion-card-header>
-      <ion-card-title>My data</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      Fields to modify user data
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
       <ion-card-title>My projects</ion-card-title>
     </ion-card-header>
     <ion-card-content>
@@ -58,6 +50,30 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>My data</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form #form="ngForm" (ngSubmit)="updateUser(form)">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="stacked">First name</ion-label>
+                <ion-input name="firstName" autocapitalize="words" ngModel [value]="firstName"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="stacked">Last name</ion-label>
+                <ion-input name="lastName" autocapitalize="words" ngModel [value]="lastName" (keyup.enter)="updateUser(form)"></ion-input>
+              </ion-item>
+              <ion-button id="submitButton" type="submit" (keydown.enter)="updateUser(form)">Update</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
     </ion-card-content>
   </ion-card>
 </ion-content>

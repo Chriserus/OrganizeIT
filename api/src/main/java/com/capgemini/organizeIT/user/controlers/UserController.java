@@ -1,6 +1,5 @@
 package com.capgemini.organizeIT.user.controlers;
 
-import com.capgemini.organizeIT.role.entities.Role;
 import com.capgemini.organizeIT.role.services.RoleService;
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.services.UserService;
@@ -9,11 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @CrossOrigin
@@ -48,11 +44,15 @@ public class UserController {
 
     @GetMapping("/api/email")
     public String currentUserName(Principal principal) {
+        if (principal == null)
+            return null;
         return principal.getName();
     }
 
     @GetMapping("/api/user")
     public User currentUser(Principal principal) {
+        if (principal == null)
+            return null;
         return userService.findByEmail(principal.getName());
     }
 
@@ -62,5 +62,26 @@ public class UserController {
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         log.info(newUser);
         return userService.save(newUser);
+    }
+
+    // TODO: Verify, that user is allowed to do this (logged in user sent it)
+    @PutMapping(value = "/api/user/update/{userEmail}/")
+    public User updateUser(@RequestBody User modifiedUser, @PathVariable String userEmail) {
+        User originalUser = userService.findByEmail(userEmail);
+        if (validateData(modifiedUser)) {
+            return originalUser;
+        }
+        if (!originalUser.getFirstName().equals(modifiedUser.getFirstName())) {
+            originalUser.setFirstName(modifiedUser.getFirstName());
+        }
+        if (!originalUser.getLastName().equals(modifiedUser.getLastName())) {
+            originalUser.setLastName(modifiedUser.getLastName());
+        }
+        log.info(originalUser);
+        return userService.save(originalUser);
+    }
+
+    private boolean validateData(@RequestBody User modifiedUser) {
+        return modifiedUser.getFirstName() == null || modifiedUser.getFirstName().equals("") || modifiedUser.getLastName() == null || modifiedUser.getLastName().equals("");
     }
 }
