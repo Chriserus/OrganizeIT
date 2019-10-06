@@ -4,6 +4,7 @@ import {ProjectService} from "../project/project.service";
 import {Project} from "../interfaces/project.model";
 import {Subject} from "rxjs";
 import {ProjectUser} from "../interfaces/project-user";
+import {NotificationService} from "../notifications/notification.service";
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +15,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
 
-  constructor(public projectService: ProjectService) {
+  constructor(private projectService: ProjectService, private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -47,7 +48,15 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.projectService.approveMemberToProject(potentialMember.user.email, project).subscribe(
         response => {
           console.log(response);
-          location.reload();
+          this.notificationService.sendNotification(potentialMember.user.email, "Enrollment successful",
+              "Owner of project " + project.title + " has accepted your enrollment submission").subscribe(
+              (response: any) => {
+                console.log(response);
+                location.reload();
+              },
+              (error: any) => {
+                console.log(error);
+              });
         },
         error => {
           console.log(error);
@@ -59,7 +68,15 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.projectService.deleteMemberFromProject(potentialMember.user.email, project).subscribe(
         response => {
           console.log(response);
-          location.reload();
+          this.notificationService.sendNotification(potentialMember.user.email, "Enrollment submission rejected",
+              "Owner of project " + project.title + " has rejected your enrollment submission").subscribe(
+              (response: any) => {
+                console.log(response);
+                location.reload();
+              },
+              (error: any) => {
+                console.log(error);
+              });
         },
         error => {
           console.log(error);
