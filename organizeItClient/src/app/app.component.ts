@@ -18,7 +18,7 @@ import firebase from '@firebase/app';
   templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit, OnDestroy {
-  public appPages = [
+  public publicAppPages = [
     {
       title: 'Home',
       url: '/home',
@@ -30,19 +30,9 @@ export class AppComponent implements OnInit, OnDestroy {
       icon: 'list'
     },
     {
-      title: 'Add project',
-      url: '/submission',
-      icon: 'add'
-    },
-    {
       title: 'Agenda',
       url: '/agenda',
       icon: 'calendar'
-    },
-    {
-      title: 'Board',
-      url: '/board',
-      icon: 'contacts'
     },
     {
       title: 'Archive',
@@ -50,6 +40,25 @@ export class AppComponent implements OnInit, OnDestroy {
       icon: 'filing'
     }
   ];
+
+  public userAppPages = [
+    {
+      title: 'Add project',
+      url: '/submission',
+      icon: 'add'
+    },
+    {
+      title: 'Board',
+      url: '/board',
+      icon: 'contacts'
+    }
+  ];
+
+  public adminPanel = {
+    title: 'Admin panel',
+    url: '/admin',
+    icon: 'finger-print'
+  };
 
   private loggedInUser: User;
   private displayName: string;
@@ -140,5 +149,13 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  isUserAdmin() {
+    if (JSON.parse(localStorage.getItem("loggedIn")) === false) {
+      return false;
+    } else {
+      return this.loggedInUser.roles.map(role => role.name).filter(name => name === "ROLE_ADMIN").pop() !== undefined;
+    }
   }
 }

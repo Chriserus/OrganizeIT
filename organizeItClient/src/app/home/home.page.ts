@@ -19,9 +19,11 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (JSON.parse(localStorage.getItem("loggedIn")) === true) {
-      this.getProjects();
-    }
+    this.getProjects();
+  }
+
+  isUserLoggedIn() {
+    return JSON.parse(localStorage.getItem("loggedIn")) === true;
   }
 
   ngOnDestroy() {

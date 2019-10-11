@@ -21,10 +21,10 @@
         of the resources below for next steps.</p>
     </ion-card-content>
   </ion-card>
-  <ion-card>
+  <ion-card *ngIf="isUserLoggedIn()">
     <ion-card-content>
       <ion-button [routerDirection]="'root'" [routerLink]="['/submission']">Submit new project</ion-button>
-      <ion-button>Join existing project</ion-button>
+      <ion-button [routerDirection]="'root'" [routerLink]="['/list']">Join existing project</ion-button>
     </ion-card-content>
   </ion-card>
   <ion-slides>

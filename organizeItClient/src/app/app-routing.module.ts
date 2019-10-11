@@ -24,7 +24,8 @@ const routes: Routes = [
   { path: 'archive', loadChildren: './archive/archive.module#ArchivePageModule' },
   { path: 'register', loadChildren: './authentication/register/register.module#RegisterPageModule' },
   { path: 'login', loadChildren: './authentication/login/login.module#LoginPageModule' },
-  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' }
+  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
+  { path: 'admin', loadChildren: './admin/admin.module#AdminPageModule' }
 ];
 
 @NgModule({

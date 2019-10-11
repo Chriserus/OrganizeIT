@@ -19,13 +19,13 @@
             <form #form="ngForm" (ngSubmit)="registerProject(form)">
               <ion-item>
                 <ion-label position="stacked">Title</ion-label>
-                <ion-input name="title" type="text" ngModel required></ion-input>
+                <ion-input name="title" type="text" autocapitalize="sentences" ngModel required></ion-input>
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Description</ion-label>
                 <!-- TODO: Move method call to the lowest input field -->
-                <ion-input name="description" type="text" autocorrect="on" ngModel required
-                           (keyup.enter)="registerProject(form)"></ion-input>
+                <ion-textarea name="description" type="text" autocapitalize="sentences" rows="6" autoGrow="true" ngModel required
+                           (keyup.enter)="registerProject(form)"></ion-textarea>
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Maximum team members</ion-label>

@@ -31,7 +31,6 @@ public class User {
     private Date modified;
     @ManyToMany(fetch = FetchType.EAGER)
     // TODO: Eager is required, else: LazyInitializationException, bcs session is not active. Inverse control?
-    @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JoinTable(name = "user_role",

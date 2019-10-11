@@ -25,7 +25,7 @@
             </ion-item-divider>
             <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
           </ion-card-content>
-          <ion-item *ngIf="!alreadyEnrolled(project)">
+          <ion-item *ngIf="!alreadyEnrolled(project) && isUserLoggedIn()">
             <ion-button id="enrollButton" expand="block" (click)="enroll(project)" >Enroll</ion-button>
           </ion-item>
         </ion-card>

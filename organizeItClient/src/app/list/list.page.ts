@@ -18,9 +18,7 @@ export class ListPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (JSON.parse(localStorage.getItem("loggedIn")) === true) {
-      this.getProjects();
-    }
+    this.getProjects();
   }
 
   ngOnDestroy() {
@@ -61,5 +59,9 @@ export class ListPage implements OnInit, OnDestroy {
 
   alreadyEnrolled(project: Project) {
     return project.members.filter(member => member.user.email === localStorage.getItem("loggedInUserEmail")).pop() !== undefined;
+  }
+
+  isUserLoggedIn(): boolean {
+    return JSON.parse(localStorage.getItem("loggedIn"));
   }
 }

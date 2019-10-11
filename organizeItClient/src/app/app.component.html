@@ -27,10 +27,22 @@
               <ion-button [routerDirection]="'root'" [routerLink]="['/register']">Register</ion-button>
             </ion-item>
           </ion-menu-toggle>
-          <ion-menu-toggle auto-hide="false" *ngFor="let page of appPages">
+          <ion-menu-toggle auto-hide="false" *ngFor="let page of publicAppPages">
             <ion-item [routerDirection]="'root'" [routerLink]="[page.url]">
               <ion-icon slot="start" [name]="page.icon"></ion-icon>
               <ion-label>{{page.title}}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false" *ngFor="let page of userAppPages">
+            <ion-item *ngIf="loggedIn" [routerDirection]="'root'" [routerLink]="[page.url]">
+              <ion-icon slot="start" [name]="page.icon"></ion-icon>
+              <ion-label>{{page.title}}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item *ngIf="isUserAdmin()" [routerDirection]="'root'" [routerLink]="[adminPanel.url]">
+              <ion-icon slot="start" [name]="adminPanel.icon"></ion-icon>
+              <ion-label>{{adminPanel.title}}</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>

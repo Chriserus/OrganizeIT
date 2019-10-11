@@ -1,6 +1,7 @@
 package com.capgemini.organizeIT.role.entities;
 
 import com.capgemini.organizeIT.user.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -18,7 +19,7 @@ public class Role {
     private Long id;
     private String name;
 
-
+    @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "roles")

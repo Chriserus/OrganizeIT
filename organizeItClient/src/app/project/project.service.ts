@@ -7,7 +7,7 @@ import {User} from "../interfaces/user.model";
   providedIn: 'root'
 })
 export class ProjectService {
-  readonly PROJECTS_URL = '/api/projects/';
+  readonly PROJECTS_URL = '/api/projects';
   readonly PROJECT_MEMBERSHIP_URL = '/api/projects/membership/';
 
   constructor(private http: HttpClient) {
@@ -18,7 +18,7 @@ export class ProjectService {
   }
 
   getProjectsByOwnerOrMemberEmail(email: string) {
-    return this.http.get<Project[]>(this.PROJECTS_URL + email + "/", {responseType: 'json'});
+    return this.http.get<Project[]>(this.PROJECTS_URL + "/" + email + "/", {responseType: 'json'});
   }
 
   addProject(form: any, owner: User) {
@@ -35,6 +35,7 @@ export class ProjectService {
       'maxMembers': form.value.maxMembers
     };
     console.log(jsonData);
+    // TODO: Secure this endpoint (or change something, that only get is allowed
     return this.http.post(this.PROJECTS_URL, jsonData, httpOptions);
   }
 
