@@ -8,5 +8,6 @@ export const Messages = {
   loggedOutSuccessMessage: 'Logged out successfully!',
   loggedOutErrorMessage: 'Logging out unsuccessful!',
   serverUnavailable: 'Server unavailable',
-  enrollmentSuccessfulTitle: 'Enrollment successful',
+  enrollmentSuccessfulNotificationTitle: 'Enrollment successful',
+  projectDeletedNotificationTitle: 'Project deleted',
 };

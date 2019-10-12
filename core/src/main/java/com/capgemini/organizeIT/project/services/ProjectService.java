@@ -58,21 +58,4 @@ public class ProjectService {
     public Optional<Project> findById(Long id) {
         return projectRepository.findById(id);
     }
-
-    public Project addPotentialMemberByEmail(Long projectId, String memberEmail) {
-        return findById(projectId).map(project -> {
-            log.info("Members before: {}", project.getMembers());
-            User user = userService.findByEmail(memberEmail);
-            Membership membership = new Membership();
-            membership.setProject(project);
-            membership.setUser(user);
-            if (user.getEmail().equals(project.getOwner().getEmail())) {
-                membership.setApproved(true);
-            }
-            project.getMembers().add(membership);
-            log.info("Members after: {}", project.getMembers());
-            userService.save(user);
-            return save(project);
-        }).orElse(null);
-    }
 }

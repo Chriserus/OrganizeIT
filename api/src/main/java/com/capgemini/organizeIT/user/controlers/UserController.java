@@ -82,6 +82,7 @@ public class UserController {
     }
 
     private boolean validateData(@RequestBody User modifiedUser) {
-        return modifiedUser.getFirstName() == null || modifiedUser.getFirstName().equals("") || modifiedUser.getLastName() == null || modifiedUser.getLastName().equals("");
+        return modifiedUser.getFirstName() == null || modifiedUser.getFirstName().equals("")
+                || modifiedUser.getLastName() == null || modifiedUser.getLastName().equals("");
     }
 }

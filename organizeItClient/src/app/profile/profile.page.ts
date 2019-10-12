@@ -18,7 +18,6 @@ export class ProfilePage implements OnInit, OnDestroy {
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
 
-
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
               private authService: AuthService, private alertController: AlertController) {
   }
@@ -41,11 +40,19 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   listMembers(project: Project) {
-    return project.members.filter(member => member.approved).map(member => member.user.firstName + " " + member.user.lastName);
+    return project.members.filter(member => member.approved).map(member => " " + member.user.firstName + " " + member.user.lastName);
   }
 
   listPotentialMembers(project: Project) {
     return project.members.filter(member => !member.approved);
+  }
+
+  projectHasRequests(project: Project) {
+    return this.listPotentialMembers(project).length
+  }
+
+  isProjectOwner(project: Project) {
+    return localStorage.getItem("loggedInUserEmail") === project.owner.email;
   }
 
   acceptUserToProject(project: Project, potentialMember: ProjectUser) {
@@ -53,7 +60,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.projectService.approveMemberToProject(potentialMember.user.email, project).subscribe(
         response => {
           console.log(response);
-          this.notificationService.sendNotification(potentialMember.user.email, Messages.enrollmentSuccessfulTitle,
+          this.notificationService.sendNotification(potentialMember.user.email, Messages.enrollmentSuccessfulNotificationTitle,
               "Owner of project " + project.title + " has accepted your enrollment submission").subscribe(
               (response: any) => {
                 console.log(response);
@@ -88,7 +95,6 @@ export class ProfilePage implements OnInit, OnDestroy {
         });
   }
 
-  // TODO: When unchanged -> field is empty? Check it
   updateUser(form) {
     console.log(form.value);
     if (form.value.firstName === undefined || form.value.lastName === undefined) {
@@ -102,10 +108,6 @@ export class ProfilePage implements OnInit, OnDestroy {
         error => {
           console.log(error);
         });
-  }
-
-  isProjectOwner(project: Project) {
-    return localStorage.getItem("loggedInUserEmail") === project.owner.email;
   }
 
   async presentDeleteProjectAlert(project: Project) {
@@ -122,33 +124,34 @@ export class ProfilePage implements OnInit, OnDestroy {
         }, {
           text: 'DELETE',
           cssClass: 'danger',
-          // TODO: Send notifications to all members
           handler: () => {
             this.projectService.deleteProject(project).subscribe(
                 response => {
                   console.log(response);
-                  project.members.map(member => member.user.email).forEach(userEmail => {
-                    this.notificationService.sendNotification(userEmail, "Project deleted", "Project: " + project.title + " has been deleted").subscribe(
-                        (response: any) => {
-                          console.log(response);
-                        },
-                        (error: any) => {
-                          console.log(error);
-                        });
-                  });
+                  this.sendNotificationToProjectMembersAboutProjectDeletion(project);
                   this.getProjects();
                 },
                 error => {
                   console.log(error);
-                }
-            );
+                });
           }
-        }
-      ]
+        }]
     });
-
     await alert.present();
     let result = await alert.onDidDismiss();
     console.log(result);
+  }
+
+  private sendNotificationToProjectMembersAboutProjectDeletion(project: Project) {
+    project.members.filter(member => member.approved).map(member => member.user.email).forEach(userEmail => {
+      this.notificationService.sendNotification(userEmail, Messages.projectDeletedNotificationTitle,
+          "Project: " + project.title + " has been deleted").subscribe(
+          (response: any) => {
+            console.log(response);
+          },
+          (error: any) => {
+            console.log(error);
+          });
+    });
   }
 }

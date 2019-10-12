@@ -43,7 +43,7 @@ export class ListPage implements OnInit, OnDestroy {
               "User " + localStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
               (response: any) => {
                 console.log(response);
-                location.reload();
+                this.getProjects();
               },
               (error: any) => {
                 console.log(error);

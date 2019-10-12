@@ -6,6 +6,7 @@ import com.capgemini.organizeIT.project.services.ProjectService;
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.services.UserService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -24,12 +25,28 @@ public class MembershipController {
 
     @PostMapping("/api/project/membership/{projectId}/{memberEmail}/")
     public Project addPotentialMemberByEmail(@PathVariable Long projectId, @PathVariable String memberEmail) {
-        return projectService.addPotentialMemberByEmail(projectId, memberEmail);
+        return projectService.findById(projectId).map(project -> {
+            log.info("Members before: {}", project.getMembers());
+            User user = userService.findByEmail(memberEmail);
+            Membership membership = new Membership();
+            membership.setProject(project);
+            membership.setUser(user);
+            if (user.getEmail().equals(project.getOwner().getEmail())) {
+                membership.setApproved(true);
+            }
+            project.getMembers().add(membership);
+            log.info("Members after: {}", project.getMembers());
+            userService.save(user);
+            return projectService.save(project);
+        }).orElse(null);
     }
 
     @PutMapping("/api/project/membership/{projectId}/{memberEmail}/")
     public Project acceptPotentialProjectMember(@PathVariable Long projectId, @PathVariable String memberEmail) {
         return projectService.findById(projectId).map(project -> {
+            if (loggedInUserNotProjectOwner(project)) {
+                return project;
+            }
             User user = userService.findByEmail(memberEmail);
             Optional<Membership> optionalMember = extractOptionalMemberByEmail(memberEmail, project);
             optionalMember.ifPresent(member -> {
@@ -44,6 +61,9 @@ public class MembershipController {
     @DeleteMapping("/api/project/membership/{projectId}/{memberEmail}/")
     public Project removeProjectMember(@PathVariable Long projectId, @PathVariable String memberEmail) {
         return projectService.findById(projectId).map(project -> {
+            if (loggedInUserNotProjectOwner(project)) {
+                return project;
+            }
             User user = userService.findByEmail(memberEmail);
             Optional<Membership> optionalMember = extractOptionalMemberByEmail(memberEmail, project);
             optionalMember.ifPresent(member ->
@@ -51,6 +71,10 @@ public class MembershipController {
             userService.save(user);
             return projectService.save(project);
         }).orElse(null);
+    }
+
+    private boolean loggedInUserNotProjectOwner(Project project) {
+        return !SecurityContextHolder.getContext().getAuthentication().getName().equals(project.getOwner().getEmail());
     }
 
     private Optional<Membership> extractOptionalMemberByEmail(@PathVariable String memberEmail, Project project) {

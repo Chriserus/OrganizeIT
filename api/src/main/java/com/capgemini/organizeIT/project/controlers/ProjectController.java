@@ -6,7 +6,9 @@ import com.capgemini.organizeIT.user.services.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @CrossOrigin
@@ -33,15 +35,16 @@ public class ProjectController {
     @PostMapping("/api/project")
     public Project addProject(@RequestBody Project project) {
         log.info(project);
-        // TODO: Do not add owner as member by default
-        projectService.save(project);
-        return projectService.addPotentialMemberByEmail(project.getId(), project.getOwner().getEmail());
+        return projectService.save(project);
     }
 
-    // TODO: Make project management endpoints available only for project owner
     @DeleteMapping("/api/project/{id}")
-    public void deleteProject(@PathVariable Long id) {
-        log.info("Deleting project: {}", projectService.findById(id).orElse(null));
-        projectService.deleteById(id);
+    public void deleteProject(@PathVariable Long id, Principal principal) {
+        projectService.findById(id).ifPresent(project -> {
+            if (principal.getName().equals(project.getOwner().getEmail())) {
+                log.info("Deleting project: {}", project);
+                projectService.deleteById(id);
+            }
+        });
     }
 }

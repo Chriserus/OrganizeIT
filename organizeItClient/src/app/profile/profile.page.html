@@ -29,25 +29,25 @@
                 <ion-item-divider>
                 </ion-item-divider>
                 <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
-                <ion-item-divider>
-                </ion-item-divider>
-                Requests:
-                <ion-item *ngFor="let potentialMember of listPotentialMembers(project)">
-                  <ion-buttons>
-                    <ion-button size="small" slot="start" shape="round"
-                                (click)="acceptUserToProject(project, potentialMember)">
-                      <ion-icon name="checkmark"></ion-icon>
-                    </ion-button>
-                    <ion-button size="small" slot="start" color="danger" shape="round"
-                                (click)="rejectUser(project, potentialMember)">
-                      <ion-icon name="close"></ion-icon>
-                    </ion-button>
-                    {{potentialMember.user.email}}
-                  </ion-buttons>
-                </ion-item>
+                <div *ngIf="projectHasRequests(project) && isProjectOwner(project)">
+                  <ion-item-divider>
+                  </ion-item-divider>
+                  Requests:
+                  <div *ngFor="let potentialMember of listPotentialMembers(project)">
+                    <ion-buttons>
+                      <ion-button size="small" slot="start" color="success" shape="round"
+                                  (click)="acceptUserToProject(project, potentialMember)">
+                        <ion-icon name="checkmark"></ion-icon>
+                      </ion-button>
+                      <ion-button size="small" slot="start" color="danger" shape="round"
+                                  (click)="rejectUser(project, potentialMember)">
+                        <ion-icon name="close"></ion-icon>
+                      </ion-button>
+                        {{potentialMember.user.email}}
+                    </ion-buttons>
+                  </div>
+                </div>
               </ion-card-content>
-              <ion-item-divider>
-              </ion-item-divider>
               <ion-button *ngIf="isProjectOwner(project)" id="deleteButton" expand="block"
                           (click)="presentDeleteProjectAlert(project)" color="danger">Delete project
               </ion-button>
