@@ -1,6 +1,6 @@
 package com.capgemini.organizeIT.user.entities;
 
-import com.capgemini.organizeIT.project.entities.ProjectUser;
+import com.capgemini.organizeIT.project.entities.Membership;
 import com.capgemini.organizeIT.role.entities.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
-    @JsonIgnore
+    // TODO: Cannot annotate @JsonIgnore, because it makes password null when registering new user
     private String password;
     @CreationTimestamp
     private Date created;
@@ -41,6 +41,6 @@ public class User {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProjectUser> projectUsers;
+    private Set<Membership> memberships;
 
 }

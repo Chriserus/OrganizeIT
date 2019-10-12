@@ -56,7 +56,7 @@ public class UserController {
         return userService.findByEmail(principal.getName());
     }
 
-    @PostMapping(value = "/api/register", consumes = "application/json", produces = "application/json")
+    @PostMapping("/api/register")
     public User register(@RequestBody User newUser) {
         newUser.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
@@ -65,7 +65,7 @@ public class UserController {
     }
 
     // TODO: Verify, that user is allowed to do this (logged in user sent it)
-    @PutMapping(value = "/api/user/update/{userEmail}/")
+    @PutMapping("/api/user/update/{userEmail}/")
     public User updateUser(@RequestBody User modifiedUser, @PathVariable String userEmail) {
         User originalUser = userService.findByEmail(userEmail);
         if (validateData(modifiedUser)) {

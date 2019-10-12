@@ -2,9 +2,7 @@ package com.capgemini.organizeIT.project.entities;
 
 import com.capgemini.organizeIT.user.entities.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,7 +15,7 @@ import java.util.Date;
 
 @Data
 @Entity
-public class ProjectUser implements Serializable {
+public class Membership implements Serializable {
     @Id
     @ManyToOne
     @JoinColumn

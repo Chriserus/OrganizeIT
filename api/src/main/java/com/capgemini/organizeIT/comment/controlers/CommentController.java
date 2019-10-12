@@ -22,7 +22,7 @@ public class CommentController {
         return commentService.findAll();
     }
 
-    @PostMapping(value = "/api/comments", consumes = "application/json", produces = "application/json")
+    @PostMapping("/api/comments")
     public Comment register(@RequestBody Comment newComment) {
         log.info(newComment);
         return commentService.save(newComment);

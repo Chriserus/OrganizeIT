@@ -6,7 +6,8 @@ import {Subject} from "rxjs";
 import {ProjectUser} from "../interfaces/project-user";
 import {NotificationService} from "../notifications/notification.service";
 import {AuthService} from "../authentication/auth.service";
-import {User} from "../interfaces/user.model";
+import {AlertController} from "@ionic/angular";
+import {Messages} from "../shared/Messages";
 
 @Component({
   selector: 'app-profile',
@@ -16,19 +17,14 @@ import {User} from "../interfaces/user.model";
 export class ProfilePage implements OnInit, OnDestroy {
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
-  firstName: string;
-  lastName: string;
 
 
-  constructor(private projectService: ProjectService, private notificationService: NotificationService, private authService: AuthService) {
+  constructor(private projectService: ProjectService, private notificationService: NotificationService,
+              private authService: AuthService, private alertController: AlertController) {
   }
 
   ngOnInit() {
     this.getProjects();
-    this.authService.getCurrentUser().subscribe((response: User) => {
-      this.firstName = response.firstName;
-      this.lastName = response.lastName;
-    });
   }
 
   ngOnDestroy() {
@@ -57,7 +53,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.projectService.approveMemberToProject(potentialMember.user.email, project).subscribe(
         response => {
           console.log(response);
-          this.notificationService.sendNotification(potentialMember.user.email, "Enrollment successful",
+          this.notificationService.sendNotification(potentialMember.user.email, Messages.enrollmentSuccessfulTitle,
               "Owner of project " + project.title + " has accepted your enrollment submission").subscribe(
               (response: any) => {
                 console.log(response);
@@ -101,9 +97,58 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.authService.updateInfo(form.value, localStorage.getItem("loggedInUserEmail")).subscribe(
         response => {
           console.log(response);
+          location.reload();
         },
         error => {
           console.log(error);
         });
+  }
+
+  isProjectOwner(project: Project) {
+    return localStorage.getItem("loggedInUserEmail") === project.owner.email;
+  }
+
+  async presentDeleteProjectAlert(project: Project) {
+    const alert = await this.alertController.create({
+      header: 'Deleting project!',
+      message: 'You are deleting project: <p><strong>' + project.title + '</strong></p>',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'DELETE',
+          cssClass: 'danger',
+          // TODO: Send notifications to all members
+          handler: () => {
+            this.projectService.deleteProject(project).subscribe(
+                response => {
+                  console.log(response);
+                  project.members.map(member => member.user.email).forEach(userEmail => {
+                    this.notificationService.sendNotification(userEmail, "Project deleted", "Project: " + project.title + " has been deleted").subscribe(
+                        (response: any) => {
+                          console.log(response);
+                        },
+                        (error: any) => {
+                          console.log(error);
+                        });
+                  });
+                  this.getProjects();
+                },
+                error => {
+                  console.log(error);
+                }
+            );
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
   }
 }

@@ -152,7 +152,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   isUserAdmin() {
-    if (JSON.parse(localStorage.getItem("loggedIn")) === false) {
+    if (JSON.parse(localStorage.getItem("loggedIn")) === false || JSON.parse(localStorage.getItem("loggedIn")) === null
+        || this.loggedInUser === undefined) {
       return false;
     } else {
       return this.loggedInUser.roles.map(role => role.name).filter(name => name === "ROLE_ADMIN").pop() !== undefined;

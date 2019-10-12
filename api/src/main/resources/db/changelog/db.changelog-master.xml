@@ -156,4 +156,8 @@
             <column name="modified" type="datetime"/>
         </addColumn>
     </changeSet>
+    <changeSet id="renameProjectUserTableToMembership" author="Chriserus">
+        <renameTable newTableName="membership"
+                     oldTableName="project_user"/>
+    </changeSet>
 </databaseChangeLog>

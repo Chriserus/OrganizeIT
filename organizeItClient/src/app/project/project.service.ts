@@ -8,7 +8,8 @@ import {User} from "../interfaces/user.model";
 })
 export class ProjectService {
   readonly PROJECTS_URL = '/api/projects';
-  readonly PROJECT_MEMBERSHIP_URL = '/api/projects/membership/';
+  readonly PROJECT_URL = '/api/project/';
+  readonly PROJECT_MEMBERSHIP_URL = '/api/project/membership/';
 
   constructor(private http: HttpClient) {
   }
@@ -36,7 +37,11 @@ export class ProjectService {
     };
     console.log(jsonData);
     // TODO: Secure this endpoint (or change something, that only get is allowed
-    return this.http.post(this.PROJECTS_URL, jsonData, httpOptions);
+    return this.http.post(this.PROJECT_URL, jsonData, httpOptions);
+  }
+
+  deleteProject(project: Project){
+    return this.http.delete(this.PROJECT_URL + project.id);
   }
 
   addMemberToProject(memberEmail: string, project: Project) {

@@ -33,7 +33,7 @@ public class NotificationController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/api/notification/permission/{userEmail}/", consumes = "application/json", produces = "application/json")
+    @PostMapping("/api/notification/permission/{userEmail}/")
     public Permission register(@RequestBody Permission permission, @PathVariable String userEmail) {
         User user = userService.findByEmail(userEmail);
         permission.setHolder(user);
@@ -42,7 +42,7 @@ public class NotificationController {
         return permissionService.save(permission);
     }
 
-    @PostMapping(value = "/api/notification/{userEmail}", consumes = "application/json", produces = "application/json")
+    @PostMapping("/api/notification/{userEmail}")
     public void sendNotificationToUser(@RequestBody Map<String, String> notificationJson, @PathVariable String userEmail) {
         log.info("Sending notification to: {}", userService.findByEmail(userEmail).getEmail());
         sendNotificationWithBodyToRecipient(notificationJson, "/topics/" + userService.findByEmail(userEmail).getId());

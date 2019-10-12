@@ -46,6 +46,11 @@
                   </ion-buttons>
                 </ion-item>
               </ion-card-content>
+              <ion-item-divider>
+              </ion-item-divider>
+              <ion-button *ngIf="isProjectOwner(project)" id="deleteButton" expand="block"
+                          (click)="presentDeleteProjectAlert(project)" color="danger">Delete project
+              </ion-button>
             </ion-card>
           </ion-col>
         </ion-row>
@@ -54,7 +59,7 @@
   </ion-card>
   <ion-card>
     <ion-card-header>
-      <ion-card-title>My data</ion-card-title>
+      <ion-card-title>Update my data</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <form #form="ngForm" (ngSubmit)="updateUser(form)">
@@ -63,11 +68,12 @@
             <ion-col>
               <ion-item>
                 <ion-label position="stacked">First name</ion-label>
-                <ion-input name="firstName" autocapitalize="words" ngModel [value]="firstName"></ion-input>
+                <ion-input name="firstName" autocapitalize="words" ngModel></ion-input>
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Last name</ion-label>
-                <ion-input name="lastName" autocapitalize="words" ngModel [value]="lastName" (keyup.enter)="updateUser(form)"></ion-input>
+                <ion-input name="lastName" autocapitalize="words" ngModel
+                           (keyup.enter)="updateUser(form)"></ion-input>
               </ion-item>
               <ion-button id="submitButton" type="submit" (keydown.enter)="updateUser(form)">Update</ion-button>
             </ion-col>
