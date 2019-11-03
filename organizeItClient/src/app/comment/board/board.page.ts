@@ -7,6 +7,7 @@ import {Comment} from "../../interfaces/comment.model";
 import {SubmitService} from "../../shared/submit.service";
 import {AuthService} from "../../authentication/auth.service";
 import {IonContent} from "@ionic/angular";
+import {User} from "../../interfaces/user.model";
 
 @Component({
   selector: 'app-board',
@@ -17,6 +18,7 @@ export class BoardPage extends SubmitService implements OnInit, OnDestroy {
   @ViewChild(IonContent) content: IonContent;
   comments: Comment[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
+  private loggedInUser: User;
 
   constructor(private commentService: CommentService, private authService: AuthService) {
     super();
@@ -25,6 +27,11 @@ export class BoardPage extends SubmitService implements OnInit, OnDestroy {
   ngOnInit() {
     if (JSON.parse(localStorage.getItem("loggedIn")) === true) {
       this.getComments();
+      this.authService.getCurrentUser().subscribe(
+          (user: User) => {
+            this.loggedInUser = user
+          }
+      )
     }
   }
 
@@ -39,8 +46,6 @@ export class BoardPage extends SubmitService implements OnInit, OnDestroy {
       console.log(comments);
       this.comments = comments;
     });
-    // TODO: Repair scrolling, so it works as intended
-    this.ScrollToBottom();
   }
 
   registerComment(form) {
@@ -59,9 +64,4 @@ export class BoardPage extends SubmitService implements OnInit, OnDestroy {
           });
     }
   }
-
-  ScrollToBottom(){
-    this.content.scrollToBottom(1500);
-  }
-
 }

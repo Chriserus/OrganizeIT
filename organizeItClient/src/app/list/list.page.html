@@ -23,10 +23,11 @@
             Members: {{listMembers(project)}}
             <ion-item-divider>
             </ion-item-divider>
-            <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
+            <!-- custom date format:  HH:MM | d-MMM-yyyy-->
+            <ion-card-subtitle>Created: {{project.created | date: 'medium'}}</ion-card-subtitle>
           </ion-card-content>
           <ion-item *ngIf="!alreadyEnrolled(project) && isUserLoggedIn()">
-            <ion-button id="enrollButton" expand="block" (click)="enroll(project)" >Enroll</ion-button>
+            <ion-button id="enrollButton" expand="block" (click)="enroll(project)">Enroll</ion-button>
           </ion-item>
         </ion-card>
       </ion-col>

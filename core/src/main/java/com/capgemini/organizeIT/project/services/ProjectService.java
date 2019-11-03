@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @Log4j2
 @Service
 public class ProjectService {
-
     private final ProjectRepository projectRepository;
     private final UserService userService;
 
@@ -26,7 +25,7 @@ public class ProjectService {
     }
 
     public List<Project> findAllThatContainUser(User user) {
-        return projectRepository.findAll(Sort.by(Sort.Direction.DESC, "created")).stream()
+        return findAllSortByDateNewFirst().stream()
                 .filter(project -> projectContainsMember(user, project) || userIsProjectOwner(user, project))
                 .collect(Collectors.toList());
     }

@@ -17,14 +17,14 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @GetMapping("/api/comments")
+    @GetMapping("/comments")
     public List<Comment> findAllComments() {
         return commentService.findAll();
     }
 
-    @PostMapping("/api/comments")
-    public Comment register(@RequestBody Comment newComment) {
-        log.info(newComment);
-        return commentService.save(newComment);
+    @PostMapping("/comments")
+    public Comment register(@RequestBody Comment comment) {
+        log.info(comment);
+        return commentService.save(comment);
     }
 }

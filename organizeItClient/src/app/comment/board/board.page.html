@@ -13,34 +13,34 @@
       <ion-col>
         <ion-card>
           <ion-card-content>
-            {{comment.content}}
-            <ion-item-divider>
-            </ion-item-divider>
-            <ion-card-subtitle>Author: {{comment.author.firstName + " " + comment.author.lastName}}</ion-card-subtitle>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-card>
-          <ion-card-content>
-            <form #form="ngForm" (ngSubmit)="registerComment(form)">
-              <ion-item>
-                <ion-checkbox name="announcement" slot="end" ngModel="false"></ion-checkbox>
-                <ion-label>Announcement</ion-label>
-              </ion-item>
-              <ion-item>
-                <ion-label position="stacked">Content</ion-label>
-                <ion-input name="content" type="text" autocorrect="on" ngModel required
-                           ></ion-input>
-              </ion-item>
-              <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Submit
-              </ion-button>
-            </form>
+            <ion-button *ngIf="comment.announcement" disabled="true" color="danger">ANNOUNCEMENT</ion-button>
+            <ion-item>{{comment.content}}</ion-item>
+            <ion-card-subtitle>{{comment.author.firstName + " " + comment.author.lastName}}, {{comment.created | date: 'medium'}}</ion-card-subtitle>
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-card>
+      <ion-card-content>
+        <form #form="ngForm" (ngSubmit)="registerComment(form)">
+          <ion-item *ngIf="authService.userHasAdminRole(this.loggedInUser)">
+            <ion-checkbox name="announcement" slot="end" ngModel="false"></ion-checkbox>
+            <ion-label>Announcement</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Content</ion-label>
+            <ion-input name="content" type="text" autocorrect="on" ngModel required
+            ></ion-input>
+          </ion-item>
+          <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Submit
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </ion-toolbar>
+</ion-footer>

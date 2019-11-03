@@ -10,9 +10,9 @@ export class AuthService {
   readonly LOGIN_URL = '/api/login';
   readonly REGISTER_URL = '/api/register';
   readonly LOGOUT_URL = '/api/logout';
+  readonly USERS_URL = '/api/users';
   readonly LOGGED_IN_USER_URL = '/api/user';
   readonly USER_BY_USERNAME_URL = '/api/users/emails/';
-  readonly UPDATE_USER_INFO_URL = '/api/user/update/';
 
   constructor(private http: HttpClient) {
   }
@@ -50,22 +50,29 @@ export class AuthService {
     return this.http.post(this.REGISTER_URL, jsonData, httpOptions);
   }
 
-  updateInfo(form: any, email: string) {
+  updateInfo(form: any, user: User) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         responseType: 'json'
       })
     };
-
     let jsonData = {
       'firstName': form.firstName,
       'lastName': form.lastName
     };
-    return this.http.put(this.UPDATE_USER_INFO_URL + email + "/", jsonData, httpOptions);
+    return this.http.put(this.USERS_URL + "/" + user.id, jsonData, httpOptions);
   }
 
   getByEmail(email: string) {
     return this.http.get<User>(this.USER_BY_USERNAME_URL + email + "/", {responseType: 'json'});
+  }
+
+  userHasAdminRole(user: User) {
+    if (JSON.parse(localStorage.getItem("loggedIn")) === false || JSON.parse(localStorage.getItem("loggedIn")) === null || user == null) {
+      return false;
+    } else {
+      return user.roles.map(role => role.name).filter(name => name === "ROLE_ADMIN").pop() !== undefined;
+    }
   }
 }

@@ -21,7 +21,7 @@ import java.util.Set;
 @RestController
 @CrossOrigin
 public class NotificationController {
-    private static final String AUTHENTICATION_KEY = "key=";
+    private static final String AUTHENTICATION_KEY = "key=AAAAB-QRAc8:APA91bGFG3j-yLpZkMqzyVFJMLr5vwPLnr2ibds7RJezgRRjECsbF_AWhZn5Qdm7eIXIh06AmHIdLmNesBhiORLKM6T0OyxzkNzZsPzjRzR7WLzkG1q-2TlcanpWpSObA_4SgBuU-rgQ";
     private static final String GOOGLE_API_URL = "https://fcm.googleapis.com/fcm/send";
     private static final String TOPIC_REGISTRATION_URL = "https://iid.googleapis.com/iid/v1:batchAdd";
     private static final String APPLICATION_JSON = "application/json";
@@ -33,19 +33,19 @@ public class NotificationController {
         this.userService = userService;
     }
 
-    @PostMapping("/api/notification/permission/{userEmail}/")
-    public Permission register(@RequestBody Permission permission, @PathVariable String userEmail) {
-        User user = userService.findByEmail(userEmail);
+    @PostMapping("/notifications/permissions/{userId}/")
+    public Permission register(@RequestBody Permission permission, @PathVariable Long userId) {
+        User user = userService.findById(userId);
         permission.setHolder(user);
         registerTokenToTopic(Set.of(permission.getToken()), user.getId());
         log.info(permission);
         return permissionService.save(permission);
     }
 
-    @PostMapping("/api/notification/{userEmail}")
-    public void sendNotificationToUser(@RequestBody Map<String, String> notificationJson, @PathVariable String userEmail) {
-        log.info("Sending notification to: {}", userService.findByEmail(userEmail).getEmail());
-        sendNotificationWithBodyToRecipient(notificationJson, "/topics/" + userService.findByEmail(userEmail).getId());
+    @PostMapping("/notifications/{userId}")
+    public void sendNotificationToUser(@RequestBody Map<String, String> notificationJson, @PathVariable Long userId) {
+        log.info("Sending notification to: {}", userService.findById(userId).getEmail());
+        sendNotificationWithBodyToRecipient(notificationJson, "/topics/" + userService.findById(userId).getId());
     }
 
     // TODO: Move below methods to service?

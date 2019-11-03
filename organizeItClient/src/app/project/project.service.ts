@@ -8,8 +8,8 @@ import {User} from "../interfaces/user.model";
 })
 export class ProjectService {
   readonly PROJECTS_URL = '/api/projects';
-  readonly PROJECT_URL = '/api/project/';
-  readonly PROJECT_MEMBERSHIP_URL = '/api/project/membership/';
+  readonly USERS_URL = '/api/users';
+  readonly MEMBERSHIP_URL = '/memberships';
 
   constructor(private http: HttpClient) {
   }
@@ -18,8 +18,8 @@ export class ProjectService {
     return this.http.get<Project[]>(this.PROJECTS_URL, {responseType: 'json'});
   }
 
-  getProjectsByOwnerOrMemberEmail(email: string) {
-    return this.http.get<Project[]>(this.PROJECTS_URL + "/" + email + "/", {responseType: 'json'});
+  getProjectsByOwnerOrMember(user: User) {
+    return this.http.get<Project[]>(this.USERS_URL + "/" + user.id + "/projects", {responseType: 'json'});
   }
 
   addProject(form: any, owner: User) {
@@ -37,28 +37,22 @@ export class ProjectService {
     };
     console.log(jsonData);
     // TODO: Secure this endpoint (or change something, that only get is allowed
-    return this.http.post(this.PROJECT_URL, jsonData, httpOptions);
+    return this.http.post(this.PROJECTS_URL, jsonData, httpOptions);
   }
 
   deleteProject(project: Project){
-    return this.http.delete(this.PROJECT_URL + project.id);
+    return this.http.delete(this.PROJECTS_URL + "/" + project.id);
   }
 
-  addMemberToProject(memberEmail: string, project: Project) {
-    let memberAdditionUrl = this.PROJECT_MEMBERSHIP_URL + project.id + "/" + memberEmail + "/";
-    console.log("Url: " + memberAdditionUrl);
-    return this.http.post<Project>(memberAdditionUrl, {}, {responseType: 'json'});
+  addMemberToProject(member: User, project: Project) {
+    return this.http.post<Project>(this.PROJECTS_URL + "/" + project.id + this.MEMBERSHIP_URL + "/" + member.id, {}, {responseType: 'json'});
   }
 
-  approveMemberToProject(memberEmail: string, project: Project) {
-    let memberApprovalUrl = this.PROJECT_MEMBERSHIP_URL + project.id + "/" + memberEmail + "/";
-    console.log("Url: " + memberApprovalUrl);
-    return this.http.put<Project>(memberApprovalUrl, {}, {responseType: 'json'});
+  approveMemberToProject(member: User, project: Project) {
+    return this.http.put<Project>(this.PROJECTS_URL + "/" + project.id + this.MEMBERSHIP_URL + "/" + member.id, {}, {responseType: 'json'});
   }
 
-  deleteMemberFromProject(memberEmail: string, project: Project) {
-    let memberDeletionUrl = this.PROJECT_MEMBERSHIP_URL + project.id + "/" + memberEmail + "/";
-    console.log("Url: " + memberDeletionUrl);
-    return this.http.delete<Project>(memberDeletionUrl, {responseType: 'json'});
+  deleteMemberFromProject(member: User, project: Project) {
+    return this.http.delete<Project>(this.PROJECTS_URL + "/" + project.id + this.MEMBERSHIP_URL + "/" + member.id, {responseType: 'json'});
   }
 }

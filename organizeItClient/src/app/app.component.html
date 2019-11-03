@@ -9,6 +9,12 @@
       <ion-content>
         <ion-list>
           <ion-menu-toggle auto-hide="false">
+            <div *ngIf="online$ | async; else offline"></div>
+            <ng-template #offline>
+              <ion-chip color="warning">
+                <ion-label>Offline</ion-label>
+              </ion-chip>
+            </ng-template>
             <ion-item *ngIf="loggedIn">
               <ion-avatar slot="start">
                 <ion-img src="/assets/sampleAvatar.svg"></ion-img>
@@ -20,7 +26,7 @@
             </ion-item>
             <ion-item *ngIf="loggedIn">
               <ion-button (click)="logout()">Logout</ion-button>
-              <ion-button (click)="sendTestNotification()">Send notification to self</ion-button>
+<!--              <ion-button (click)="sendTestNotification()">Send notification to self</ion-button>-->
             </ion-item>
             <ion-item *ngIf="!loggedIn">
               <ion-button [routerDirection]="'root'" [routerLink]="['/login']">Login</ion-button>
@@ -40,7 +46,7 @@
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
-            <ion-item *ngIf="isUserAdmin()" [routerDirection]="'root'" [routerLink]="[adminPanel.url]">
+            <ion-item *ngIf="authService.userHasAdminRole(this.loggedInUser)" [routerDirection]="'root'" [routerLink]="[adminPanel.url]">
               <ion-icon slot="start" [name]="adminPanel.icon"></ion-icon>
               <ion-label>{{adminPanel.title}}</ion-label>
             </ion-item>

@@ -4,6 +4,8 @@ import {Subject} from "rxjs";
 import {ProjectService} from "../project/project.service";
 import {takeUntil} from "rxjs/operators";
 import {NotificationService} from "../notifications/notification.service";
+import {AuthService} from "../authentication/auth.service";
+import {User} from "../interfaces/user.model";
 
 @Component({
   selector: 'app-list',
@@ -14,7 +16,7 @@ export class ListPage implements OnInit, OnDestroy {
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
 
-  constructor(private projectService: ProjectService, private notificationService: NotificationService) {
+  constructor(private projectService: ProjectService, private notificationService: NotificationService, private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -36,19 +38,21 @@ export class ListPage implements OnInit, OnDestroy {
 
   enroll(project: Project) {
     console.log("Adding member: " + localStorage.getItem("loggedInUserEmail") + " to project: " + project.title);
-    this.projectService.addMemberToProject(localStorage.getItem("loggedInUserEmail"), project).subscribe(
-        (response: any) => {
-          console.log(response);
-          this.notificationService.sendNotification(project.owner.email, "Enrollment request",
-              "User " + localStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
-              (response: any) => {
-                console.log(response);
-                this.getProjects();
-              },
-              (error: any) => {
-                console.log(error);
-              });
-        });
+    this.authService.getCurrentUser().subscribe((user: User) => {
+      this.projectService.addMemberToProject(user, project).subscribe(
+          (response: any) => {
+            console.log(response);
+            this.notificationService.sendNotification(project.owner, "Enrollment request",
+                "User " + localStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
+                (response: any) => {
+                  console.log(response);
+                  this.getProjects();
+                },
+                (error: any) => {
+                  console.log(error);
+                });
+          });
+    })
   }
 
   listMembers(project: Project) {

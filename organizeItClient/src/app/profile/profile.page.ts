@@ -8,6 +8,7 @@ import {NotificationService} from "../notifications/notification.service";
 import {AuthService} from "../authentication/auth.service";
 import {AlertController} from "@ionic/angular";
 import {Messages} from "../shared/Messages";
+import {User} from "../interfaces/user.model";
 
 @Component({
   selector: 'app-profile',
@@ -17,13 +18,17 @@ import {Messages} from "../shared/Messages";
 export class ProfilePage implements OnInit, OnDestroy {
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
+  loggedInUser: User;
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
               private authService: AuthService, private alertController: AlertController) {
   }
 
   ngOnInit() {
-    this.getProjects();
+    this.authService.getCurrentUser().subscribe((user: User) => {
+      this.loggedInUser = user;
+      this.getProjects();
+    });
   }
 
   ngOnDestroy() {
@@ -33,7 +38,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   getProjects() {
     this.projects = [];
-    this.projectService.getProjectsByOwnerOrMemberEmail(localStorage.getItem("loggedInUserEmail")).pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
+    this.projectService.getProjectsByOwnerOrMember(this.loggedInUser).pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
       console.log(projects);
       this.projects = projects;
     });
@@ -57,14 +62,14 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   acceptUserToProject(project: Project, potentialMember: ProjectUser) {
     console.log("Accepting member: " + potentialMember.user.email + " to project: " + project.title);
-    this.projectService.approveMemberToProject(potentialMember.user.email, project).subscribe(
+    this.projectService.approveMemberToProject(potentialMember.user, project).subscribe(
         response => {
           console.log(response);
-          this.notificationService.sendNotification(potentialMember.user.email, Messages.enrollmentSuccessfulNotificationTitle,
+          this.notificationService.sendNotification(potentialMember.user, Messages.enrollmentSuccessfulNotificationTitle,
               "Owner of project " + project.title + " has accepted your enrollment submission").subscribe(
               (response: any) => {
                 console.log(response);
-                location.reload();
+                this.getProjects();
               },
               (error: any) => {
                 console.log(error);
@@ -77,14 +82,14 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   rejectUser(project: Project, potentialMember: ProjectUser) {
     console.log("Rejecting user: " + potentialMember.user.email + ", project: " + project.title);
-    this.projectService.deleteMemberFromProject(potentialMember.user.email, project).subscribe(
+    this.projectService.deleteMemberFromProject(potentialMember.user, project).subscribe(
         response => {
           console.log(response);
-          this.notificationService.sendNotification(potentialMember.user.email, "Enrollment submission rejected",
+          this.notificationService.sendNotification(potentialMember.user, "Enrollment submission rejected",
               "Owner of project " + project.title + " has rejected your enrollment submission").subscribe(
               (response: any) => {
                 console.log(response);
-                location.reload();
+                this.getProjects();
               },
               (error: any) => {
                 console.log(error);
@@ -100,14 +105,17 @@ export class ProfilePage implements OnInit, OnDestroy {
     if (form.value.firstName === undefined || form.value.lastName === undefined) {
       return;
     }
-    this.authService.updateInfo(form.value, localStorage.getItem("loggedInUserEmail")).subscribe(
-        response => {
-          console.log(response);
-          location.reload();
-        },
-        error => {
-          console.log(error);
-        });
+    this.authService.getCurrentUser().subscribe((user: User) => {
+      this.authService.updateInfo(form.value, user).subscribe(
+          response => {
+            console.log(response);
+            location.reload();
+          },
+          error => {
+            console.log(error);
+          });
+    });
+
   }
 
   async presentDeleteProjectAlert(project: Project) {
@@ -143,8 +151,8 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   private sendNotificationToProjectMembersAboutProjectDeletion(project: Project) {
-    project.members.filter(member => member.approved).map(member => member.user.email).forEach(userEmail => {
-      this.notificationService.sendNotification(userEmail, Messages.projectDeletedNotificationTitle,
+    project.members.filter(member => member.approved).map(member => member.user).forEach(user => {
+      this.notificationService.sendNotification(user, Messages.projectDeletedNotificationTitle,
           "Project: " + project.title + " has been deleted").subscribe(
           (response: any) => {
             console.log(response);

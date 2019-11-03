@@ -19,8 +19,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
 
-    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService) {
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService, RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
         this.userDetailsService = userDetailsService;
+        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
     }
 
     @Bean
@@ -46,18 +49,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/users").hasRole("ADMIN")
                 .antMatchers("/api/users/emails/**").permitAll()
                 .antMatchers("/api/users/*").hasRole("USER")
-                .antMatchers("/api/projects/*").hasRole("USER")
-                .antMatchers("/api/project/**").hasRole("USER")
+                .antMatchers("/api/projects/**").hasRole("USER")
                 .antMatchers("/api/comments").hasRole("USER")
+                .antMatchers("/error").permitAll()
                 .antMatchers("/api/register", "/api/projects").permitAll()
                 .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(restAuthenticationEntryPoint)
+                .and()
                 .formLogin()
-                .loginProcessingUrl("/api/login")
+                .loginProcessingUrl("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and()
-                .logout().logoutUrl("/api/logout").permitAll()
-                .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
+                .logout().logoutUrl("/logout").permitAll()
+                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
                 .and()
                 .csrf().disable();
         // TODO: Dodać application-local.properties jako profil i w ustawieniach intellij odpalać z tym profilem. w nim można wyłączyć spring security - on ma priorytet nad application.properties

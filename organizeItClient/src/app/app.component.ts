@@ -12,6 +12,7 @@ import {Router} from "@angular/router";
 import {Messages} from "./shared/Messages";
 import {NotificationService} from "./notifications/notification.service";
 import firebase from '@firebase/app';
+import {Network} from "@ngx-pwa/offline";
 
 @Component({
   selector: 'app-root',
@@ -64,6 +65,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private displayName: string;
   private unsubscribe: Subject<User> = new Subject();
   public loggedIn: boolean;
+  public online$ = this.network.onlineChanges;
 
   constructor(
       private platform: Platform,
@@ -72,7 +74,8 @@ export class AppComponent implements OnInit, OnDestroy {
       private authService: AuthService,
       private toastService: ToastService,
       private router: Router,
-      private notificationService: NotificationService
+      private notificationService: NotificationService,
+      private network: Network
   ) {
     this.initializeApp();
   }
@@ -125,7 +128,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.loggedIn = true;
             localStorage.setItem("loggedInUserEmail", this.loggedInUser.email);
             // TODO: Correct place to ask for permissions \/
-            this.notificationService.askForPermissions();
+            this.notificationService.askForPermissions(this.loggedInUser);
           },
           (error: any) => {
             console.log(error);
@@ -136,7 +139,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   sendTestNotification() {
-    this.notificationService.sendNotification(localStorage.getItem("loggedInUserEmail"),
+    this.notificationService.sendNotification(this.loggedInUser,
         "Test notification", "Test notification body").subscribe(
         (response: any) => {
           console.log(response);
@@ -149,14 +152,5 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-  }
-
-  isUserAdmin() {
-    if (JSON.parse(localStorage.getItem("loggedIn")) === false || JSON.parse(localStorage.getItem("loggedIn")) === null
-        || this.loggedInUser === undefined) {
-      return false;
-    } else {
-      return this.loggedInUser.roles.map(role => role.name).filter(name => name === "ROLE_ADMIN").pop() !== undefined;
-    }
   }
 }

@@ -2,19 +2,20 @@ import {Injectable} from '@angular/core';
 import '@firebase/messaging';
 import {AngularFireMessaging} from "@angular/fire/messaging";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {User} from "../interfaces/user.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
 
-  readonly NOTIFICATION_URL = "/api/notification/";
-  readonly NOTIFICATION_PERMISSION_URL = "/api/notification/permission/";
+  readonly NOTIFICATION_URL = "/api/notifications";
+  readonly NOTIFICATION_PERMISSION_URL = "/api/notifications/permissions";
 
   constructor(private angularFireMessaging: AngularFireMessaging, private http: HttpClient) {
   }
 
-  addPermission(token: string) {
+  addPermission(token: string, user: User) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -24,7 +25,7 @@ export class NotificationService {
     let jsonData = {
       'token': token
     };
-    this.http.post(this.NOTIFICATION_PERMISSION_URL + localStorage.getItem("loggedInUserEmail") + "/", jsonData, httpOptions).subscribe(
+    this.http.post(this.NOTIFICATION_PERMISSION_URL + "/" + user.id, jsonData, httpOptions).subscribe(
         (response: any) => {
           console.log(response);
         },
@@ -33,7 +34,7 @@ export class NotificationService {
         });
   }
 
-  askForPermissions() {
+  askForPermissions(user: User) {
     this.angularFireMessaging.getToken.subscribe(
         oldToken => {
           if (oldToken === null) {
@@ -41,7 +42,7 @@ export class NotificationService {
                 .subscribe(
                     newToken => {
                       console.log('Permission granted! Save to the server!', newToken);
-                      this.addPermission(newToken);
+                      this.addPermission(newToken, user);
                     },
                     error => {
                       console.error(error);
@@ -54,7 +55,7 @@ export class NotificationService {
         });
   }
 
-  sendNotification(userEmail: string, title: string, body: string) {
+  sendNotification(user: User, title: string, body: string) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -66,6 +67,6 @@ export class NotificationService {
       "body": body,
       "click_action": "/profile"
     };
-    return this.http.post(this.NOTIFICATION_URL + userEmail + "/", jsonData, httpOptions);
+    return this.http.post(this.NOTIFICATION_URL + "/" + user.id, jsonData, httpOptions);
   }
 }

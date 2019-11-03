@@ -27,7 +27,9 @@ import {AngularFireMessaging} from "@angular/fire/messaging";
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    ServiceWorkerModule.register('combined-sw.js', {enabled: environment.production})
+    ServiceWorkerModule.register('combined-sw.js', {
+      enabled: environment.production
+    })
   ],
   providers: [
     StatusBar,
