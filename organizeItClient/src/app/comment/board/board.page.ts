@@ -18,9 +18,9 @@ export class BoardPage extends SubmitService implements OnInit, OnDestroy {
   @ViewChild(IonContent) content: IonContent;
   comments: Comment[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
-  private loggedInUser: User;
+  public loggedInUser: User;
 
-  constructor(private commentService: CommentService, private authService: AuthService) {
+  constructor(private commentService: CommentService, public authService: AuthService) {
     super();
   }
 

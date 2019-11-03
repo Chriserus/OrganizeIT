@@ -61,7 +61,7 @@ export class AppComponent implements OnInit, OnDestroy {
     icon: 'finger-print'
   };
 
-  private loggedInUser: User;
+  public loggedInUser: User;
   private displayName: string;
   private unsubscribe: Subject<User> = new Subject();
   public loggedIn: boolean;
@@ -71,7 +71,7 @@ export class AppComponent implements OnInit, OnDestroy {
       private platform: Platform,
       private splashScreen: SplashScreen,
       private statusBar: StatusBar,
-      private authService: AuthService,
+      public authService: AuthService,
       private toastService: ToastService,
       private router: Router,
       private notificationService: NotificationService,

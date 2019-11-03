@@ -33,7 +33,7 @@ public class NotificationController {
         this.userService = userService;
     }
 
-    @PostMapping("/notifications/permissions/{userId}/")
+    @PostMapping("/api/notifications/permissions/{userId}/")
     public Permission register(@RequestBody Permission permission, @PathVariable Long userId) {
         User user = userService.findById(userId);
         permission.setHolder(user);
@@ -42,7 +42,7 @@ public class NotificationController {
         return permissionService.save(permission);
     }
 
-    @PostMapping("/notifications/{userId}")
+    @PostMapping("/api/notifications/{userId}")
     public void sendNotificationToUser(@RequestBody Map<String, String> notificationJson, @PathVariable Long userId) {
         log.info("Sending notification to: {}", userService.findById(userId).getEmail());
         sendNotificationWithBodyToRecipient(notificationJson, "/topics/" + userService.findById(userId).getId());

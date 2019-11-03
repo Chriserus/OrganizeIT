@@ -18,18 +18,18 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @GetMapping("/projects")
+    @GetMapping("/api/projects")
     public List<Project> findAllProjects() {
         return projectService.findAllSortByDateNewFirst();
     }
 
-    @PostMapping("/projects")
+    @PostMapping("/api/projects")
     public Project addProject(@RequestBody Project project) {
         log.info(project);
         return projectService.save(project);
     }
 
-    @DeleteMapping("/projects/{id}")
+    @DeleteMapping("/api/projects/{id}")
     public void deleteProject(@PathVariable Long id, Principal principal) {
         projectService.findById(id).ifPresent(project -> {
             if (principal.getName().equals(project.getOwner().getEmail())) {

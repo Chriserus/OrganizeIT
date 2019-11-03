@@ -23,7 +23,7 @@ public class MembershipController {
         this.userService = userService;
     }
 
-    @PostMapping("/projects/{projectId}/memberships/{memberId}")
+    @PostMapping("/api/projects/{projectId}/memberships/{memberId}")
     public Project addPotentialMemberByEmail(@PathVariable Long projectId, @PathVariable Long memberId) {
         return projectService.findById(projectId).map(project -> {
             log.info("Members before: {}", project.getMembers());
@@ -41,7 +41,7 @@ public class MembershipController {
         }).orElse(null);
     }
 
-    @PutMapping("/projects/{projectId}/memberships/{memberId}")
+    @PutMapping("/api/projects/{projectId}/memberships/{memberId}")
     public Project acceptPotentialProjectMember(@PathVariable Long projectId, @PathVariable Long memberId) {
         return projectService.findById(projectId).map(project -> {
             if (loggedInUserNotProjectOwner(project)) {
@@ -58,7 +58,7 @@ public class MembershipController {
         }).orElse(null);
     }
 
-    @DeleteMapping("/projects/{projectId}/memberships/{memberId}")
+    @DeleteMapping("/api/projects/{projectId}/memberships/{memberId}")
     public Project removeProjectMember(@PathVariable Long projectId, @PathVariable Long memberId) {
         return projectService.findById(projectId).map(project -> {
             if (loggedInUserNotProjectOwner(project)) {

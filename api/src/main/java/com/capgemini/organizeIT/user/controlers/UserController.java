@@ -30,35 +30,35 @@ public class UserController {
         this.projectService = projectService;
     }
 
-    @GetMapping("/user")
+    @GetMapping("/api/user")
     public User currentUser(Principal principal) {
         if (principal == null)
             return null;
         return userService.findByEmail(principal.getName());
     }
 
-    @GetMapping("/users")
+    @GetMapping("/api/users")
     public List<User> allUsers() {
         return userService.findAll();
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/api/users/{userId}")
     public User user(@PathVariable final Long userId) {
         return userService.findById(userId);
     }
 
-    @GetMapping("/users/emails/{email}/")
+    @GetMapping("/api/users/emails/{email}/")
     public User userByEmail(@PathVariable final String email) {
         log.info(email);
         return userService.findByEmail(email);
     }
     
-    @GetMapping("/users/{userId}/projects")
+    @GetMapping("/api/users/{userId}/projects")
     public List<Project> projectsThatContainUser(@PathVariable final Long userId) {
         return projectService.findAllThatContainUser(userService.findById(userId));
     }
 
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     public User register(@RequestBody User newUser) {
         newUser.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
@@ -67,7 +67,7 @@ public class UserController {
     }
 
     // TODO: Verify, that user is allowed to do this (logged in user sent it)
-    @PutMapping("/users/{userId}")
+    @PutMapping("/api/users/{userId}")
     public User updateUser(@RequestBody User modifiedUser, @PathVariable Long userId) {
         User originalUser = userService.findById(userId);
         if (validateData(modifiedUser)) {
