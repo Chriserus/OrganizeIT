@@ -32,7 +32,7 @@ export class ListPage implements OnInit, OnDestroy {
     this.projects = [];
     this.projectService.getProjects().pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
       console.log(projects);
-      this.projects = projects;
+      this.projects = projects.filter(project => project.verified);
     });
   }
 

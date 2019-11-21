@@ -160,4 +160,9 @@
         <renameTable newTableName="membership"
                      oldTableName="project_user"/>
     </changeSet>
+    <changeSet id="addVerifiedColumnToProjectTable" author="Chriserus">
+        <addColumn tableName="project">
+            <column name="verified" type="boolean"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

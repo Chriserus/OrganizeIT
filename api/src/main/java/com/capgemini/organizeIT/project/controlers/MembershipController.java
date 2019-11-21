@@ -6,6 +6,7 @@ import com.capgemini.organizeIT.project.services.ProjectService;
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.services.UserService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +45,7 @@ public class MembershipController {
     @PutMapping("/api/projects/{projectId}/memberships/{memberId}")
     public Project acceptPotentialProjectMember(@PathVariable Long projectId, @PathVariable Long memberId) {
         return projectService.findById(projectId).map(project -> {
-            if (loggedInUserNotProjectOwner(project)) {
+            if (loggedInUserNotProjectOwner(project) && !loggedInUserIsAdmin()) {
                 return project;
             }
             User user = userService.findById(memberId);
@@ -61,7 +62,7 @@ public class MembershipController {
     @DeleteMapping("/api/projects/{projectId}/memberships/{memberId}")
     public Project removeProjectMember(@PathVariable Long projectId, @PathVariable Long memberId) {
         return projectService.findById(projectId).map(project -> {
-            if (loggedInUserNotProjectOwner(project)) {
+            if (loggedInUserNotProjectOwner(project) && !loggedInUserIsAdmin()) {
                 return project;
             }
             User user = userService.findById(memberId);
@@ -75,6 +76,10 @@ public class MembershipController {
 
     private boolean loggedInUserNotProjectOwner(Project project) {
         return !SecurityContextHolder.getContext().getAuthentication().getName().equals(project.getOwner().getEmail());
+    }
+
+    private boolean loggedInUserIsAdmin() {
+        return !SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
     }
 
     private Optional<Membership> extractOptionalMemberById(Long memberId, Project project) {

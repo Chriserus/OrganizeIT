@@ -55,4 +55,8 @@ export class ProjectService {
   deleteMemberFromProject(member: User, project: Project) {
     return this.http.delete<Project>(this.PROJECTS_URL + "/" + project.id + this.MEMBERSHIP_URL + "/" + member.id, {responseType: 'json'});
   }
+
+  verifyProject(project: Project) {
+    return this.http.put<Project>(this.PROJECTS_URL + "/" + project.id, {}, {responseType: 'json'});
+  }
 }

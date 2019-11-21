@@ -33,7 +33,7 @@ public class NotificationController {
         this.userService = userService;
     }
 
-    @PostMapping("/api/notifications/permissions/{userId}/")
+    @PostMapping("/api/notifications/permissions/{userId}")
     public Permission register(@RequestBody Permission permission, @PathVariable Long userId) {
         User user = userService.findById(userId);
         permission.setHolder(user);

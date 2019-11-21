@@ -20,6 +20,10 @@
               <ion-card-header>
                 <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
                 <ion-card-title>{{project.title}}</ion-card-title>
+                <ion-chip *ngIf="project.verified === false" color="danger" outline>
+                  <ion-icon name="warning" color="warning"></ion-icon>
+                  <ion-label>Not yet verified</ion-label>
+                </ion-chip>
               </ion-card-header>
               <ion-card-content>
                 {{project.description}}
@@ -43,7 +47,7 @@
                                   (click)="rejectUser(project, potentialMember)">
                         <ion-icon name="close"></ion-icon>
                       </ion-button>
-                        {{potentialMember.user.email}}
+                      {{potentialMember.user.email}}
                     </ion-buttons>
                   </div>
                 </div>

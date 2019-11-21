@@ -35,7 +35,8 @@ export class HomePage implements OnInit, OnDestroy {
     this.projects = [];
     this.projectService.getProjects().pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
       console.log(projects);
-      this.projects = projects;
+      //TODO: Filter projects on backend, make an endpoint that uses clustered index
+      this.projects = projects.filter(project => project.verified === true);
     });
   }
 }

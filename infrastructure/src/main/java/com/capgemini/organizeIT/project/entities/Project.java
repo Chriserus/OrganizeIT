@@ -24,6 +24,7 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Membership> members = new HashSet<>();
     private Integer maxMembers = 1;
+    private Boolean verified = false;
     @CreationTimestamp
     private Date created;
     @UpdateTimestamp

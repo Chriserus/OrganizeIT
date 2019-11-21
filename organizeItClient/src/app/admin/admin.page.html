@@ -7,6 +7,62 @@
   </ion-toolbar>
 </ion-header>
 
+<!--TODO: Create card for unverified projects, all projects, users (and all the admin rights related)-->
 <ion-content>
-Secret here!
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Projects</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
+            <ion-card class="project-card">
+              <ion-card-header>
+                <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
+                <ion-card-title>{{project.title}}</ion-card-title>
+                <ion-chip *ngIf="project.verified === false" color="danger" outline>
+                  <ion-icon name="warning" color="warning"></ion-icon>
+                  <ion-label>Not yet verified</ion-label>
+                </ion-chip>
+              </ion-card-header>
+              <ion-card-content>
+                {{project.description}}
+                <ion-item-divider>
+                </ion-item-divider>
+                Members: {{listMembers(project)}}
+                <ion-item-divider>
+                </ion-item-divider>
+                <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
+                <div *ngIf="projectHasRequests(project)">
+                  <ion-item-divider>
+                  </ion-item-divider>
+                  Requests:
+                  <div *ngFor="let potentialMember of listPotentialMembers(project)">
+                    <ion-buttons>
+                      <ion-button size="small" slot="start" color="success" shape="round"
+                                  (click)="acceptUserToProject(project, potentialMember)">
+                        <ion-icon name="checkmark"></ion-icon>
+                      </ion-button>
+                      <ion-button size="small" slot="start" color="danger" shape="round"
+                                  (click)="rejectUser(project, potentialMember)">
+                        <ion-icon name="close"></ion-icon>
+                      </ion-button>
+                      {{potentialMember.user.email}}
+                    </ion-buttons>
+                  </div>
+                </div>
+              </ion-card-content>
+              <ion-button *ngIf="project.verified === false" id="verifyButton" expand="block"
+                          (click)="presentVerifyProjectAlert(project)" color="success">Verify project
+              </ion-button>
+              <ion-button id="deleteButton" expand="block"
+                          (click)="presentDeleteProjectAlert(project)" color="danger">Delete project
+              </ion-button>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

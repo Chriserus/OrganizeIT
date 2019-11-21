@@ -10,4 +10,5 @@ export const Messages = {
   serverUnavailable: 'Server unavailable',
   enrollmentSuccessfulNotificationTitle: 'Enrollment successful',
   projectDeletedNotificationTitle: 'Project deleted',
+  projectVerifiedNotificationTitle: 'Project verified',
 };
