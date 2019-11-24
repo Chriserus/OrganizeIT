@@ -1,4 +1,4 @@
-package com.capgemini.organizeIT.comment.repositories;
+package com.capgemini.organizeIT.comment.repositories.jpa;
 
 import com.capgemini.organizeIT.comment.entities.Comment;
 import com.capgemini.organizeIT.user.entities.User;

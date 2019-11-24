@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compile project(':infrastructure')
+//    compile project(':infrastructure') // should be removed onec we clean architecture
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 }

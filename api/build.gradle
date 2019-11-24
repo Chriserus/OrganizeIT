@@ -25,6 +25,7 @@ bootJar {
 }
 
 dependencies {
+    // DB dependencies liquibase/mysql/h2 should be defined only in infrastructure module.
     compile project(':core')
     compile project(':infrastructure')
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -32,6 +33,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.liquibase:liquibase-core'
     runtimeOnly 'mysql:mysql-connector-java'
+    // It's a good practise to keep versions in separate settings file
     compile group: 'org.apache.logging.log4j', name: 'log4j', version: '2.12.1', ext: 'pom'
     compile group: 'org.json', name: 'json', version: '20190722'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.1.9.RELEASE'

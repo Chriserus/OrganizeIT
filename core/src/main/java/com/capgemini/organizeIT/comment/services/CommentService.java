@@ -1,8 +1,7 @@
 package com.capgemini.organizeIT.comment.services;
 
-import com.capgemini.organizeIT.comment.entities.Comment;
-import com.capgemini.organizeIT.comment.repositories.CommentRepository;
-import org.springframework.data.domain.Sort;
+import com.capgemini.organizeIT.comment.model.CommentDto;
+import com.capgemini.organizeIT.comment.repository.ICommentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,17 +9,19 @@ import java.util.List;
 @Service
 public class CommentService {
 
-    private final CommentRepository commentRepository;
+    private final ICommentRepository commentRepository;
 
-    public CommentService(final CommentRepository commentRepository) {
+    public CommentService(final ICommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
 
-    public List<Comment> findAll() {
-        return commentRepository.findAll(Sort.by(Sort.Direction.DESC, "created"));
+    //
+    public List<CommentDto> findAll() {
+        return commentRepository.findAllSortedDescending();
     }
 
-    public Comment save(Comment comment) {
+    // once we switch from Entity to dto object there will be more logic then only save, so I would rename to the same name as in controller
+    public CommentDto save(CommentDto comment) {
         return commentRepository.save(comment);
     }
 }
