@@ -9,3 +9,14 @@
   margin-right: auto;
   width: 50%;
 }
+ion-slide {
+  display: flex;
+  flex-direction: column;
+  width: 100% !important;
+  min-height: 20vh;
+}
+p {
+  display: block;
+  margin: 1em 2em 1em 2em;
+}
+

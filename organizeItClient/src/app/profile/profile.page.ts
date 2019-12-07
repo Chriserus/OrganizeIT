@@ -48,6 +48,10 @@ export class ProfilePage implements OnInit, OnDestroy {
     return project.members.filter(member => member.approved).map(member => " " + member.user.firstName + " " + member.user.lastName);
   }
 
+  loggedInUserApproved(project: Project){
+    return project.members.filter(member => member.approved).map(member => member.user.email).includes(this.loggedInUser.email);
+  }
+
   listPotentialMembers(project: Project) {
     return project.members.filter(member => !member.approved);
   }

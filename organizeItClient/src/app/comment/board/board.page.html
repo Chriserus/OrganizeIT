@@ -15,7 +15,8 @@
           <ion-card-content>
             <ion-button *ngIf="comment.announcement" disabled="true" color="danger">ANNOUNCEMENT</ion-button>
             <ion-item>{{comment.content}}</ion-item>
-            <ion-card-subtitle>{{comment.author.firstName + " " + comment.author.lastName}}, {{comment.created | date: 'medium'}}</ion-card-subtitle>
+            <ion-card-subtitle>{{comment.author.firstName + " " + comment.author.lastName}}
+              , {{comment.created | date: 'medium'}}</ion-card-subtitle>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -23,7 +24,7 @@
   </ion-grid>
 </ion-content>
 
-<ion-footer>
+<ion-header>
   <ion-toolbar>
     <ion-card>
       <ion-card-content>
@@ -37,10 +38,10 @@
             <ion-input name="content" type="text" autocorrect="on" ngModel required
             ></ion-input>
           </ion-item>
-          <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Submit
+          <ion-button id="submitButton" type="submit" [disabled]="form.invalid" expand="block">Submit
           </ion-button>
         </form>
       </ion-card-content>
     </ion-card>
   </ion-toolbar>
-</ion-footer>
+</ion-header>

@@ -22,11 +22,8 @@
               <ion-label>
                 <h3>{{displayName}}</h3>
                 <ion-button [routerDirection]="'root'" [routerLink]="['/profile']">My profile</ion-button>
+                <ion-button (click)="logout()">Logout</ion-button>
               </ion-label>
-            </ion-item>
-            <ion-item *ngIf="loggedIn">
-              <ion-button (click)="logout()">Logout</ion-button>
-<!--              <ion-button (click)="sendTestNotification()">Send notification to self</ion-button>-->
             </ion-item>
             <ion-item *ngIf="!loggedIn">
               <ion-button [routerDirection]="'root'" [routerLink]="['/login']">Login</ion-button>

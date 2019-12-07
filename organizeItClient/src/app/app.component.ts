@@ -30,16 +30,16 @@ export class AppComponent implements OnInit, OnDestroy {
       url: '/list',
       icon: 'list'
     },
-    {
-      title: 'Agenda',
-      url: '/agenda',
-      icon: 'calendar'
-    },
-    {
-      title: 'Archive',
-      url: '/archive',
-      icon: 'filing'
-    }
+    // {
+    //   title: 'Agenda',
+    //   url: '/agenda',
+    //   icon: 'calendar'
+    // },
+    // {
+    //   title: 'Archive',
+    //   url: '/archive',
+    //   icon: 'filing'
+    // }
   ];
 
   public userAppPages = [

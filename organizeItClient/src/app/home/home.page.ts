@@ -4,16 +4,21 @@ import {Project} from '../interfaces/project.model';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, OnDestroy {
-
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
+  slideOptsOne = {
+    initialSlide: 0,
+    slidesPerView: 1,
+    autoplay: {
+      disableOnInteraction: false
+    }
+  };
 
   constructor(public projectService: ProjectService) {
   }

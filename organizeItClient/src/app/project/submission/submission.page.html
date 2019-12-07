@@ -24,15 +24,14 @@
               <ion-item>
                 <ion-label position="stacked">Description</ion-label>
                 <!-- TODO: Move method call to the lowest input field -->
-                <ion-textarea name="description" type="text" autocapitalize="sentences" rows="6" autoGrow="true" ngModel required
-                           (keyup.enter)="registerProject(form)"></ion-textarea>
+                <ion-textarea name="description" type="text" autocapitalize="sentences" rows="6" autoGrow="true" ngModel required></ion-textarea>
               </ion-item>
-              <ion-item>
-                <ion-label position="stacked">Maximum team members</ion-label>
-                <ion-input name="maxMembers" type="number" min="1" required ngModel="1"
-                           oninput="this.value = Math.abs(this.value)"
-                           (keyup.enter)="registerProject(form)"></ion-input>
-              </ion-item>
+<!--              <ion-item>-->
+<!--                <ion-label position="stacked">Maximum team members</ion-label>-->
+<!--                <ion-input name="maxMembers" type="number" min="1" required ngModel="1"-->
+<!--                           oninput="this.value = Math.abs(this.value)"-->
+<!--                           (keyup.enter)="registerProject(form)"></ion-input>-->
+<!--              </ion-item>-->
               <!-- TODO: Add technologies field with chips and custom technologies -->
               <!--              <ion-item>-->
               <!--                <ion-label position="stacked">Technologies</ion-label>-->

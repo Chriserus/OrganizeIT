@@ -35,7 +35,7 @@ public class ProjectService {
     }
 
     private boolean projectContainsMember(User user, Project project) {
-        return project.getMembers().stream().filter(Membership::isApproved).map(Membership::getUser).anyMatch(member -> member.equals(user));
+        return project.getMembers().stream().map(Membership::getUser).anyMatch(member -> member.equals(user));
     }
 
     public List<Project> findAllSortByDateNewFirst() {

@@ -12,54 +12,67 @@
 <ion-content>
   <ion-card class="welcome-card">
     <img src="../../assets/banner.png" alt=""/>
+  </ion-card>
+  <ion-card style="color: black;">
     <ion-card-header>
-      <ion-card-subtitle>Get Started</ion-card-subtitle>
-      <ion-card-title>Welcome to Ionic</ion-card-title>
+      <ion-card-title>Newest projects:</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>Now that your app has been created, you'll want to start building out features and components. Check out some
-        of the resources below for next steps.</p>
+      <ion-spinner *ngIf="projects.length === 0"></ion-spinner>
+      <ion-slides *ngIf="projects.length !== 0" pager [options]="slideOptsOne" >
+        <ion-slide *ngFor="let project of projects">
+          <p>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</p>
+          <h1>{{project.title}}</h1>
+          <p style="white-space:pre-wrap;">{{project.description}}</p>
+          <p></p>
+        </ion-slide>
+      </ion-slides>
     </ion-card-content>
   </ion-card>
   <ion-card *ngIf="isUserLoggedIn()">
-    <ion-card-content>
-      <ion-button [routerDirection]="'root'" [routerLink]="['/submission']">Submit new project</ion-button>
-      <ion-button [routerDirection]="'root'" [routerLink]="['/list']">Join existing project</ion-button>
-    </ion-card-content>
-  </ion-card>
-  <ion-spinner *ngIf="projects.length === 0"></ion-spinner>
-  <ion-slides *ngIf="projects.length !== 0">
-    <ion-slide *ngFor="let project of projects">
-      <ion-card>
-        <img class="center" src="../../assets/shapes.svg" alt=""/>
-        <ion-card-header>
-          <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
-          <ion-card-title>{{project.title}}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          {{project.description}}
-        </ion-card-content>
-      </ion-card>
-    </ion-slide>
-  </ion-slides>
-
-  <ion-card>
     <ion-card-header>
-      <ion-card-title>About ship IT Day</ion-card-title>
+      <ion-card-title>Submit your project now! Or join a friend!</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>Now that your app has been created, you'll want to start building out features and components. Check out some
-        of the resources below for next steps.</p>
+      <ion-button [routerDirection]="'root'" [routerLink]="['/submission']">New project</ion-button>
+      <ion-button [routerDirection]="'root'" [routerLink]="['/list']">Join project</ion-button>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>About Ship It Day</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-list-header>
+          <ion-label>Ship It Day (a.k.a. Exploration Days) to impreza "hackerska" (niekoniecznie programistyczna!),
+            która daje Ci
+            możliwość:
+          </ion-label>
+        </ion-list-header>
+        <ion-item>- wykazania się Twoją kreatywnością</ion-item>
+        <ion-item>- zrealizowania pomysłów, które od jakiegoś czasu siedzą Ci w głowie</ion-item>
+        <ion-item>- wymiany doświadczeń i umiejętności z ludźmi spoza Twojego projektu</ion-item>
+      </ion-list>
     </ion-card-content>
   </ion-card>
 
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Announcements</ion-card-title>
+      <ion-card-title>Regulations</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>Now that your app has been created, you'll want to start building out features and components. Check out some
-        of the resources below for next steps.</p>
+      <ion-list>
+        <ion-item>- każdy może wziąć udział w Ship It Day</ion-item>
+        <ion-item>- każdy może zgłosić swój projekt, bądź chęć wsparcia już zaproponowanego pomysłu do zrealizowania w
+          ramach
+          wydarzenia
+        </ion-item>
+        <ion-item>- do realizacji jednego pomysłu wymagane są grupy maksymalnie 5-osobowe</ion-item>
+        <ion-item>- do udziału w wydarzeniu wymagana jest zgoda przełożonego oraz uzgodnienie nieobecności w projekcie
+        </ion-item>
+        <ion-item>- w trakcie eventu przewidziany jest catering</ion-item>
+      </ion-list>
     </ion-card-content>
   </ion-card>
 </ion-content>
