@@ -7,23 +7,6 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-grid>
-    <ion-row *ngFor="let comment of comments">
-      <ion-col>
-        <ion-card>
-          <ion-card-content>
-            <ion-button *ngIf="comment.announcement" disabled="true" color="danger">ANNOUNCEMENT</ion-button>
-            <ion-item>{{comment.content}}</ion-item>
-            <ion-card-subtitle>{{comment.author.firstName + " " + comment.author.lastName}}
-              , {{comment.created | date: 'medium'}}</ion-card-subtitle>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content>
-
 <ion-header>
   <ion-toolbar>
     <ion-card>
@@ -45,3 +28,21 @@
     </ion-card>
   </ion-toolbar>
 </ion-header>
+
+<ion-content>
+  <ion-spinner *ngIf="comments.length === 0"></ion-spinner>
+  <ion-grid *ngIf="comments.length != 0">
+    <ion-row *ngFor="let comment of comments">
+      <ion-col>
+        <ion-card>
+          <ion-card-content>
+            <ion-button *ngIf="comment.announcement" disabled="true" color="danger">ANNOUNCEMENT</ion-button>
+            <ion-item>{{comment.content}}</ion-item>
+            <ion-card-subtitle>{{comment.author.firstName + " " + comment.author.lastName}}
+              , {{comment.created | date: 'medium'}}</ion-card-subtitle>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
