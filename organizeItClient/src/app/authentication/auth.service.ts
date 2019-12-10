@@ -83,8 +83,8 @@ export class AuthService {
   redirectAfterLogin(response: any, form){
     console.log(response);
     localStorage.setItem("loggedIn", 'true');
-    this.events.publish('reloadSideMenuData');
     this.toastService.showTemporarySuccessMessage(Messages.logInSuccess).then(() => {
+      this.events.publish('reloadSideMenuData');
       this.router.navigateByUrl("home").then(() => {
         form.reset();
       });

@@ -15,6 +15,7 @@ import {AlertController} from "@ionic/angular";
   templateUrl: './admin.page.html',
   styleUrls: ['./admin.page.scss'],
 })
+// TODO: Add toast to inform, that approval was successful? Or that verification was successful? Project deleted?
 export class AdminPage implements OnInit, OnDestroy {
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();

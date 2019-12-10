@@ -11,4 +11,6 @@ export const Messages = {
   enrollmentSuccessfulNotificationTitle: 'Enrollment successful',
   projectDeletedNotificationTitle: 'Project deleted',
   projectVerifiedNotificationTitle: 'Project verified',
+  enrollmentRequestSentMessage: 'Enrollment request sent',
+  projectSubmittedMessage: 'Project submitted for verification',
 };

@@ -6,6 +6,8 @@ import {takeUntil} from "rxjs/operators";
 import {NotificationService} from "../notifications/notification.service";
 import {AuthService} from "../authentication/auth.service";
 import {User} from "../interfaces/user.model";
+import {ToastService} from "../shared/toast.service";
+import {Messages} from "../shared/Messages";
 
 @Component({
   selector: 'app-list',
@@ -16,7 +18,7 @@ export class ListPage implements OnInit, OnDestroy {
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
 
-  constructor(private projectService: ProjectService, private notificationService: NotificationService, private authService: AuthService) {
+  constructor(private projectService: ProjectService, private notificationService: NotificationService, private authService: AuthService, private toastService: ToastService) {
   }
 
   ngOnInit() {
@@ -46,6 +48,7 @@ export class ListPage implements OnInit, OnDestroy {
                 "User " + localStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
                 (response: any) => {
                   console.log(response);
+                  this.toastService.showClosableInformationMessage(Messages.enrollmentRequestSentMessage);
                   this.getProjects();
                 },
                 (error: any) => {

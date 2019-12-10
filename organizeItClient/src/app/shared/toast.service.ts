@@ -27,4 +27,13 @@ export class ToastService {
     });
     await toast.present();
   }
+
+  async showClosableInformationMessage(message: string){
+    const toast = await this.toastController.create({
+      color: 'secondary',
+      message: message,
+      showCloseButton: true
+    });
+    await toast.present();
+  }
 }
