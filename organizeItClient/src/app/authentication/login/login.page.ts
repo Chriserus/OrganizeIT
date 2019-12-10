@@ -25,13 +25,7 @@ export class LoginPage extends SubmitService implements OnInit {
     }
     this.authService.login(form.value.email, form.value.password).subscribe(
         (response: any) => {
-          console.log(response);
-          localStorage.setItem("loggedIn", 'true');
-          this.toastService.showTemporarySuccessMessage(Messages.logInSuccess).then(() => {
-            this.router.navigateByUrl("home").then(() => {
-              window.location.reload();
-            });
-          });
+          this.authService.redirectAfterLogin(response, form);
         },
         (error: any) => {
           console.log(error);

@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {Platform} from '@ionic/angular';
+import {Events, Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AuthService} from "./authentication/auth.service";
@@ -75,9 +75,16 @@ export class AppComponent implements OnInit, OnDestroy {
       private toastService: ToastService,
       private router: Router,
       private notificationService: NotificationService,
-      private network: Network
-  ) {
+      private network: Network,
+      public events: Events) {
+    this.listenForDataReloadEvent();
     this.initializeApp();
+  }
+
+  private listenForDataReloadEvent() {
+    this.events.subscribe('reloadSideMenuData', () => {
+      this.determineUserLoggedIn();
+    });
   }
 
   initializeApp() {
@@ -100,9 +107,8 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log(response);
       this.toastService.showTemporarySuccessMessage(Messages.loggedOutSuccessMessage).then(() => {
         localStorage.setItem("loggedIn", 'false');
-        this.determineUserLoggedIn();
-        this.router.navigateByUrl("login").then(() => {
-          window.location.reload();
+        this.router.navigateByUrl("home").then(() => {
+          this.events.publish('reloadSideMenuData');
         });
       });
     }, error => {
@@ -135,7 +141,15 @@ export class AppComponent implements OnInit, OnDestroy {
             this.loggedIn = false;
             localStorage.setItem("loggedIn", 'false');
           });
+    } else {
+      this.clearUserData();
     }
+  }
+
+  private clearUserData() {
+    this.loggedInUser = undefined;
+    this.displayName = undefined;
+    this.loggedIn = false;
   }
 
   sendTestNotification() {

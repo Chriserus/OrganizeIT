@@ -1,6 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {User} from "../interfaces/user.model";
+import {Messages} from "../shared/Messages";
+import {Router} from "@angular/router";
+import {ToastService} from "../shared/toast.service";
+import {Events} from "@ionic/angular";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +18,7 @@ export class AuthService {
   readonly LOGGED_IN_USER_URL = '/api/user';
   readonly USER_BY_USERNAME_URL = '/api/users/emails/';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private  router: Router, private toastService: ToastService, public events: Events) {
   }
 
   getCurrentUser() {
@@ -75,4 +79,15 @@ export class AuthService {
       return user.roles.map(role => role.name).filter(name => name === "ROLE_ADMIN").pop() !== undefined;
     }
   }
-}
+
+  redirectAfterLogin(response: any, form){
+    console.log(response);
+    localStorage.setItem("loggedIn", 'true');
+    this.events.publish('reloadSideMenuData');
+    this.toastService.showTemporarySuccessMessage(Messages.logInSuccess).then(() => {
+      this.router.navigateByUrl("home").then(() => {
+        form.reset();
+      });
+    });
+  }
+  }

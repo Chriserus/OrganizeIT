@@ -39,13 +39,7 @@ export class RegisterPage extends SubmitService implements OnInit {
                   this.router.navigateByUrl("home").then(() => {
                     this.toastService.showTemporarySuccessMessage(Messages.registerSuccess);
                     this.authService.login(form.value.email, form.value.password).subscribe((response: any) => {
-                      console.log(response);
-                      localStorage.setItem("loggedIn", 'true');
-                      this.toastService.showTemporarySuccessMessage(Messages.logInSuccess).then(() => {
-                        this.router.navigateByUrl("home").then(() => {
-                          window.location.reload();
-                        });
-                      });
+                      this.authService.redirectAfterLogin(response, form);
                     })
                   });
                 },
