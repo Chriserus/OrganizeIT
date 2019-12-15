@@ -5,12 +5,13 @@ import {Messages} from "../shared/Messages";
 import {Router} from "@angular/router";
 import {ToastService} from "../shared/toast.service";
 import {Events} from "@ionic/angular";
+import {ShirtSize} from "../interfaces/shirt-size";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
+  readonly SHIRT_SIZES_URL = '/api/shirt-sizes';
   readonly LOGIN_URL = '/api/login';
   readonly REGISTER_URL = '/api/register';
   readonly LOGOUT_URL = '/api/logout';
@@ -32,7 +33,6 @@ export class AuthService {
     return this.http.post(this.LOGIN_URL, formData, {responseType: 'text'});
   }
 
-
   logout() {
     return this.http.post(this.LOGOUT_URL, {}, {responseType: 'text'});
   }
@@ -49,8 +49,12 @@ export class AuthService {
       'firstName': form.firstName,
       'lastName': form.lastName,
       'email': form.email,
-      'password': form.password
+      'password': form.password,
+      'shirtType': form.shirtType,
+      'shirtSize': form.shirtSize
     };
+    console.log("Sending data:");
+    console.log(jsonData);
     return this.http.post(this.REGISTER_URL, jsonData, httpOptions);
   }
 
@@ -80,7 +84,7 @@ export class AuthService {
     }
   }
 
-  redirectAfterLogin(response: any, form){
+  redirectAfterLogin(response: any, form) {
     console.log(response);
     localStorage.setItem("loggedIn", 'true');
     this.toastService.showTemporarySuccessMessage(Messages.logInSuccess).then(() => {
@@ -90,4 +94,8 @@ export class AuthService {
       });
     });
   }
+
+  getAllShirtSizes() {
+    return this.http.get<ShirtSize[]>(this.SHIRT_SIZES_URL, {responseType: 'json'})
   }
+}

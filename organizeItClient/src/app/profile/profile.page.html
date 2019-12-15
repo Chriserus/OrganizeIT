@@ -13,7 +13,8 @@
       <ion-card-title>My projects</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-grid>
+      <ion-spinner *ngIf="projects.length === 0"></ion-spinner>
+      <ion-grid *ngIf="projects.length != 0">
         <ion-row>
           <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
             <ion-card class="project-card">

@@ -1,4 +1,5 @@
 import {Role} from "./role";
+import {ShirtSize} from "./shirt-size";
 
 export interface User {
   id: number;
@@ -7,4 +8,6 @@ export interface User {
   email: string;
   password: string;
   roles: Role[];
+  shirtSize: ShirtSize;
+  // shirtType: string;
 }

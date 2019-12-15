@@ -6,6 +6,7 @@ import {ToastController} from "@ionic/angular";
 })
 export class ToastService {
   private errorToastDuration = 2000;
+  private informationToastDuration = 5000;
 
   constructor(private toastController: ToastController) {
   }
@@ -32,6 +33,7 @@ export class ToastService {
     const toast = await this.toastController.create({
       color: 'secondary',
       message: message,
+      duration: this.informationToastDuration,
       showCloseButton: true
     });
     await toast.present();

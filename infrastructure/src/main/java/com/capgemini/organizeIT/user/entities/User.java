@@ -2,6 +2,7 @@ package com.capgemini.organizeIT.user.entities;
 
 import com.capgemini.organizeIT.project.entities.Membership;
 import com.capgemini.organizeIT.role.entities.Role;
+import com.capgemini.organizeIT.shirt.entities.ShirtSize;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,13 +17,17 @@ import java.util.Set;
 @Data
 @Entity
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;
     private String email;
+    @Enumerated(EnumType.STRING)
+    private ShirtType shirtType;
+    @ManyToOne
+    @JoinColumn(name = "shirtSize")
+    private ShirtSize shirtSize;
     // TODO: Cannot annotate @JsonIgnore, because it makes password null when registering new user
     private String password;
     @CreationTimestamp

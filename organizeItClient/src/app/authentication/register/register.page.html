@@ -37,9 +37,24 @@
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Repeat password</ion-label>
-                <ion-input name="passwordConfirm" type="password" ngModel required (keyup.enter)="register(form)"></ion-input>
+                <ion-input name="passwordConfirm" type="password" ngModel required
+                           (keyup.enter)="register(form)"></ion-input>
               </ion-item>
-              <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" (keydown.enter)="register(form)" expand="block">Register</ion-button>
+              <ion-item>
+                <ion-label position="stacked">Shirt size</ion-label>
+                <ion-select name="shirtSize" ngModel required>
+                  <ion-select-option *ngFor="let shirtSize of shirtSizes" [value]="shirtSize">{{shirtSize.size}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item>
+                <ion-label position="stacked">Shirt type</ion-label>
+                <ion-select name="shirtType" ngModel required>
+                  <ion-select-option *ngFor="let shirtType of shirtTypes" [value]="shirtType">{{shirtType}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid"
+                          (keydown.enter)="register(form)" expand="block">Register
+              </ion-button>
             </ion-col>
           </ion-row>
         </ion-grid>

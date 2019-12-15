@@ -165,4 +165,47 @@
             <column name="verified" type="boolean"/>
         </addColumn>
     </changeSet>
+    <changeSet id="createShirtSizeTable" author="Chriserus">
+        <createTable tableName="shirt_size">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="size" type="varchar(255)"/>
+        </createTable>
+        <addAutoIncrement columnDataType="int"
+                          columnName="id"
+                          tableName="shirt_size"/>
+        <insert tableName="shirt_size">
+            <column name="size" value="XS"/>
+        </insert>
+        <insert tableName="shirt_size">
+            <column name="size" value="S"/>
+        </insert>
+        <insert tableName="shirt_size">
+            <column name="size" value="M"/>
+        </insert>
+        <insert tableName="shirt_size">
+            <column name="size" value="L"/>
+        </insert>
+        <insert tableName="shirt_size">
+            <column name="size" value="XL"/>
+        </insert>
+        <insert tableName="shirt_size">
+            <column name="size" value="XXL"/>
+        </insert>
+    </changeSet>
+    <changeSet id="addShirtRelatedColumnsToUser" author="Chriserus">
+        <addColumn tableName="user">
+            <column name="shirt_dimension" type="int"/>
+            <column name="shirt_type" type="ENUM('M', 'F')"/>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="shirt_dimension"
+                                 baseTableName="user"
+                                 constraintName="fk_size"
+                                 referencedColumnNames="id"
+                                 referencedTableName="shirt_size"/>
+    </changeSet>
+    <changeSet id="renameShirtSizeColumn" author="Chriserus">
+        <renameColumn tableName="user" newColumnName="shirt_size" oldColumnName="shirt_dimension" columnDataType="int"/>
+    </changeSet>
 </databaseChangeLog>

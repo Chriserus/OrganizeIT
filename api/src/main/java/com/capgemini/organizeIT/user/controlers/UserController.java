@@ -3,8 +3,12 @@ package com.capgemini.organizeIT.user.controlers;
 import com.capgemini.organizeIT.project.entities.Project;
 import com.capgemini.organizeIT.project.services.ProjectService;
 import com.capgemini.organizeIT.role.services.RoleService;
+import com.capgemini.organizeIT.shirt.services.ShirtSizeService;
+import com.capgemini.organizeIT.user.entities.ShirtType;
 import com.capgemini.organizeIT.user.entities.User;
+import com.capgemini.organizeIT.user.entities.UserDto;
 import com.capgemini.organizeIT.user.services.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -16,19 +20,14 @@ import java.util.Set;
 @RestController
 @CrossOrigin
 @Log4j2
+@RequiredArgsConstructor
 public class UserController {
     private static final String DEFAULT_ROLE = "ROLE_USER";
     private final UserService userService;
     private final RoleService roleService;
     private final ProjectService projectService;
+    private final ShirtSizeService shirtSizeService;
     private final PasswordEncoder passwordEncoder;
-
-    public UserController(final UserService userService, final RoleService roleService, final PasswordEncoder passwordEncoder, final ProjectService projectService) {
-        this.userService = userService;
-        this.roleService = roleService;
-        this.passwordEncoder = passwordEncoder;
-        this.projectService = projectService;
-    }
 
     @GetMapping("/api/user")
     public User currentUser(Principal principal) {
@@ -59,11 +58,11 @@ public class UserController {
     }
 
     @PostMapping("/api/register")
-    public User register(@RequestBody User newUser) {
-        newUser.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        log.info(newUser);
-        return userService.save(newUser);
+    public User register(@RequestBody User user) {
+        user.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        log.info(user);
+        return userService.save(user);
     }
 
     // TODO: Verify, that user is allowed to do this (logged in user sent it)
