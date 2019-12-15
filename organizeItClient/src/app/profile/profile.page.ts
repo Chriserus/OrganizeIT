@@ -6,9 +6,10 @@ import {Subject} from "rxjs";
 import {ProjectUser} from "../interfaces/project-user";
 import {NotificationService} from "../notifications/notification.service";
 import {AuthService} from "../authentication/auth.service";
-import {AlertController} from "@ionic/angular";
+import {AlertController, Events} from "@ionic/angular";
 import {Messages} from "../shared/Messages";
 import {User} from "../interfaces/user.model";
+import {MembershipService} from "../project/membership.service";
 
 @Component({
   selector: 'app-profile',
@@ -16,12 +17,15 @@ import {User} from "../interfaces/user.model";
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit, OnDestroy {
+  readonly RELOAD_DATA_EVENT_NAME = 'reloadProjectsProfilePage';
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
   loggedInUser: User;
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
-              private authService: AuthService, private alertController: AlertController) {
+              private authService: AuthService, private alertController: AlertController,
+              private membershipService: MembershipService, private events: Events) {
+    this.listenForDataReloadEvent();
   }
 
   ngOnInit() {
@@ -37,7 +41,6 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   getProjects() {
-    this.projects = [];
     this.projectService.getProjectsByOwnerOrMember(this.loggedInUser).pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
       console.log(projects);
       this.projects = projects;
@@ -46,10 +49,6 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   listMembers(project: Project) {
     return project.members.filter(member => member.approved).map(member => " " + member.user.firstName + " " + member.user.lastName);
-  }
-
-  loggedInUserApproved(project: Project){
-    return project.members.filter(member => member.approved).map(member => member.user.email).includes(this.loggedInUser.email);
   }
 
   listPotentialMembers(project: Project) {
@@ -66,7 +65,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   acceptUserToProject(project: Project, potentialMember: ProjectUser) {
     console.log("Accepting member: " + potentialMember.user.email + " to project: " + project.title);
-    this.projectService.approveMemberToProject(potentialMember.user, project).subscribe(
+    this.membershipService.approveMemberToProject(potentialMember.user, project).subscribe(
         response => {
           console.log(response);
           this.notificationService.sendNotification(potentialMember.user, Messages.enrollmentSuccessfulNotificationTitle,
@@ -86,7 +85,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   rejectUser(project: Project, potentialMember: ProjectUser) {
     console.log("Rejecting user: " + potentialMember.user.email + ", project: " + project.title);
-    this.projectService.deleteMemberFromProject(potentialMember.user, project).subscribe(
+    this.membershipService.deleteMemberFromProject(potentialMember.user, project).subscribe(
         response => {
           console.log(response);
           this.notificationService.sendNotification(potentialMember.user, "Enrollment submission rejected",
@@ -164,6 +163,12 @@ export class ProfilePage implements OnInit, OnDestroy {
           (error: any) => {
             console.log(error);
           });
+    });
+  }
+
+  private listenForDataReloadEvent() {
+    this.events.subscribe(this.RELOAD_DATA_EVENT_NAME, () => {
+      this.getProjects();
     });
   }
 }

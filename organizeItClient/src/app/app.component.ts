@@ -26,7 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
       icon: 'home'
     },
     {
-      title: 'List',
+      title: 'Projects list',
       url: '/list',
       icon: 'list'
     },
@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
       icon: 'add'
     },
     {
-      title: 'Board',
+      title: 'Discussion board',
       url: '/board',
       icon: 'contacts'
     }

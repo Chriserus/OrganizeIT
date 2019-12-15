@@ -25,9 +25,11 @@
                   <ion-icon name="warning" color="warning"></ion-icon>
                   <ion-label>Not verified yet</ion-label>
                 </ion-chip>
-                <ion-chip *ngIf="!loggedInUserApproved(project) && !isProjectOwner(project)" color="danger" outline>
-                  <ion-icon name="alert" color="danger"></ion-icon>
-                  <ion-label>Enrollment not approved yet</ion-label>
+                <ion-chip *ngIf="membershipService.userEnrollmentPending(project) && !isProjectOwner(project)"
+                          (click)="membershipService.cancelEnrollmentRequest(project, RELOAD_DATA_EVENT_NAME)" color="danger" outline>
+                  <ion-icon name="alert"></ion-icon>
+                  <ion-label>Enrollment request pending</ion-label>
+                  <ion-icon name="close-circle"></ion-icon>
                 </ion-chip>
               </ion-card-header>
               <ion-card-content>

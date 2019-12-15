@@ -9,6 +9,7 @@ import {User} from "../interfaces/user.model";
 import {NotificationService} from "../notifications/notification.service";
 import {AuthService} from "../authentication/auth.service";
 import {AlertController} from "@ionic/angular";
+import {MembershipService} from "../project/membership.service";
 
 @Component({
   selector: 'app-admin',
@@ -21,7 +22,7 @@ export class AdminPage implements OnInit, OnDestroy {
   private unsubscribe: Subject<Project[]> = new Subject();
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
-              private authService: AuthService, private alertController: AlertController) {
+              private authService: AuthService, private alertController: AlertController, private membershipService: MembershipService) {
   }
 
   ngOnInit() {
@@ -63,7 +64,7 @@ export class AdminPage implements OnInit, OnDestroy {
 
   acceptUserToProject(project: Project, potentialMember: ProjectUser) {
     console.log("Accepting member: " + potentialMember.user.email + " to project: " + project.title);
-    this.projectService.approveMemberToProject(potentialMember.user, project).subscribe(
+    this.membershipService.approveMemberToProject(potentialMember.user, project).subscribe(
         response => {
           console.log(response);
           this.notificationService.sendNotification(potentialMember.user, Messages.enrollmentSuccessfulNotificationTitle,
@@ -83,7 +84,7 @@ export class AdminPage implements OnInit, OnDestroy {
 
   rejectUser(project: Project, potentialMember: ProjectUser) {
     console.log("Rejecting user: " + potentialMember.user.email + ", project: " + project.title);
-    this.projectService.deleteMemberFromProject(potentialMember.user, project).subscribe(
+    this.membershipService.deleteMemberFromProject(potentialMember.user, project).subscribe(
         response => {
           console.log(response);
           this.notificationService.sendNotification(potentialMember.user, "Enrollment submission rejected",
@@ -154,7 +155,7 @@ export class AdminPage implements OnInit, OnDestroy {
   async presentVerifyProjectAlert(project: Project) {
     const alert = await this.alertController.create({
       header: 'Verifying project!',
-      message: 'Do you want to verify project: <p><strong>' + project.title + '</strong></p>',
+      message: 'You are verifying project: <p><strong>' + project.title + '</strong></p>',
       buttons: [
         {
           text: 'Cancel',

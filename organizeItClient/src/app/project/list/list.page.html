@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="home"></ion-back-button>
     </ion-buttons>
-    <ion-title>List</ion-title>
+    <ion-title>Projects list</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -27,8 +27,15 @@
             <!-- custom date format:  HH:MM | d-MMM-yyyy-->
             <ion-card-subtitle>Created: {{project.created | date: 'medium'}}</ion-card-subtitle>
           </ion-card-content>
-          <ion-item *ngIf="!alreadyEnrolled(project) && isUserLoggedIn()">
-            <ion-button id="enrollButton" expand="block" (click)="enroll(project)">Enroll</ion-button>
+          <ion-item *ngIf="!membershipService.userAlreadyEnrolled(project) && isUserLoggedIn() && !membershipService.userEnrollmentPending(project)">
+            <ion-button id="enrollButton" expand="block" (click)="sendEnrollmentRequest(project)">Enroll</ion-button>
+          </ion-item>
+          <ion-item *ngIf="membershipService.userEnrollmentPending(project)" >
+            <ion-chip color="danger" (click)="membershipService.cancelEnrollmentRequest(project, RELOAD_DATA_EVENT_NAME)" outline>
+              <ion-icon name="alarm"></ion-icon>
+              <ion-label>Enrollment request pending</ion-label>
+              <ion-icon name="close-circle"></ion-icon>
+            </ion-chip>
           </ion-item>
         </ion-card>
       </ion-col>

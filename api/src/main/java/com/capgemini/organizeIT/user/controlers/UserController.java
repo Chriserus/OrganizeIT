@@ -4,9 +4,7 @@ import com.capgemini.organizeIT.project.entities.Project;
 import com.capgemini.organizeIT.project.services.ProjectService;
 import com.capgemini.organizeIT.role.services.RoleService;
 import com.capgemini.organizeIT.shirt.services.ShirtSizeService;
-import com.capgemini.organizeIT.user.entities.ShirtType;
 import com.capgemini.organizeIT.user.entities.User;
-import com.capgemini.organizeIT.user.entities.UserDto;
 import com.capgemini.organizeIT.user.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -51,7 +49,7 @@ public class UserController {
         log.info(email);
         return userService.findByEmail(email);
     }
-    
+
     @GetMapping("/api/users/{userId}/projects")
     public List<Project> projectsThatContainUser(@PathVariable final Long userId) {
         return projectService.findAllThatContainUser(userService.findById(userId));
