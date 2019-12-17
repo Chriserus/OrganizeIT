@@ -1,5 +1,6 @@
 import {Role} from "./role";
 import {ShirtSize} from "./shirt-size";
+import {ShirtType} from "./shirt-type.enum";
 
 export interface User {
   id: number;
@@ -9,5 +10,5 @@ export interface User {
   password: string;
   roles: Role[];
   shirtSize: ShirtSize;
-  // shirtType: string;
+  shirtType: ShirtType;
 }

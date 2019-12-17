@@ -13,4 +13,7 @@ export const Messages = {
   projectVerifiedNotificationTitle: 'Project verified',
   enrollmentRequestSentMessage: 'Enrollment request sent',
   projectSubmittedMessage: 'Project submitted for verification',
+  userInfoUpdateSuccessMessage: 'Data successfully updated',
+  userInfoUpdateErrorMessage: 'Data update failure',
+  userInfoUpdateWarningMessage: 'Data unchanged',
 };

@@ -76,6 +76,12 @@ public class UserController {
         if (!originalUser.getLastName().equals(modifiedUser.getLastName())) {
             originalUser.setLastName(modifiedUser.getLastName());
         }
+        if (!originalUser.getShirtSize().equals(modifiedUser.getShirtSize())) {
+            originalUser.setShirtSize(modifiedUser.getShirtSize());
+        }
+        if (!originalUser.getShirtType().equals(modifiedUser.getShirtType())) {
+            originalUser.setShirtType(modifiedUser.getShirtType());
+        }
         log.info(originalUser);
         return userService.save(originalUser);
     }

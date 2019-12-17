@@ -5,16 +5,25 @@ import {ToastController} from "@ionic/angular";
   providedIn: 'root'
 })
 export class ToastService {
-  private errorToastDuration = 2000;
-  private informationToastDuration = 5000;
+  private temporaryToastDuration = 2000;
+  private closableToastDuration = 5000;
 
   constructor(private toastController: ToastController) {
+  }
+
+  async showTemporaryWarningMessage(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: this.temporaryToastDuration,
+      color: "warning",
+    });
+    await toast.present();
   }
 
   async showTemporaryErrorMessage(message: string) {
     const toast = await this.toastController.create({
       message: message,
-      duration: this.errorToastDuration,
+      duration: this.temporaryToastDuration,
       color: "danger",
     });
     await toast.present();
@@ -23,7 +32,7 @@ export class ToastService {
   async showTemporarySuccessMessage(message: string) {
     const toast = await this.toastController.create({
       message: message,
-      duration: this.errorToastDuration,
+      duration: this.temporaryToastDuration,
       color: "success",
     });
     await toast.present();
@@ -33,7 +42,7 @@ export class ToastService {
     const toast = await this.toastController.create({
       color: 'secondary',
       message: message,
-      duration: this.informationToastDuration,
+      duration: this.closableToastDuration,
       showCloseButton: true
     });
     await toast.present();

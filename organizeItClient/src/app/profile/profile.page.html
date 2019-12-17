@@ -26,7 +26,8 @@
                   <ion-label>Not verified yet</ion-label>
                 </ion-chip>
                 <ion-chip *ngIf="membershipService.userEnrollmentPending(project) && !isProjectOwner(project)"
-                          (click)="membershipService.cancelEnrollmentRequest(project, RELOAD_DATA_EVENT_NAME)" color="danger" outline>
+                          (click)="membershipService.cancelEnrollmentRequest(project, RELOAD_DATA_EVENT_NAME)"
+                          color="danger" outline>
                   <ion-icon name="alert"></ion-icon>
                   <ion-label>Enrollment request pending</ion-label>
                   <ion-icon name="close-circle"></ion-icon>
@@ -79,15 +80,31 @@
             <ion-col>
               <ion-item>
                 <ion-label position="stacked">First name</ion-label>
-                <!-- TODO: Logged in user data in value field at start -->
-                <ion-input name="firstName" autocapitalize="words" ngModel></ion-input>
+                <ion-input name="firstName" autocapitalize="words" value="{{firstName}}" [(ngModel)]="firstName"
+                           required></ion-input>
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Last name</ion-label>
-                <ion-input name="lastName" autocapitalize="words" ngModel
-                           (keyup.enter)="updateUser(form)"></ion-input>
+                <ion-input name="lastName" autocapitalize="words" value="{{lastName}}" [(ngModel)]="lastName"
+                           required></ion-input>
               </ion-item>
-              <ion-button id="submitButton" type="submit" (keydown.enter)="updateUser(form)">Update</ion-button>
+              <ion-item>
+                <ion-label position="stacked">Shirt size</ion-label>
+                <!--                TODO: Figure out how to select default value-->
+                <ion-select name="shirtSize" value="{{shirtSize}}" [(ngModel)]="shirtSize" required>
+                  <ion-select-option *ngFor="let shirtSizeOption of shirtSizes; let i = index"
+                                     [selected]="shirtSizeOption.size === shirtSize.size"
+                                     [value]="shirtSizeOption">{{shirtSizeOption.size}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item>
+                <ion-label position="stacked">Shirt type</ion-label>
+                <ion-select name="shirtType" value="{{shirtType}}" [(ngModel)]="shirtType" required>
+                  <ion-select-option *ngFor="let shirtType of shirtTypes"
+                                     [value]="shirtType">{{shirtType}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-button id="submitButton" type="submit" [disabled]="form.invalid">Update</ion-button>
             </ion-col>
           </ion-row>
         </ion-grid>

@@ -10,6 +10,9 @@ import {AlertController, Events} from "@ionic/angular";
 import {Messages} from "../shared/Messages";
 import {User} from "../interfaces/user.model";
 import {MembershipService} from "../project/membership.service";
+import {ToastService} from "../shared/toast.service";
+import {ShirtType} from "../interfaces/shirt-type.enum";
+import {ShirtSize} from "../interfaces/shirt-size";
 
 @Component({
   selector: 'app-profile',
@@ -21,18 +24,37 @@ export class ProfilePage implements OnInit, OnDestroy {
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
   loggedInUser: User;
+  firstName: String;
+  lastName: String;
+  shirtSize: ShirtSize;
+  shirtSizeIndex: number;
+  shirtType: ShirtType;
+  shirtSizes: ShirtSize[];
+  shirtTypes: ShirtType[] = [ShirtType.M, ShirtType.F];
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
               private authService: AuthService, private alertController: AlertController,
-              private membershipService: MembershipService, private events: Events) {
+              private membershipService: MembershipService, private events: Events,
+              private toastService: ToastService) {
     this.listenForDataReloadEvent();
+    this.authService.getCurrentUser().subscribe((user: User) => {
+      this.loggedInUser = user;
+      this.firstName = user.firstName;
+      this.lastName = user.lastName;
+      this.shirtSize = user.shirtSize;
+      this.shirtSizeIndex = user.shirtSize.id;
+      this.shirtType = user.shirtType;
+      this.getProjects();
+      console.log(user.shirtSize)
+      console.log(this.shirtSizeIndex)
+      this.authService.getAllShirtSizes().subscribe((shirtSizes: ShirtSize[]) => {
+        this.shirtSizes = shirtSizes;
+      })
+    });
   }
 
   ngOnInit() {
-    this.authService.getCurrentUser().subscribe((user: User) => {
-      this.loggedInUser = user;
-      this.getProjects();
-    });
+
   }
 
   ngOnDestroy() {
@@ -105,20 +127,26 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   updateUser(form) {
     console.log(form.value);
-    if (form.value.firstName === undefined || form.value.lastName === undefined) {
+    if (this.userDataUnchanged(form)) {
+      this.toastService.showTemporaryWarningMessage(Messages.userInfoUpdateWarningMessage);
       return;
     }
-    this.authService.getCurrentUser().subscribe((user: User) => {
-      this.authService.updateInfo(form.value, user).subscribe(
-          response => {
-            console.log(response);
-            location.reload();
-          },
-          error => {
-            console.log(error);
-          });
-    });
+    this.authService.updateInfo(form.value, this.loggedInUser).subscribe(
+        (user: User) => {
+          console.log(user);
+          this.loggedInUser = user;
+          this.events.publish('reloadSideMenuData');
+          this.toastService.showTemporarySuccessMessage(Messages.userInfoUpdateSuccessMessage);
+        },
+        error => {
+          console.log(error);
+          this.toastService.showTemporaryErrorMessage(Messages.userInfoUpdateErrorMessage);
+        });
+  }
 
+  private userDataUnchanged(form) {
+    return this.loggedInUser.firstName === form.value.firstName && this.loggedInUser.lastName === form.value.lastName
+        && this.loggedInUser.shirtSize === form.value.shirtSize && this.loggedInUser.shirtType === form.value.shirtType;
   }
 
   async presentDeleteProjectAlert(project: Project) {

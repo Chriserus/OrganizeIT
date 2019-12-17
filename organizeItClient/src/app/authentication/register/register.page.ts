@@ -23,7 +23,7 @@ export class RegisterPage extends SubmitService implements OnInit {
   ngOnInit() {
     this.authService.getAllShirtSizes().subscribe(data => {
       this.shirtSizes = data;
-    })
+    });
   }
 
   register(form) {
@@ -35,7 +35,8 @@ export class RegisterPage extends SubmitService implements OnInit {
       console.log(Messages.passwordMismatch);
       return;
     }
-    this.authService.getByEmail(form.value.email).subscribe(data => {
+    this.authService.getByEmail(form.value.email).subscribe(
+        data => {
           console.log(data);
           if (data === null) {
             console.log("Registering user with email: " + form.value.email);
@@ -60,7 +61,7 @@ export class RegisterPage extends SubmitService implements OnInit {
             console.log(Messages.emailExists)
           }
         },
-        error => {
+        () => {
           this.toastService.showTemporaryErrorMessage(Messages.serverUnavailable)
         });
   }
