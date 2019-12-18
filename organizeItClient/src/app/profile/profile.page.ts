@@ -27,7 +27,6 @@ export class ProfilePage implements OnInit, OnDestroy {
   firstName: String;
   lastName: String;
   shirtSize: ShirtSize;
-  shirtSizeIndex: number;
   shirtType: ShirtType;
   shirtSizes: ShirtSize[];
   shirtTypes: ShirtType[] = [ShirtType.M, ShirtType.F];
@@ -37,24 +36,25 @@ export class ProfilePage implements OnInit, OnDestroy {
               private membershipService: MembershipService, private events: Events,
               private toastService: ToastService) {
     this.listenForDataReloadEvent();
-    this.authService.getCurrentUser().subscribe((user: User) => {
-      this.loggedInUser = user;
-      this.firstName = user.firstName;
-      this.lastName = user.lastName;
-      this.shirtSize = user.shirtSize;
-      this.shirtSizeIndex = user.shirtSize.id;
-      this.shirtType = user.shirtType;
-      this.getProjects();
-      console.log(user.shirtSize)
-      console.log(this.shirtSizeIndex)
-      this.authService.getAllShirtSizes().subscribe((shirtSizes: ShirtSize[]) => {
-        this.shirtSizes = shirtSizes;
-      })
-    });
+    this.authService.getAllShirtSizes().subscribe((shirtSizes: ShirtSize[]) => {
+      this.shirtSizes = shirtSizes;
+      this.authService.getCurrentUser().subscribe((user: User) => {
+        this.loggedInUser = user;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
+        this.shirtSize = user.shirtSize;
+        this.shirtType = user.shirtType;
+        this.getProjects();
+      });
+    })
   }
 
   ngOnInit() {
 
+  }
+
+  compareShirtSizes(s1: ShirtSize, s2: ShirtSize) {
+    return s1 && s2 ? s1.id === s2.id : s1 === s2;
   }
 
   ngOnDestroy() {
@@ -146,7 +146,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   private userDataUnchanged(form) {
     return this.loggedInUser.firstName === form.value.firstName && this.loggedInUser.lastName === form.value.lastName
-        && this.loggedInUser.shirtSize === form.value.shirtSize && this.loggedInUser.shirtType === form.value.shirtType;
+        && this.compareShirtSizes(this.loggedInUser.shirtSize, form.value.shirtSize) && this.loggedInUser.shirtType === form.value.shirtType;
   }
 
   async presentDeleteProjectAlert(project: Project) {

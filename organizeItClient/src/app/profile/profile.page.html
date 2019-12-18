@@ -88,13 +88,12 @@
                 <ion-input name="lastName" autocapitalize="words" value="{{lastName}}" [(ngModel)]="lastName"
                            required></ion-input>
               </ion-item>
-              <ion-item>
+              <ion-item *ngIf="shirtSize">
                 <ion-label position="stacked">Shirt size</ion-label>
-                <!--                TODO: Figure out how to select default value-->
-                <ion-select name="shirtSize" value="{{shirtSize}}" [(ngModel)]="shirtSize" required>
-                  <ion-select-option *ngFor="let shirtSizeOption of shirtSizes; let i = index"
-                                     [selected]="shirtSizeOption.size === shirtSize.size"
-                                     [value]="shirtSizeOption">{{shirtSizeOption.size}}</ion-select-option>
+                <ion-select name="shirtSize" value="{{shirtSize}}" [(ngModel)]="shirtSize"
+                            [compareWith]="compareShirtSizes" required>
+                  <ion-select-option *ngFor="let shirtSize of shirtSizes"
+                                     [value]="shirtSize">{{shirtSize.size}}</ion-select-option>
                 </ion-select>
               </ion-item>
               <ion-item>

@@ -67,7 +67,9 @@ export class AuthService {
     };
     let jsonData = {
       'firstName': form.firstName,
-      'lastName': form.lastName
+      'lastName': form.lastName,
+      'shirtSize': form.shirtSize,
+      'shirtType': form.shirtType
     };
     return this.http.put(this.USERS_URL + "/" + user.id, jsonData, httpOptions);
   }
