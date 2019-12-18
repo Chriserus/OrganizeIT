@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentService {
@@ -22,5 +23,13 @@ public class CommentService {
 
     public Comment save(Comment comment) {
         return commentRepository.save(comment);
+    }
+
+    public Optional<Comment> findById(Long id) {
+        return commentRepository.findById(id);
+    }
+
+    public void deleteById(Long id) {
+        commentRepository.deleteById(id);
     }
 }

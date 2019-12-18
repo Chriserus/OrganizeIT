@@ -32,4 +32,8 @@ export class CommentService {
     console.log(jsonData);
     return this.http.post(this.COMMENTS_URL, jsonData, httpOptions);
   }
+
+  deleteComment(id: number) {
+    return this.http.delete(this.COMMENTS_URL + "/" + id)
+  }
 }
