@@ -12,8 +12,11 @@ import {Messages} from "../../shared/Messages";
   styleUrls: ['./submission.page.scss'],
 })
 export class SubmissionPage extends SubmitService implements OnInit {
+  joinAsMember: boolean;
+
   constructor(private projectService: ProjectService, private authService: AuthService, private  router: Router, private toastService: ToastService) {
     super();
+    this.joinAsMember = true;
   }
 
   ngOnInit() {

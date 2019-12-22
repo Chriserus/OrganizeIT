@@ -24,7 +24,11 @@
               <ion-item>
                 <ion-label position="stacked">Description</ion-label>
                 <!-- TODO: Move method call to the lowest input field -->
-                <ion-textarea name="description" type="text" autocapitalize="sentences" rows="6" autoGrow="true" ngModel required></ion-textarea>
+                <ion-textarea name="description" type="text" autocapitalize="sentences" rows="8" ngModel required></ion-textarea>
+              </ion-item>
+              <ion-item>
+                <ion-label>Join project</ion-label>
+                <ion-checkbox name="joinAsMember" slot="end" [checked]=true [(ngModel)]="joinAsMember"></ion-checkbox>
               </ion-item>
 <!--              <ion-item>-->
 <!--                <ion-label position="stacked">Maximum team members</ion-label>-->

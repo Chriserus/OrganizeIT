@@ -5,6 +5,7 @@ import com.capgemini.organizeIT.project.entities.Project;
 import com.capgemini.organizeIT.project.repositories.ProjectRepository;
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.services.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,14 +16,10 @@ import java.util.stream.Collectors;
 
 @Log4j2
 @Service
+@RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final UserService userService;
-
-    public ProjectService(final ProjectRepository projectRepository, final UserService userService) {
-        this.projectRepository = projectRepository;
-        this.userService = userService;
-    }
 
     public List<Project> findAllThatContainUser(User user) {
         return findAllSortByDateNewFirst().stream()

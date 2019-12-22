@@ -36,8 +36,8 @@ export class ProjectService {
       'maxMembers': form.value.maxMembers
     };
     console.log(jsonData);
-    // TODO: Secure this endpoint (or change something, that only get is allowed
-    return this.http.post(this.PROJECTS_URL, jsonData, httpOptions);
+    // TODO: Secure this endpoint (or change something, that only get is allowed)
+    return this.http.post(this.PROJECTS_URL + "?joinProject=" + form.value.joinAsMember, jsonData, httpOptions);
   }
 
   deleteProject(project: Project) {

@@ -5,6 +5,7 @@ import com.capgemini.organizeIT.project.entities.Project;
 import com.capgemini.organizeIT.project.services.ProjectService;
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.services.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,14 +16,10 @@ import java.util.Optional;
 @Log4j2
 @CrossOrigin
 @RestController
+@RequiredArgsConstructor
 public class MembershipController {
     private final ProjectService projectService;
     private final UserService userService;
-
-    public MembershipController(final ProjectService projectService, final UserService userService) {
-        this.projectService = projectService;
-        this.userService = userService;
-    }
 
     @PostMapping("/api/projects/{projectId}/memberships/{memberId}")
     public Project addPotentialMemberByEmail(@PathVariable Long projectId, @PathVariable Long memberId) {

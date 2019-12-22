@@ -17,9 +17,11 @@ export class BoardPage extends SubmitService implements OnInit, OnDestroy {
   comments: Comment[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
   public loggedInUser: User;
+  announcement: boolean;
 
   constructor(private commentService: CommentService, public authService: AuthService) {
     super();
+    this.announcement = false;
   }
 
   ngOnInit() {
