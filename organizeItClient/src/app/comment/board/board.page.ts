@@ -7,6 +7,7 @@ import {Comment} from "../../interfaces/comment.model";
 import {SubmitService} from "../../shared/submit.service";
 import {AuthService} from "../../authentication/auth.service";
 import {User} from "../../interfaces/user.model";
+import {AlertController} from "@ionic/angular";
 
 @Component({
   selector: 'app-board',
@@ -19,7 +20,7 @@ export class BoardPage extends SubmitService implements OnInit, OnDestroy {
   public loggedInUser: User;
   announcement: boolean;
 
-  constructor(private commentService: CommentService, public authService: AuthService) {
+  constructor(private commentService: CommentService, public authService: AuthService, public alertController: AlertController) {
     super();
     this.announcement = false;
   }
@@ -77,5 +78,29 @@ export class BoardPage extends SubmitService implements OnInit, OnDestroy {
 
   loggedInUserIsAuthor(comment: Comment) {
     return localStorage.getItem("loggedInUserEmail") === comment.author.email;
+  }
+
+  async presentDeleteCommentAlert(comment: Comment) {
+    const alert = await this.alertController.create({
+      header: 'Deleting comment!',
+      message: 'You are deleting comment with content: <p><strong>' + comment.content + '</strong></p>',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'DELETE',
+          cssClass: 'danger',
+          handler: () => {
+            this.deleteComment(comment);
+          }
+        }]
+    });
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
   }
 }

@@ -42,7 +42,7 @@
               <ion-card-subtitle>{{comment.author.firstName + " " + comment.author.lastName}}
                 , {{comment.created | date: 'medium'}}</ion-card-subtitle>
               <ion-button *ngIf="loggedInUserIsAuthor(comment) || authService.userHasAdminRole(this.loggedInUser)"
-                          fill="clear" slot="end" color="danger" (click)="deleteComment(comment)">
+                          fill="clear" slot="end" color="danger" (click)="presentDeleteCommentAlert(comment)">
                 <ion-icon slot="icon-only" name="trash"></ion-icon>
               </ion-button>
             </ion-item>
