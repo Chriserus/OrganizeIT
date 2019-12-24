@@ -72,10 +72,10 @@ export class NotificationService {
     return this.http.post(this.NOTIFICATION_URL + "/" + user.id, jsonData, httpOptions);
   }
 
-  sendNotificationToProjectMembersAboutProjectDeletion(project: Project) {
+  sendNotificationToProjectMembersAboutProjectDeletion(project: Project, reason: string) {
     project.members.filter(member => member.approved).map(member => member.user).forEach(user => {
       this.sendNotification(user, Messages.projectDeletedNotificationTitle,
-          "Project: " + project.title + " has been deleted").subscribe(
+          "Project: " + project.title + " has been deleted. " + reason).subscribe(
           (response: any) => {
             console.log(response);
           },

@@ -31,7 +31,7 @@
             <ion-button id="enrollButton" expand="block" (click)="sendEnrollmentRequest(project)">Enroll</ion-button>
           </ion-item>
           <ion-item *ngIf="membershipService.userEnrollmentPending(project)" >
-            <ion-chip color="danger" (click)="membershipService.cancelEnrollmentRequest(project, RELOAD_DATA_EVENT_NAME)" outline>
+            <ion-chip color="danger" (click)="alertService.cancelEnrollmentRequest(project, RELOAD_DATA_EVENT_NAME)" outline>
               <ion-icon name="alarm"></ion-icon>
               <ion-label>Enrollment request pending</ion-label>
               <ion-icon name="close-circle"></ion-icon>

@@ -10,6 +10,7 @@ import {ToastService} from "../../shared/toast.service";
 import {Messages} from "../../shared/Messages";
 import {MembershipService} from "../membership.service";
 import {Events} from "@ionic/angular";
+import {AlertService} from "../../shared/alert.service";
 
 @Component({
   selector: 'app-list',
@@ -23,7 +24,8 @@ export class ListPage implements OnInit, OnDestroy {
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
               private authService: AuthService, private membershipService: MembershipService,
-              private toastService: ToastService, private events: Events) {
+              private toastService: ToastService, private events: Events,
+              private alertService: AlertService) {
     this.listenForDataReloadEvent();
   }
 

@@ -26,7 +26,7 @@
                   <ion-label>Not verified yet</ion-label>
                 </ion-chip>
                 <ion-chip *ngIf="membershipService.userEnrollmentPending(project) && !isProjectOwner(project)"
-                          (click)="membershipService.cancelEnrollmentRequest(project, RELOAD_DATA_EVENT_NAME)"
+                          (click)="alertService.cancelEnrollmentRequest(project, RELOAD_DATA_EVENT_NAME)"
                           color="danger" outline>
                   <ion-icon name="alert"></ion-icon>
                   <ion-label>Enrollment request pending</ion-label>

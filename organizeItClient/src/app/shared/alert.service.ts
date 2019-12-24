@@ -5,6 +5,9 @@ import {ProjectService} from "../project/project.service";
 import {NotificationService} from "../notifications/notification.service";
 import {Comment} from "../interfaces/comment.model";
 import {CommentService} from "../comment/comment.service";
+import {User} from "../interfaces/user.model";
+import {AuthService} from "../authentication/auth.service";
+import {MembershipService} from "../project/membership.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +16,21 @@ export class AlertService {
 
   constructor(private alertController: AlertController, private projectService: ProjectService,
               private notificationService: NotificationService, private events: Events,
-              private commentService: CommentService) {
+              private commentService: CommentService, private authService: AuthService,
+              private membershipService: MembershipService) {
   }
 
   async presentDeleteProjectAlert(project: Project, eventName: string) {
     const alert = await this.alertController.create({
       header: 'Deleting project!',
       message: 'You are deleting project: <p><strong>' + project.title + '</strong></p>',
+      inputs: [
+        {
+          name: 'reason',
+          type: 'text',
+          placeholder: 'Specify reason'
+        }
+      ],
       buttons: [
         {
           text: 'Cancel',
@@ -30,11 +41,11 @@ export class AlertService {
         }, {
           text: 'DELETE',
           cssClass: 'danger',
-          handler: () => {
+          handler: data => {
             this.projectService.deleteProject(project).subscribe(
                 response => {
                   console.log(response);
-                  this.notificationService.sendNotificationToProjectMembersAboutProjectDeletion(project);
+                  this.notificationService.sendNotificationToProjectMembersAboutProjectDeletion(project, data.reason);
                   this.events.publish(eventName);
                 },
                 error => {
@@ -144,6 +155,44 @@ export class AlertService {
                 response => {
                   console.log(response);
                   this.events.publish(eventName);
+                },
+                error => {
+                  console.log(error);
+                });
+          }
+        }]
+    });
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+  }
+
+  async cancelEnrollmentRequest(project: Project, eventName: string) {
+    const alert = await this.alertController.create({
+      header: 'Deleting project enrollment request!',
+      message: 'You are deleting your enrollment request for project: <p><strong>' + project.title + '</strong></p>',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'DELETE',
+          cssClass: 'danger',
+          handler: () => {
+            this.authService.getCurrentUser().subscribe(
+                (user: User) => {
+                  console.log(user);
+                  this.membershipService.deleteMemberFromProject(user, project).subscribe(
+                      response => {
+                        console.log(response);
+                        this.events.publish(eventName);
+                      },
+                      error => {
+                        console.log(error);
+                      });
                 },
                 error => {
                   console.log(error);

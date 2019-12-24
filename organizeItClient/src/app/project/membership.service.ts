@@ -19,41 +19,6 @@ export class MembershipService {
               private events: Events, private notificationService: NotificationService) {
   }
 
-  cancelEnrollmentRequest(project: Project, eventName: string) {
-    this.alertController.create({
-      header: 'Deleting project enrollment request!',
-      message: 'You are deleting your enrollment request for project: <p><strong>' + project.title + '</strong></p>',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Canceled');
-          }
-        }, {
-          text: 'DELETE',
-          cssClass: 'danger',
-          handler: () => {
-            this.authService.getCurrentUser().subscribe(
-                (user: User) => {
-                  console.log(user);
-                  this.deleteMemberFromProject(user, project).subscribe(
-                      response => {
-                        console.log(response);
-                        this.events.publish(eventName);
-                      },
-                      error => {
-                        console.log(error);
-                      });
-                },
-                error => {
-                  console.log(error);
-                });
-          }
-        }]
-    }).then(alert => alert.present());
-  }
-
   acceptMembershipRequest(project: Project, potentialMember: ProjectUser, eventName: string) {
     console.log("Accepting member: " + potentialMember.user.email + " to project: " + project.title);
     this.approveMemberToProject(potentialMember.user, project).subscribe(
