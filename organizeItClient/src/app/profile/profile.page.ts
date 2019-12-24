@@ -3,16 +3,16 @@ import {takeUntil} from "rxjs/operators";
 import {ProjectService} from "../project/project.service";
 import {Project} from "../interfaces/project.model";
 import {Subject} from "rxjs";
-import {ProjectUser} from "../interfaces/project-user";
 import {NotificationService} from "../notifications/notification.service";
 import {AuthService} from "../authentication/auth.service";
-import {AlertController, Events} from "@ionic/angular";
+import {Events} from "@ionic/angular";
 import {Messages} from "../shared/Messages";
 import {User} from "../interfaces/user.model";
 import {MembershipService} from "../project/membership.service";
 import {ToastService} from "../shared/toast.service";
 import {ShirtType} from "../interfaces/shirt-type.enum";
 import {ShirtSize} from "../interfaces/shirt-size";
+import {AlertService} from "../shared/alert.service";
 
 @Component({
   selector: 'app-profile',
@@ -32,9 +32,8 @@ export class ProfilePage implements OnInit, OnDestroy {
   shirtTypes: ShirtType[] = [ShirtType.M, ShirtType.F];
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
-              private authService: AuthService, private alertController: AlertController,
-              private membershipService: MembershipService, private events: Events,
-              private toastService: ToastService) {
+              private authService: AuthService, private membershipService: MembershipService, private events: Events,
+              private toastService: ToastService, private alertService: AlertService) {
     this.listenForDataReloadEvent();
     this.authService.getAllShirtSizes().subscribe((shirtSizes: ShirtSize[]) => {
       this.shirtSizes = shirtSizes;
@@ -50,7 +49,6 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
   }
 
   compareShirtSizes(s1: ShirtSize, s2: ShirtSize) {
@@ -85,46 +83,6 @@ export class ProfilePage implements OnInit, OnDestroy {
     return localStorage.getItem("loggedInUserEmail") === project.owner.email;
   }
 
-  acceptUserToProject(project: Project, potentialMember: ProjectUser) {
-    console.log("Accepting member: " + potentialMember.user.email + " to project: " + project.title);
-    this.membershipService.approveMemberToProject(potentialMember.user, project).subscribe(
-        response => {
-          console.log(response);
-          this.notificationService.sendNotification(potentialMember.user, Messages.enrollmentSuccessfulNotificationTitle,
-              "Owner of project " + project.title + " has accepted your enrollment submission").subscribe(
-              (response: any) => {
-                console.log(response);
-                this.getProjects();
-              },
-              (error: any) => {
-                console.log(error);
-              });
-        },
-        error => {
-          console.log(error);
-        });
-  }
-
-  rejectUser(project: Project, potentialMember: ProjectUser) {
-    console.log("Rejecting user: " + potentialMember.user.email + ", project: " + project.title);
-    this.membershipService.deleteMemberFromProject(potentialMember.user, project).subscribe(
-        response => {
-          console.log(response);
-          this.notificationService.sendNotification(potentialMember.user, "Enrollment submission rejected",
-              "Owner of project " + project.title + " has rejected your enrollment submission").subscribe(
-              (response: any) => {
-                console.log(response);
-                this.getProjects();
-              },
-              (error: any) => {
-                console.log(error);
-              });
-        },
-        error => {
-          console.log(error);
-        });
-  }
-
   updateUser(form) {
     console.log(form.value);
     if (this.userDataUnchanged(form)) {
@@ -149,109 +107,9 @@ export class ProfilePage implements OnInit, OnDestroy {
         && this.compareShirtSizes(this.loggedInUser.shirtSize, form.value.shirtSize) && this.loggedInUser.shirtType === form.value.shirtType;
   }
 
-  async presentDeleteProjectAlert(project: Project) {
-    const alert = await this.alertController.create({
-      header: 'Deleting project!',
-      message: 'You are deleting project: <p><strong>' + project.title + '</strong></p>',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Canceled');
-          }
-        }, {
-          text: 'DELETE',
-          cssClass: 'danger',
-          handler: () => {
-            this.projectService.deleteProject(project).subscribe(
-                response => {
-                  console.log(response);
-                  this.sendNotificationToProjectMembersAboutProjectDeletion(project);
-                  this.getProjects();
-                },
-                error => {
-                  console.log(error);
-                });
-          }
-        }]
-    });
-    await alert.present();
-    let result = await alert.onDidDismiss();
-    console.log(result);
-  }
-
-  private sendNotificationToProjectMembersAboutProjectDeletion(project: Project) {
-    project.members.filter(member => member.approved).map(member => member.user).forEach(user => {
-      this.notificationService.sendNotification(user, Messages.projectDeletedNotificationTitle,
-          "Project: " + project.title + " has been deleted").subscribe(
-          (response: any) => {
-            console.log(response);
-          },
-          (error: any) => {
-            console.log(error);
-          });
-    });
-  }
-
   private listenForDataReloadEvent() {
     this.events.subscribe(this.RELOAD_DATA_EVENT_NAME, () => {
       this.getProjects();
     });
-  }
-
-  async presentModifyProjectAlert(project: Project) {
-    const alert = await this.alertController.create({
-      header: 'Modifying project!',
-      inputs: [
-        {
-          label: 'Title',
-          name: 'title',
-          placeholder: 'Title',
-          value: project.title
-        },
-        {
-          label: 'Description',
-          name: 'description',
-          placeholder: 'Description',
-          value: project.description,
-          type: "text" // TODO: Known bug: no textarea, formatting does not work -> Ionic team is working on adding it
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Canceled');
-          }
-        }, {
-          text: 'SAVE',
-          handler: data => {
-            console.log(data);
-            this.modifyProjectOnDataChange(project, data);
-            this.projectService.modifyProject(project).subscribe(
-                response => {
-                  console.log(response);
-                  this.getProjects();
-                },
-                error => {
-                  console.log(error);
-                });
-          }
-        }]
-    });
-    await alert.present();
-    let result = await alert.onDidDismiss();
-    console.log(result);
-  }
-
-  private modifyProjectOnDataChange(project: Project, data: any) {
-    if (project.title != data.title) {
-      project.title = data.title;
-    }
-    if (project.description != data.description) {
-      project.description = data.description;
-    }
   }
 }

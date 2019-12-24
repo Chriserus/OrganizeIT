@@ -51,4 +51,13 @@ export class ProjectService {
   modifyProject(project: Project) {
     return this.http.put<Project>(this.PROJECTS_URL, project);
   }
+
+  modifyProjectOnDataChange(project: Project, data: any) {
+    if (project.title != data.title) {
+      project.title = data.title;
+    }
+    if (project.description != data.description) {
+      project.description = data.description;
+    }
+  }
 }

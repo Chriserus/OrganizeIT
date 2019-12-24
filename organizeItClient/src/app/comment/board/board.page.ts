@@ -7,7 +7,8 @@ import {Comment} from "../../interfaces/comment.model";
 import {SubmitService} from "../../shared/submit.service";
 import {AuthService} from "../../authentication/auth.service";
 import {User} from "../../interfaces/user.model";
-import {AlertController} from "@ionic/angular";
+import {Events} from "@ionic/angular";
+import {AlertService} from "../../shared/alert.service";
 
 @Component({
   selector: 'app-board',
@@ -15,14 +16,23 @@ import {AlertController} from "@ionic/angular";
   styleUrls: ['./board.page.scss'],
 })
 export class BoardPage extends SubmitService implements OnInit, OnDestroy {
+  readonly RELOAD_DATA_EVENT_NAME = 'reloadCommentsBoardPage';
   comments: Comment[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
   public loggedInUser: User;
   announcement: boolean;
 
-  constructor(private commentService: CommentService, public authService: AuthService, public alertController: AlertController) {
+  constructor(private commentService: CommentService, public authService: AuthService, public alertService: AlertService,
+              private events: Events) {
     super();
     this.announcement = false;
+    this.listenForDataReloadEvent();
+  }
+
+  private listenForDataReloadEvent() {
+    this.events.subscribe(this.RELOAD_DATA_EVENT_NAME, () => {
+      this.getComments();
+    });
   }
 
   ngOnInit() {
@@ -65,42 +75,7 @@ export class BoardPage extends SubmitService implements OnInit, OnDestroy {
     }
   }
 
-  deleteComment(comment: Comment) {
-    this.commentService.deleteComment(comment.id).subscribe(
-        response => {
-          console.log(response);
-          this.getComments();
-        },
-        error => {
-          console.log(error);
-        });
-  }
-
   loggedInUserIsAuthor(comment: Comment) {
     return localStorage.getItem("loggedInUserEmail") === comment.author.email;
-  }
-
-  async presentDeleteCommentAlert(comment: Comment) {
-    const alert = await this.alertController.create({
-      header: 'Deleting comment!',
-      message: 'You are deleting comment with content: <p><strong>' + comment.content + '</strong></p>',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Canceled');
-          }
-        }, {
-          text: 'DELETE',
-          cssClass: 'danger',
-          handler: () => {
-            this.deleteComment(comment);
-          }
-        }]
-    });
-    await alert.present();
-    let result = await alert.onDidDismiss();
-    console.log(result);
   }
 }

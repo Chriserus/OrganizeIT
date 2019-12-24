@@ -3,6 +3,8 @@ import '@firebase/messaging';
 import {AngularFireMessaging} from "@angular/fire/messaging";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {User} from "../interfaces/user.model";
+import {Project} from "../interfaces/project.model";
+import {Messages} from "../shared/Messages";
 
 @Injectable({
   providedIn: 'root'
@@ -68,5 +70,31 @@ export class NotificationService {
       "click_action": "/profile"
     };
     return this.http.post(this.NOTIFICATION_URL + "/" + user.id, jsonData, httpOptions);
+  }
+
+  sendNotificationToProjectMembersAboutProjectDeletion(project: Project) {
+    project.members.filter(member => member.approved).map(member => member.user).forEach(user => {
+      this.sendNotification(user, Messages.projectDeletedNotificationTitle,
+          "Project: " + project.title + " has been deleted").subscribe(
+          (response: any) => {
+            console.log(response);
+          },
+          (error: any) => {
+            console.log(error);
+          });
+    });
+  }
+
+  sendNotificationToProjectMembersAboutProjectVerification(project: Project) {
+    project.members.filter(member => member.approved).map(member => member.user).forEach(user => {
+      this.sendNotification(user, Messages.projectVerifiedNotificationTitle,
+          "Project: " + project.title + " has been verified").subscribe(
+          (response: any) => {
+            console.log(response);
+          },
+          (error: any) => {
+            console.log(error);
+          });
+    });
   }
 }
