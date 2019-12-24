@@ -21,7 +21,7 @@
             <div style="white-space:pre-wrap;">{{project.description}}</div>
             <ion-item-divider>
             </ion-item-divider>
-            Members: {{listMembers(project)}}
+            Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}): {{projectService.listApprovedMembers(project)}}
             <ion-item-divider>
             </ion-item-divider>
             <!-- custom date format:  HH:MM | d-MMM-yyyy-->

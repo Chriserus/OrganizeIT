@@ -67,10 +67,6 @@ export class ProfilePage implements OnInit, OnDestroy {
     });
   }
 
-  listMembers(project: Project) {
-    return project.members.filter(member => member.approved).map(member => " " + member.user.firstName + " " + member.user.lastName);
-  }
-
   listPotentialMembers(project: Project) {
     return project.members.filter(member => !member.approved);
   }

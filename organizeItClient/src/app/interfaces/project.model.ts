@@ -7,7 +7,7 @@ export interface Project {
   description: string;
   owner: User;
   members: ProjectUser[];
-  maxTeamMembers: number;
+  maxMembers: number;
   verified: boolean;
   created?: string;
   modified?: string;

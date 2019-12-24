@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Project} from '../interfaces/project.model';
 import {User} from "../interfaces/user.model";
-import {AlertController} from "@ionic/angular";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +10,7 @@ export class ProjectService {
   readonly PROJECTS_URL = '/api/projects';
   readonly USERS_URL = '/api/users';
 
-  constructor(private http: HttpClient, private alertController: AlertController) {
+  constructor(private http: HttpClient) {
   }
 
   getProjects() {
@@ -59,5 +58,13 @@ export class ProjectService {
     if (project.description != data.description) {
       project.description = data.description;
     }
+  }
+
+  countApprovedMembers(project: Project) {
+    return project.members.filter(member => member.approved).length;
+  }
+
+  listApprovedMembers(project: Project) {
+    return project.members.filter(member => member.approved).map(member => " " + member.user.firstName + " " + member.user.lastName);
   }
 }

@@ -39,7 +39,6 @@ export class ListPage implements OnInit, OnDestroy {
   }
 
   getProjects() {
-    this.projects = [];
     this.projectService.getProjects().pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
       console.log(projects);
       this.projects = projects.filter(project => project.verified);
@@ -68,12 +67,6 @@ export class ListPage implements OnInit, OnDestroy {
         (error: any) => {
           console.log(error);
         });
-  }
-
-  listMembers(project: Project) {
-    let listOfMembers = [];
-    project.members.filter(member => member.approved).forEach(member => listOfMembers.push(member.user.firstName + " " + member.user.lastName));
-    return listOfMembers;
   }
 
   isUserLoggedIn(): boolean {
