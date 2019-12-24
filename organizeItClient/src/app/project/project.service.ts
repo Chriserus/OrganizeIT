@@ -48,4 +48,7 @@ export class ProjectService {
     return this.http.put<Project>(this.PROJECTS_URL + "/" + project.id, {}, {responseType: 'json'});
   }
 
+  modifyProject(project: Project) {
+    return this.http.put<Project>(this.PROJECTS_URL, project);
+  }
 }

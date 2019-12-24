@@ -60,6 +60,9 @@
                   </div>
                 </div>
               </ion-card-content>
+              <ion-button *ngIf="isProjectOwner(project)" id="modifyButton" expand="block"
+                          (click)="presentModifyProjectAlert(project)">Modify project
+              </ion-button>
               <ion-button *ngIf="isProjectOwner(project)" id="deleteButton" expand="block"
                           (click)="presentDeleteProjectAlert(project)" color="danger">Delete project
               </ion-button>

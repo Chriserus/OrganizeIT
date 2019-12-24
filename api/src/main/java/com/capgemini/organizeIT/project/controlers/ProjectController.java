@@ -68,6 +68,21 @@ public class ProjectController {
         });
     }
 
+    @PutMapping("/api/projects")
+    public void modifyProject(@RequestBody Project modifiedProject) {
+        projectService.findById(modifiedProject.getId()).ifPresent(project -> {
+            if (!project.getTitle().equals(modifiedProject.getTitle())) {
+                log.info("Modifying title");
+                project.setTitle(modifiedProject.getTitle());
+            }
+            if (!project.getDescription().equals(modifiedProject.getDescription())) {
+                log.info("Modifying description");
+                project.setDescription(modifiedProject.getDescription());
+            }
+            projectService.save(project);
+        });
+    }
+
     //TODO: Check if it works
     private boolean loggedInUserIsAdmin() {
         return !SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));

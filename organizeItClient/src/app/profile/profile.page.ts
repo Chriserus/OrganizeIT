@@ -199,4 +199,59 @@ export class ProfilePage implements OnInit, OnDestroy {
       this.getProjects();
     });
   }
+
+  async presentModifyProjectAlert(project: Project) {
+    const alert = await this.alertController.create({
+      header: 'Modifying project!',
+      inputs: [
+        {
+          label: 'Title',
+          name: 'title',
+          placeholder: 'Title',
+          value: project.title
+        },
+        {
+          label: 'Description',
+          name: 'description',
+          placeholder: 'Description',
+          value: project.description,
+          type: "text" // TODO: Known bug: no textarea, formatting does not work -> Ionic team is working on adding it
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'SAVE',
+          handler: data => {
+            console.log(data);
+            this.modifyProjectOnDataChange(project, data);
+            this.projectService.modifyProject(project).subscribe(
+                response => {
+                  console.log(response);
+                  this.getProjects();
+                },
+                error => {
+                  console.log(error);
+                });
+          }
+        }]
+    });
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+  }
+
+  private modifyProjectOnDataChange(project: Project, data: any) {
+    if (project.title != data.title) {
+      project.title = data.title;
+    }
+    if (project.description != data.description) {
+      project.description = data.description;
+    }
+  }
 }
