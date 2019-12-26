@@ -67,20 +67,14 @@ export class AppComponent implements OnInit, OnDestroy {
   public loggedIn: boolean;
   public online$ = this.network.onlineChanges;
 
-  constructor(
-      private platform: Platform,
-      private splashScreen: SplashScreen,
-      private statusBar: StatusBar,
-      public authService: AuthService,
-      private toastService: ToastService,
-      private router: Router,
-      private notificationService: NotificationService,
-      private network: Network,
-      public events: Events) {
+  constructor(private platform: Platform, private splashScreen: SplashScreen, private statusBar: StatusBar,
+              public authService: AuthService, private toastService: ToastService, private router: Router,
+              private notificationService: NotificationService, private network: Network, public events: Events) {
     this.listenForDataReloadEvent();
     this.initializeApp();
   }
 
+  //TODO: Maybe provide a Events enum that holds events names and use it instead of hard coded strings
   private listenForDataReloadEvent() {
     this.events.subscribe('reloadSideMenuData', () => {
       this.determineUserLoggedIn();

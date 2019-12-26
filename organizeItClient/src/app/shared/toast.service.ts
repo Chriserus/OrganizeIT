@@ -40,9 +40,9 @@ export class ToastService {
 
   async showClosableInformationMessage(message: string){
     const toast = await this.toastController.create({
-      color: 'secondary',
       message: message,
       duration: this.closableToastDuration,
+      color: 'secondary',
       showCloseButton: true
     });
     await toast.present();

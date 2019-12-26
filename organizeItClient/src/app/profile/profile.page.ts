@@ -108,4 +108,9 @@ export class ProfilePage implements OnInit, OnDestroy {
       this.getProjects();
     });
   }
+
+  async doRefresh(event) {
+    this.getProjects();
+    event.target.complete();
+  }
 }

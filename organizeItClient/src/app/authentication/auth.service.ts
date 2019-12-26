@@ -100,4 +100,12 @@ export class AuthService {
   getAllShirtSizes() {
     return this.http.get<ShirtSize[]>(this.SHIRT_SIZES_URL, {responseType: 'json'})
   }
+
+  getAllUsers() {
+    return this.http.get<User[]>(this.USERS_URL, {responseType: "json"})
+  }
+
+  deleteUser(user: User) {
+    return this.http.delete(this.USERS_URL + "/" + user.id)
+  }
 }

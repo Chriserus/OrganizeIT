@@ -38,6 +38,7 @@ export class ListPage implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
+  // TODO: Create clustered index of verified projects
   getProjects() {
     this.projectService.getProjects().pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
       console.log(projects);
@@ -77,5 +78,10 @@ export class ListPage implements OnInit, OnDestroy {
     this.events.subscribe(this.RELOAD_DATA_EVENT_NAME, () => {
       this.getProjects();
     });
+  }
+
+  async doRefresh(event) {
+    this.getProjects();
+    event.target.complete();
   }
 }

@@ -9,15 +9,20 @@
 
 <!--TODO: Create card for unverified projects, all projects, users (and all the admin rights related)-->
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Projects</ion-card-title>
+      <ion-item>
+        <ion-card-title>Unverified projects</ion-card-title>
+        <ion-toggle slot="end" color="secondary" [(ngModel)]="showUnverifiedProjects"></ion-toggle>
+      </ion-item>
     </ion-card-header>
     <ion-card-content>
-      <ion-spinner *ngIf="projects.length === 0"></ion-spinner>
-      <ion-grid *ngIf="projects.length != 0">
+      <ion-grid *ngIf="showUnverifiedProjects">
         <ion-row>
-          <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
+          <ion-col *ngFor="let project of unverifiedProjects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
             <ion-card class="project-card">
               <ion-card-header>
                 <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
@@ -54,11 +59,102 @@
                   </div>
                 </div>
               </ion-card-content>
-              <ion-button *ngIf="project.verified === false" id="verifyButton" expand="block"
+              <ion-button *ngIf="project.verified === false" expand="block"
                           (click)="alertService.presentVerifyProjectAlert(project, RELOAD_DATA_EVENT_NAME)" color="success">Verify project
               </ion-button>
-              <ion-button id="deleteButton" expand="block"
+              <ion-button expand="block"
                           (click)="alertService.presentDeleteProjectAlert(project, RELOAD_DATA_EVENT_NAME)" color="danger">Delete project
+              </ion-button>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-item>
+        <ion-card-title>Verified projects</ion-card-title>
+        <ion-toggle slot="end" color="secondary" [(ngModel)]="showVerifiedProjects"></ion-toggle>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid *ngIf="showVerifiedProjects">
+        <ion-row>
+          <ion-col *ngFor="let project of verifiedProjects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
+            <ion-card class="project-card">
+              <ion-card-header>
+                <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
+                <ion-card-title>{{project.title}}</ion-card-title>
+                <ion-chip *ngIf="project.verified === false" color="danger" outline>
+                  <ion-icon name="warning" color="warning"></ion-icon>
+                  <ion-label>Not verified yet</ion-label>
+                </ion-chip>
+              </ion-card-header>
+              <ion-card-content>
+                {{project.description}}
+                <ion-item-divider>
+                </ion-item-divider>
+                Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}): {{projectService.listApprovedMembers(project)}}
+                <ion-item-divider>
+                </ion-item-divider>
+                <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
+                <div *ngIf="projectHasRequests(project)">
+                  <ion-item-divider>
+                  </ion-item-divider>
+                  Requests:
+                  <div *ngFor="let potentialMember of listPotentialMembers(project)">
+                    <ion-buttons>
+                      <ion-button size="small" slot="start" color="success" shape="round"
+                                  (click)="membershipService.acceptMembershipRequest(project, potentialMember, RELOAD_DATA_EVENT_NAME)">
+                        <ion-icon name="checkmark"></ion-icon>
+                      </ion-button>
+                      <ion-button size="small" slot="start" color="danger" shape="round"
+                                  (click)="membershipService.rejectMembershipRequest(project, potentialMember, RELOAD_DATA_EVENT_NAME)">
+                        <ion-icon name="close"></ion-icon>
+                      </ion-button>
+                      {{potentialMember.user.email}}
+                    </ion-buttons>
+                  </div>
+                </div>
+              </ion-card-content>
+              <ion-button expand="block"
+                          (click)="alertService.presentDeleteProjectAlert(project, RELOAD_DATA_EVENT_NAME)" color="danger">Delete project
+              </ion-button>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-item>
+        <ion-card-title>Users</ion-card-title>
+        <ion-toggle slot="end" color="secondary" [(ngModel)]="showUsersCard"></ion-toggle>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid *ngIf="showUsersCard">
+        <ion-row>
+          <ion-col *ngFor="let user of users" size-xs="12" size-sm="12" size-md="6" size-lg="6">
+            <ion-card class="project-card">
+              <ion-card-header>
+                <ion-card-subtitle>{{user.email}}</ion-card-subtitle>
+                <ion-card-title>{{user.firstName + " " + user.lastName}}</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-item *ngIf="user.shirtSize">
+                  <ion-label position="stacked">Shirt size</ion-label>
+                  <ion-input value="{{user.shirtSize.size}}" readonly="true"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">Shirt type</ion-label>
+                  <ion-input value="{{user.shirtType}}" readonly="true"></ion-input>
+                </ion-item>
+              </ion-card-content>
+              <ion-button expand="block"
+                          (click)="alertService.presentDeleteUserAlert(user, RELOAD_USERS_DATA_EVENT_NAME)" color="danger">Delete user
               </ion-button>
             </ion-card>
           </ion-col>

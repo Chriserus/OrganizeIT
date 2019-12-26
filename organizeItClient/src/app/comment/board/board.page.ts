@@ -78,4 +78,9 @@ export class BoardPage extends SubmitService implements OnInit, OnDestroy {
   loggedInUserIsAuthor(comment: Comment) {
     return localStorage.getItem("loggedInUserEmail") === comment.author.email;
   }
+
+  async doRefresh(event) {
+    this.getComments();
+    event.target.complete();
+  }
 }

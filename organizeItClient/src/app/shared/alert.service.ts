@@ -204,4 +204,35 @@ export class AlertService {
     let result = await alert.onDidDismiss();
     console.log(result);
   }
+
+  async presentDeleteUserAlert(user: User, eventName: string) {
+    const alert = await this.alertController.create({
+      header: 'Deleting user!',
+      message: 'You are deleting user: <p><strong>' + user.email + '</strong></p>',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'DELETE',
+          cssClass: 'danger',
+          handler: data => {
+            this.authService.deleteUser(user).subscribe(
+                response => {
+                  console.log(response);
+                  this.events.publish(eventName);
+                },
+                error => {
+                  console.log(error);
+                });
+          }
+        }]
+    });
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+  }
 }

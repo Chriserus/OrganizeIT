@@ -8,6 +8,9 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-spinner *ngIf="projects.length === 0"></ion-spinner>
   <ion-grid *ngIf="projects.length != 0">
     <ion-row>

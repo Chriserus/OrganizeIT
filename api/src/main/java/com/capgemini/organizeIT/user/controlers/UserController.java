@@ -44,6 +44,11 @@ public class UserController {
         return userService.findById(userId);
     }
 
+    @DeleteMapping("/api/users/{userId}")
+    public void deleteUser(@PathVariable final Long userId) {
+        userService.delete(userService.findById(userId));
+    }
+
     @GetMapping("/api/users/emails/{email}/")
     public User userByEmail(@PathVariable final String email) {
         log.info(email);

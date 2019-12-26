@@ -4,17 +4,19 @@
       <ion-header>
         <ion-toolbar color="primary">
           <ion-title>Menu</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-list>
-          <ion-menu-toggle auto-hide="false">
+          <ion-buttons slot="end">
             <div *ngIf="online$ | async; else offline"></div>
             <ng-template #offline>
               <ion-chip color="warning">
                 <ion-label>Offline</ion-label>
               </ion-chip>
             </ng-template>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list>
+          <ion-menu-toggle auto-hide="false">
             <ion-item *ngIf="loggedIn">
               <ion-avatar slot="start">
                 <ion-img src="/assets/sampleAvatar.svg"></ion-img>
