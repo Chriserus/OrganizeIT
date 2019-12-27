@@ -8,6 +8,7 @@ import {CommentService} from "../comment/comment.service";
 import {User} from "../interfaces/user.model";
 import {AuthService} from "../authentication/auth.service";
 import {MembershipService} from "../project/membership.service";
+import {ToastService} from "./toast.service";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class AlertService {
   constructor(private alertController: AlertController, private projectService: ProjectService,
               private notificationService: NotificationService, private events: Events,
               private commentService: CommentService, private authService: AuthService,
-              private membershipService: MembershipService) {
+              private membershipService: MembershipService, private toastService: ToastService) {
   }
 
   async presentDeleteProjectAlert(project: Project, eventName: string) {
@@ -47,6 +48,7 @@ export class AlertService {
                   console.log(response);
                   this.notificationService.sendNotificationToProjectMembersAboutProjectDeletion(project, data.reason);
                   this.events.publish(eventName);
+                  this.toastService.showTemporarySuccessMessage("Project: " + project.title + " successfully deleted");
                 },
                 error => {
                   console.log(error);
@@ -78,6 +80,7 @@ export class AlertService {
                   console.log(response);
                   this.notificationService.sendNotificationToProjectMembersAboutProjectVerification(project);
                   this.events.publish(eventName);
+                  this.toastService.showTemporarySuccessMessage("Project: " + project.title + " successfully verified");
                 },
                 error => {
                   console.log(error);
@@ -124,6 +127,7 @@ export class AlertService {
                 response => {
                   console.log(response);
                   this.events.publish(eventName);
+                  this.toastService.showTemporarySuccessMessage("Project: " + project.title + " successfully modified");
                 },
                 error => {
                   console.log(error);
@@ -155,6 +159,7 @@ export class AlertService {
                 response => {
                   console.log(response);
                   this.events.publish(eventName);
+                  this.toastService.showTemporarySuccessMessage("Comment successfully deleted");
                 },
                 error => {
                   console.log(error);
@@ -189,6 +194,7 @@ export class AlertService {
                       response => {
                         console.log(response);
                         this.events.publish(eventName);
+                        this.toastService.showTemporarySuccessMessage("Enrollment request for project: " + project.title + " successfully cancelled");
                       },
                       error => {
                         console.log(error);
@@ -208,7 +214,7 @@ export class AlertService {
   async presentDeleteUserAlert(user: User, eventName: string) {
     const alert = await this.alertController.create({
       header: 'Deleting user!',
-      message: 'You are deleting user: <p><strong>' + user.email + '</strong></p>',
+      message: user.firstName + ' ' + user.lastName + '<p>Email: <strong>' + user.email + '</strong></p>',
       buttons: [
         {
           text: 'Cancel',
@@ -224,6 +230,7 @@ export class AlertService {
                 response => {
                   console.log(response);
                   this.events.publish(eventName);
+                  this.toastService.showTemporarySuccessMessage("User: " + user.email + " successfully deleted");
                 },
                 error => {
                   console.log(error);

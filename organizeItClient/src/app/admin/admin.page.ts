@@ -15,7 +15,7 @@ import {AlertService} from "../shared/alert.service";
   templateUrl: './admin.page.html',
   styleUrls: ['./admin.page.scss'],
 })
-// TODO: Add toast to inform, that approval was successful? Or that verification was successful? Project deleted?
+
 export class AdminPage implements OnInit, OnDestroy {
   readonly RELOAD_DATA_EVENT_NAME = 'reloadProjectsAdminPage';
   readonly RELOAD_USERS_DATA_EVENT_NAME = 'reloadUsersAdminPage';
