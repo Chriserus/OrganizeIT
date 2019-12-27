@@ -6,6 +6,7 @@ import {SubmitService} from "../../shared/submit.service";
 import {Messages} from "../../shared/Messages";
 import {ShirtSize} from "../../interfaces/shirt-size";
 import {ShirtType} from "../../interfaces/shirt-type.enum";
+import {City} from "../../interfaces/city.enum";
 
 @Component({
   selector: 'app-register',
@@ -15,6 +16,7 @@ import {ShirtType} from "../../interfaces/shirt-type.enum";
 export class RegisterPage extends SubmitService implements OnInit {
   shirtSizes: ShirtSize[];
   shirtTypes: ShirtType[] = [ShirtType.M, ShirtType.F];
+  cities: City[] = [City.WRO, City.POZ];
 
   constructor(private authService: AuthService, private  router: Router, private toastService: ToastService) {
     super();

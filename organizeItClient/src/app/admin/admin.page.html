@@ -152,6 +152,10 @@
                   <ion-label position="stacked">Shirt type</ion-label>
                   <ion-input value="{{user.shirtType}}" readonly="true"></ion-input>
                 </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">City</ion-label>
+                  <ion-input value="{{user.city}}" readonly="true"></ion-input>
+                </ion-item>
               </ion-card-content>
               <ion-button expand="block"
                           (click)="alertService.presentDeleteUserAlert(user, RELOAD_USERS_DATA_EVENT_NAME)" color="danger">Delete user

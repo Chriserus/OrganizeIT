@@ -87,6 +87,9 @@ public class UserController {
         if (!originalUser.getShirtType().equals(modifiedUser.getShirtType())) {
             originalUser.setShirtType(modifiedUser.getShirtType());
         }
+        if (!originalUser.getCity().equals(modifiedUser.getCity())) {
+            originalUser.setCity(modifiedUser.getCity());
+        }
         log.info(originalUser);
         return userService.save(originalUser);
     }

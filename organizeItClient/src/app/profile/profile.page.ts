@@ -13,6 +13,7 @@ import {ToastService} from "../shared/toast.service";
 import {ShirtType} from "../interfaces/shirt-type.enum";
 import {ShirtSize} from "../interfaces/shirt-size";
 import {AlertService} from "../shared/alert.service";
+import {City} from "../interfaces/city.enum";
 
 @Component({
   selector: 'app-profile',
@@ -28,8 +29,10 @@ export class ProfilePage implements OnInit, OnDestroy {
   lastName: String;
   shirtSize: ShirtSize;
   shirtType: ShirtType;
+  city: City;
   shirtSizes: ShirtSize[];
   shirtTypes: ShirtType[] = [ShirtType.M, ShirtType.F];
+  cities: City[] = [City.WRO, City.POZ];
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
               private authService: AuthService, private membershipService: MembershipService, private events: Events,
@@ -43,6 +46,7 @@ export class ProfilePage implements OnInit, OnDestroy {
         this.lastName = user.lastName;
         this.shirtSize = user.shirtSize;
         this.shirtType = user.shirtType;
+        this.city = user.city;
         this.getProjects();
       });
     })
@@ -100,7 +104,8 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   private userDataUnchanged(form) {
     return this.loggedInUser.firstName === form.value.firstName && this.loggedInUser.lastName === form.value.lastName
-        && this.compareShirtSizes(this.loggedInUser.shirtSize, form.value.shirtSize) && this.loggedInUser.shirtType === form.value.shirtType;
+        && this.compareShirtSizes(this.loggedInUser.shirtSize, form.value.shirtSize) && this.loggedInUser.shirtType === form.value.shirtType
+        && this.loggedInUser.city === form.value.city;
   }
 
   private listenForDataReloadEvent() {

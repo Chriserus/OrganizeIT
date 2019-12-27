@@ -52,6 +52,12 @@
                   <ion-select-option *ngFor="let shirtType of shirtTypes" [value]="shirtType">{{shirtType}}</ion-select-option>
                 </ion-select>
               </ion-item>
+              <ion-item>
+                <ion-label position="stacked">City</ion-label>
+                <ion-select name="city" ngModel required>
+                  <ion-select-option *ngFor="let city of cities" [value]="city">{{city}}</ion-select-option>
+                </ion-select>
+              </ion-item>
               <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid"
                           (keydown.enter)="register(form)" expand="block">Register
               </ion-button>

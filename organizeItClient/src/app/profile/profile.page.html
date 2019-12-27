@@ -109,6 +109,13 @@
                                      [value]="shirtType">{{shirtType}}</ion-select-option>
                 </ion-select>
               </ion-item>
+              <ion-item>
+                <ion-label position="stacked">City</ion-label>
+                <ion-select name="city" value="{{city}}" [(ngModel)]="city" required>
+                  <ion-select-option *ngFor="let city of cities"
+                                     [value]="city">{{city}}</ion-select-option>
+                </ion-select>
+              </ion-item>
               <ion-button id="submitButton" type="submit" [disabled]="form.invalid">Update</ion-button>
             </ion-col>
           </ion-row>

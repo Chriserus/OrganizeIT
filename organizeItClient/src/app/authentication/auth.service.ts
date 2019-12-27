@@ -51,7 +51,8 @@ export class AuthService {
       'email': form.email,
       'password': form.password,
       'shirtType': form.shirtType,
-      'shirtSize': form.shirtSize
+      'shirtSize': form.shirtSize,
+      'city': form.city
     };
     console.log("Sending data:");
     console.log(jsonData);
@@ -69,7 +70,8 @@ export class AuthService {
       'firstName': form.firstName,
       'lastName': form.lastName,
       'shirtSize': form.shirtSize,
-      'shirtType': form.shirtType
+      'shirtType': form.shirtType,
+      'city': form.city
     };
     return this.http.put(this.USERS_URL + "/" + user.id, jsonData, httpOptions);
   }

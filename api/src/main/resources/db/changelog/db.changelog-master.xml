@@ -208,4 +208,9 @@
     <changeSet id="renameShirtSizeColumn" author="Chriserus">
         <renameColumn tableName="user" newColumnName="shirt_size" oldColumnName="shirt_dimension" columnDataType="int"/>
     </changeSet>
+    <changeSet id="addCityColumnToUser" author="Chriserus">
+        <addColumn tableName="user">
+            <column name="city" type="ENUM('WRO', 'POZ')"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

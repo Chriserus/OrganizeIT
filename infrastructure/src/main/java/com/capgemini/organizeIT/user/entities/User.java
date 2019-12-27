@@ -25,6 +25,8 @@ public class User {
     private String email;
     @Enumerated(EnumType.STRING)
     private ShirtType shirtType;
+    @Enumerated(EnumType.STRING)
+    private City city;
     @ManyToOne
     @JoinColumn(name = "shirtSize")
     private ShirtSize shirtSize;

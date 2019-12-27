@@ -18,7 +18,7 @@
         <ion-card class="project-card">
           <ion-card-header>
             <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
-            <ion-card-title>{{project.title}}</ion-card-title>
+            <ion-card-title>{{project.title}}<ion-chip color="primary">{{project.owner.city}}</ion-chip></ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <div style="white-space:pre-wrap;">{{project.description}}</div>
