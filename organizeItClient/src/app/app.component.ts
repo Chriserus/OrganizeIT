@@ -118,7 +118,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private determineUserLoggedIn() {
-    console.log(localStorage.getItem("loggedIn"));
+    console.log("Is user online?:", localStorage.getItem("loggedIn"));
     if (JSON.parse(localStorage.getItem("loggedIn")) === true) {
       this.authService.getCurrentUser().pipe(takeUntil(this.unsubscribe)).subscribe(
           (response: any) => {

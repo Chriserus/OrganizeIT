@@ -10,17 +10,17 @@ import {Messages} from "../../shared/Messages";
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage extends SubmitService implements OnInit {
+export class LoginPage implements OnInit {
 
-  constructor(private authService: AuthService, private router: Router, private toastService: ToastService) {
-    super();
+  constructor(private authService: AuthService, private router: Router, private toastService: ToastService,
+              private submitService: SubmitService) {
   }
 
   ngOnInit() {
   }
 
   login(form) {
-    if (this.isButtonDisabled('submitButton')) {
+    if (this.submitService.isButtonDisabled('submitButton')) {
       return;
     }
     this.authService.login(form.value.email, form.value.password).subscribe(

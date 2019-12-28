@@ -15,7 +15,7 @@ import {AlertService} from "../../shared/alert.service";
   templateUrl: './board.page.html',
   styleUrls: ['./board.page.scss'],
 })
-export class BoardPage extends SubmitService implements OnInit, OnDestroy {
+export class BoardPage implements OnInit, OnDestroy {
   readonly RELOAD_DATA_EVENT_NAME = 'reloadCommentsBoardPage';
   comments: Comment[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
@@ -23,8 +23,7 @@ export class BoardPage extends SubmitService implements OnInit, OnDestroy {
   announcement: boolean;
 
   constructor(private commentService: CommentService, public authService: AuthService, public alertService: AlertService,
-              private events: Events) {
-    super();
+              private events: Events, private submitService: SubmitService) {
     this.announcement = false;
     this.listenForDataReloadEvent();
   }
@@ -60,7 +59,7 @@ export class BoardPage extends SubmitService implements OnInit, OnDestroy {
 
   registerComment(form) {
     console.log(form.value);
-    if (!this.isButtonDisabled('submitButton')) {
+    if (!this.submitService.isButtonDisabled('submitButton')) {
       this.authService.getCurrentUser().subscribe(
           (user: any) => {
             this.commentService.addComment(form, user).subscribe(

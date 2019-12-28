@@ -43,21 +43,24 @@
               <ion-item>
                 <ion-label position="stacked">Shirt size</ion-label>
                 <ion-select name="shirtSize" ngModel required>
-                  <ion-select-option *ngFor="let shirtSize of shirtSizes" [value]="shirtSize">{{shirtSize.size}}</ion-select-option>
+                  <ion-select-option *ngFor="let shirtSize of shirtSizes"
+                                     [value]="shirtSize">{{shirtSize.size}}</ion-select-option>
                 </ion-select>
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Shirt type</ion-label>
                 <ion-select name="shirtType" ngModel required>
-                  <ion-select-option *ngFor="let shirtType of shirtTypes" [value]="shirtType">{{shirtType}}</ion-select-option>
+                  <ion-select-option *ngFor="let shirtType of shirtTypes"
+                                     [value]="shirtType">{{shirtType}}</ion-select-option>
                 </ion-select>
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">City</ion-label>
-                <ion-select name="city" ngModel required>
+                <ion-select name="city" [(ngModel)]="city" required>
                   <ion-select-option *ngFor="let city of cities" [value]="city">{{city}}</ion-select-option>
                 </ion-select>
               </ion-item>
+              <ion-button (click)="checkUserLocation()">Use current location</ion-button>
               <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid"
                           (keydown.enter)="register(form)" expand="block">Register
               </ion-button>

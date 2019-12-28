@@ -11,11 +11,11 @@ import {Messages} from "../../shared/Messages";
   templateUrl: './submission.page.html',
   styleUrls: ['./submission.page.scss'],
 })
-export class SubmissionPage extends SubmitService implements OnInit {
+export class SubmissionPage implements OnInit {
   joinAsMember: boolean;
 
-  constructor(private projectService: ProjectService, private authService: AuthService, private  router: Router, private toastService: ToastService) {
-    super();
+  constructor(private projectService: ProjectService, private authService: AuthService, private  router: Router,
+              private toastService: ToastService, private submitService: SubmitService) {
     this.joinAsMember = true;
   }
 
@@ -24,7 +24,7 @@ export class SubmissionPage extends SubmitService implements OnInit {
 
   // TODO: Add notification sending to admins?
   registerProject(form) {
-    if (!this.isButtonDisabled('submitButton')) {
+    if (!this.submitService.isButtonDisabled('submitButton')) {
       this.authService.getCurrentUser().subscribe(
           (response: any) => {
             if (form.value.maxMembers === 0) {

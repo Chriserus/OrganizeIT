@@ -16,6 +16,7 @@ import {AngularFirestore, AngularFirestoreModule} from "@angular/fire/firestore"
 import {environment} from "../environments/environment";
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {AngularFireMessaging} from "@angular/fire/messaging";
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,6 +37,7 @@ import {AngularFireMessaging} from "@angular/fire/messaging";
     SplashScreen,
     Firebase,
     AngularFirestore,
+      Geolocation,
     AngularFireMessaging,
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
   ],

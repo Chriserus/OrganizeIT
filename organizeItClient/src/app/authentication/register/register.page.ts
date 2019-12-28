@@ -7,29 +7,33 @@ import {Messages} from "../../shared/Messages";
 import {ShirtSize} from "../../interfaces/shirt-size";
 import {ShirtType} from "../../interfaces/shirt-type.enum";
 import {City} from "../../interfaces/city.enum";
+import {Geolocation} from "@ionic-native/geolocation/ngx";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
 })
-export class RegisterPage extends SubmitService implements OnInit {
+export class RegisterPage implements OnInit {
+  readonly pozCoordinates = {latitude: 52.406376, longitude: 16.925167};
+  readonly wroCoordinates = {latitude: 51.107883, longitude: 17.038538};
   shirtSizes: ShirtSize[];
   shirtTypes: ShirtType[] = [ShirtType.M, ShirtType.F];
   cities: City[] = [City.WRO, City.POZ];
+  city: City;
 
-  constructor(private authService: AuthService, private  router: Router, private toastService: ToastService) {
-    super();
+  constructor(private authService: AuthService, private  router: Router, private toastService: ToastService,
+              private geolocation: Geolocation, private submitService: SubmitService) {
   }
 
   ngOnInit() {
-    this.authService.getAllShirtSizes().subscribe(data => {
-      this.shirtSizes = data;
+    this.authService.getAllShirtSizes().subscribe(shirtSizes => {
+      this.shirtSizes = shirtSizes;
     });
   }
 
   register(form) {
-    if (this.isButtonDisabled('submitButton')) {
+    if (this.submitService.isButtonDisabled('submitButton')) {
       return;
     }
     if (form.value.password != form.value.passwordConfirm) {
@@ -68,4 +72,19 @@ export class RegisterPage extends SubmitService implements OnInit {
         });
   }
 
+  checkUserLocation() {
+    this.geolocation.getCurrentPosition().then((resp) => {
+      let distanceToPoz = this.calculateDistanceBetweenCoordinates(resp.coords, this.pozCoordinates);
+      console.log("Distance to Poznan:", distanceToPoz);
+      let distanceToWro = this.calculateDistanceBetweenCoordinates(resp.coords, this.wroCoordinates);
+      console.log("Distance to Wroclaw:", distanceToWro);
+      this.city = distanceToWro < distanceToPoz ? City.WRO : City.POZ
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
+  }
+
+  calculateDistanceBetweenCoordinates(origin, destination) {
+    return Math.sqrt(Math.pow(origin.latitude - destination.latitude, 2) + Math.pow(origin.longitude - destination.longitude, 2))
+  }
 }

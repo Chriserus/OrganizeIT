@@ -11,7 +11,7 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class HomePage implements OnInit, OnDestroy {
   projects: Project[] = [];
-  private unsubscribe: Subject<Project[]> = new Subject();
+  unsubscribe: Subject<Project[]> = new Subject();
   slideOptsOne = {
     initialSlide: 0,
     slidesPerView: 1,
