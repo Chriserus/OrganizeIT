@@ -13,6 +13,7 @@ import {Messages} from "./shared/Messages";
 import {NotificationService} from "./notifications/notification.service";
 import firebase from '@firebase/app';
 import {Network} from "@ngx-pwa/offline";
+import {ThemeService} from "./shared/theme.service";
 
 @Component({
   selector: 'app-root',
@@ -69,7 +70,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private platform: Platform, private splashScreen: SplashScreen, private statusBar: StatusBar,
               public authService: AuthService, private toastService: ToastService, private router: Router,
-              private notificationService: NotificationService, private network: Network, public events: Events) {
+              private notificationService: NotificationService, private network: Network, public events: Events,
+              private themeService: ThemeService) {
     this.listenForDataReloadEvent();
     this.initializeApp();
   }

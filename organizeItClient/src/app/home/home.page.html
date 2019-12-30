@@ -13,17 +13,17 @@
   <ion-card class="welcome-card">
     <img src="../../assets/banner.png" alt=""/>
   </ion-card>
-  <ion-card style="color: black;">
+  <ion-card>
     <ion-card-header>
       <ion-card-title>Newest projects:</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="projects.length === 0"></ion-spinner>
-      <ion-slides *ngIf="projects.length !== 0" pager [options]="slideOptsOne" >
+      <ion-slides *ngIf="projects.length !== 0" pager [options]="slideOptsOne" > <!-- scrollbar -->
         <ion-slide *ngFor="let project of projects">
-          <p>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</p>
-          <h1>{{project.title}}</h1>
-          <p style="white-space:pre-wrap;">{{project.description}}</p>
+          <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
+          <ion-item class="title-font-size">{{project.title}}</ion-item>
+          <ion-text color="dark" class="project-description">{{project.description}}</ion-text>
           <p></p>
         </ion-slide>
       </ion-slides>

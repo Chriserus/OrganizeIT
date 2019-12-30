@@ -16,7 +16,9 @@ import {AngularFirestore, AngularFirestoreModule} from "@angular/fire/firestore"
 import {environment} from "../environments/environment";
 import {ServiceWorkerModule} from '@angular/service-worker';
 import {AngularFireMessaging} from "@angular/fire/messaging";
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
+import {IonicStorageModule} from "@ionic/storage";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,20 +26,22 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     ServiceWorkerModule.register('combined-sw.js', {
       enabled: environment.production
-    })
+    }),
+    FormsModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Firebase,
     AngularFirestore,
-      Geolocation,
+    Geolocation,
     AngularFireMessaging,
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
   ],

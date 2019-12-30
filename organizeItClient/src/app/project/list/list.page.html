@@ -22,10 +22,10 @@
           </ion-card-header>
           <ion-card-content>
             <div style="white-space:pre-wrap;">{{project.description}}</div>
-            <ion-item-divider>
+            <ion-item-divider color="white">
             </ion-item-divider>
             Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}): {{projectService.listApprovedMembers(project)}}
-            <ion-item-divider>
+            <ion-item-divider color="white">
             </ion-item-divider>
             <!-- custom date format:  HH:MM | d-MMM-yyyy-->
             <ion-card-subtitle>Created: {{project.created | date: 'medium'}}</ion-card-subtitle>
