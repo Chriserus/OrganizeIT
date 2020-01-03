@@ -17,6 +17,7 @@ export class ThemeService {
         this.setAppTheme(theme);
       });
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+      this.setAppTheme(prefersDark.matches);
       prefersDark.addEventListener("change", e => {
         console.log("Matches:", e);
         this.setAppTheme(e.matches);

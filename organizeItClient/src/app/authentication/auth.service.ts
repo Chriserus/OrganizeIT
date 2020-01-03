@@ -110,4 +110,9 @@ export class AuthService {
   deleteUser(user: User) {
     return this.http.delete(this.USERS_URL + "/" + user.id)
   }
+
+  isValuePresentInUserFields(user, value) {
+    return user.email.toLowerCase().indexOf(value.toLowerCase()) > -1 || user.firstName.toLowerCase().indexOf(value.toLowerCase()) > -1
+        || user.lastName.toLowerCase().indexOf(value.toLowerCase()) > -1;
+  }
 }

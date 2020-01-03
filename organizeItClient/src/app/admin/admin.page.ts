@@ -23,6 +23,7 @@ export class AdminPage implements OnInit, OnDestroy {
   unverifiedProjects: Project[] = [];
   verifiedProjects: Project[] = [];
   users: User[] = [];
+  usersCopy: User[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
   showUnverifiedProjects: boolean;
   showVerifiedProjects: boolean;
@@ -69,11 +70,11 @@ export class AdminPage implements OnInit, OnDestroy {
           this.showProjectsSpinner = false;
         }))
         .subscribe(projects => {
-      console.log(projects);
-      this.projects = projects;
-      this.unverifiedProjects = projects.filter(project => !project.verified);
-      this.verifiedProjects = projects.filter(project => project.verified);
-    });
+          console.log(projects);
+          this.projects = projects;
+          this.unverifiedProjects = projects.filter(project => !project.verified);
+          this.verifiedProjects = projects.filter(project => project.verified);
+        });
   }
 
   getUsers() {
@@ -83,9 +84,10 @@ export class AdminPage implements OnInit, OnDestroy {
           this.showUsersSpinner = false;
         }))
         .subscribe(users => {
-      console.log(users);
-      this.users = users;
-    });
+          console.log(users);
+          this.users = users;
+          this.usersCopy = users;
+        });
   }
 
   listMembers(project: Project) {
@@ -106,6 +108,17 @@ export class AdminPage implements OnInit, OnDestroy {
 
   async doRefresh(event) {
     this.getProjects();
+    this.getUsers();
     event.target.complete();
+  }
+
+  onSearchChange(event) {
+    this.users = this.usersCopy;
+    let value = event.target.value;
+    if (value && value.trim() != '') {
+      this.users = this.users.filter(user => {
+        return this.authService.isValuePresentInUserFields(user, value);
+      })
+    }
   }
 }

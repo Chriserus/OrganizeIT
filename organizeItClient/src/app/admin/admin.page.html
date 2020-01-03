@@ -7,7 +7,6 @@
   </ion-toolbar>
 </ion-header>
 
-<!--TODO: Create card for unverified projects, all projects, users (and all the admin rights related)-->
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
@@ -137,6 +136,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-grid *ngIf="showUsersCard">
+        <ion-searchbar (ionChange)="onSearchChange($event)"></ion-searchbar>
         <ion-row>
           <ion-col *ngFor="let user of users" size-xs="12" size-sm="12" size-md="6" size-lg="6">
             <ion-card class="project-card">

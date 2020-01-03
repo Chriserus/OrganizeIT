@@ -22,7 +22,7 @@
       <ion-slides pager [options]="slideOptsOne" > <!-- scrollbar -->
         <ion-slide *ngFor="let project of projects">
           <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
-          <ion-item class="title-font-size">{{project.title}}</ion-item>
+          <ion-item class="title-font-size" lines="none">{{project.title}}</ion-item>
           <ion-text color="dark" class="project-description">{{project.description}}</ion-text>
           <p></p>
         </ion-slide>

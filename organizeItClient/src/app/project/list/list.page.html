@@ -14,7 +14,7 @@
   <ion-spinner *ngIf="showProjectsSpinner"></ion-spinner>
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="4">
+      <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
         <ion-card class="project-card">
           <ion-card-header>
             <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
