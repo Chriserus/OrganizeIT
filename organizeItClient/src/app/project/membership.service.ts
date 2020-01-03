@@ -60,11 +60,11 @@ export class MembershipService {
   }
 
   userEnrollmentPending(project: Project) {
-    return project.members.filter(member => !member.approved).map(member => member.user.email).includes(localStorage.getItem("loggedInUserEmail"));
+    return project.members.filter(member => !member.approved).map(member => member.user.email).includes(sessionStorage.getItem("loggedInUserEmail"));
   }
 
   userAlreadyEnrolled(project: Project) {
-    return project.members.filter(member => member.approved).map(member => member.user.email).includes(localStorage.getItem("loggedInUserEmail"));
+    return project.members.filter(member => member.approved).map(member => member.user.email).includes(sessionStorage.getItem("loggedInUserEmail"));
   }
 
   addMemberToProject(member: User, project: Project) {

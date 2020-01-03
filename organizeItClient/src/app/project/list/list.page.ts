@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from "../../interfaces/project.model";
 import {Subject} from "rxjs";
 import {ProjectService} from "../project.service";
-import {takeUntil} from "rxjs/operators";
+import {finalize, takeUntil} from "rxjs/operators";
 import {NotificationService} from "../../notifications/notification.service";
 import {AuthService} from "../../authentication/auth.service";
 import {User} from "../../interfaces/user.model";
@@ -21,6 +21,7 @@ export class ListPage implements OnInit, OnDestroy {
   readonly RELOAD_DATA_EVENT_NAME = 'reloadProjectsListPage';
   projects: Project[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
+  showProjectsSpinner: boolean;
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
               private authService: AuthService, private membershipService: MembershipService,
@@ -40,14 +41,19 @@ export class ListPage implements OnInit, OnDestroy {
 
   // TODO: Create clustered index of verified projects
   getProjects() {
-    this.projectService.getProjects().pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
-      console.log(projects);
-      this.projects = projects.filter(project => project.verified);
-    });
+    this.showProjectsSpinner = true;
+    this.projectService.getProjects().pipe(takeUntil(this.unsubscribe))
+        .pipe(finalize(async () => {
+          this.showProjectsSpinner = false;
+        }))
+        .subscribe(projects => {
+          console.log(projects);
+          this.projects = projects.filter(project => project.verified);
+        });
   }
 
   sendEnrollmentRequest(project: Project) {
-    console.log("Adding member: " + localStorage.getItem("loggedInUserEmail") + " to project: " + project.title);
+    console.log("Adding member: " + sessionStorage.getItem("loggedInUserEmail") + " to project: " + project.title);
     this.authService.getCurrentUser().subscribe((user: User) => {
       this.membershipService.addMemberToProject(user, project).subscribe(
           (response: any) => {
@@ -59,7 +65,7 @@ export class ListPage implements OnInit, OnDestroy {
   private sendNotificationAboutEnrollmentToProjectOwner(response: any, project: Project) {
     console.log(response);
     this.notificationService.sendNotification(project.owner, "Enrollment request",
-        "User " + localStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
+        "User " + sessionStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
         (response: any) => {
           console.log(response);
           this.toastService.showClosableInformationMessage(Messages.enrollmentRequestSentMessage);
@@ -71,7 +77,7 @@ export class ListPage implements OnInit, OnDestroy {
   }
 
   isUserLoggedIn(): boolean {
-    return JSON.parse(localStorage.getItem("loggedIn"));
+    return JSON.parse(sessionStorage.getItem("loggedIn"));
   }
 
   private listenForDataReloadEvent() {

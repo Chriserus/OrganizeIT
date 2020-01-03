@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {takeUntil} from "rxjs/operators";
+import {finalize, takeUntil} from "rxjs/operators";
 import {Project} from "../../interfaces/project.model";
 import {Subject} from "rxjs";
 import {CommentService} from "../comment.service";
@@ -21,6 +21,7 @@ export class BoardPage implements OnInit, OnDestroy {
   private unsubscribe: Subject<Project[]> = new Subject();
   public loggedInUser: User;
   announcement: boolean;
+  showCommentsSpinner: boolean;
 
   constructor(private commentService: CommentService, public authService: AuthService, public alertService: AlertService,
               private events: Events, private submitService: SubmitService) {
@@ -35,7 +36,7 @@ export class BoardPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (JSON.parse(localStorage.getItem("loggedIn")) === true) {
+    if (JSON.parse(sessionStorage.getItem("loggedIn")) === true) {
       this.getComments();
       this.authService.getCurrentUser().subscribe(
           (user: User) => {
@@ -51,10 +52,15 @@ export class BoardPage implements OnInit, OnDestroy {
   }
 
   getComments() {
-    this.commentService.getComments().pipe(takeUntil(this.unsubscribe)).subscribe(comments => {
-      console.log(comments);
-      this.comments = comments;
-    });
+    this.showCommentsSpinner = true;
+    this.commentService.getComments().pipe(takeUntil(this.unsubscribe))
+        .pipe(finalize(async () => {
+          this.showCommentsSpinner = false;
+        }))
+        .subscribe(comments => {
+          console.log(comments);
+          this.comments = comments;
+        });
   }
 
   registerComment(form) {
@@ -66,7 +72,7 @@ export class BoardPage implements OnInit, OnDestroy {
                 (response: any) => {
                   console.log(response);
                   form.reset();
-                  if (JSON.parse(localStorage.getItem("loggedIn")) === true) {
+                  if (JSON.parse(sessionStorage.getItem("loggedIn")) === true) {
                     this.getComments();
                   }
                 })
@@ -75,7 +81,7 @@ export class BoardPage implements OnInit, OnDestroy {
   }
 
   loggedInUserIsAuthor(comment: Comment) {
-    return localStorage.getItem("loggedInUserEmail") === comment.author.email;
+    return sessionStorage.getItem("loggedInUserEmail") === comment.author.email;
   }
 
   async doRefresh(event) {

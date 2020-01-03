@@ -71,7 +71,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private platform: Platform, private splashScreen: SplashScreen, private statusBar: StatusBar,
               public authService: AuthService, private toastService: ToastService, private router: Router,
               private notificationService: NotificationService, private network: Network, public events: Events,
-              private themeService: ThemeService) {
+              public themeService: ThemeService) {
     this.listenForDataReloadEvent();
     this.initializeApp();
   }
@@ -102,7 +102,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.authService.logout().subscribe(response => {
       console.log(response);
       this.toastService.showTemporarySuccessMessage(Messages.loggedOutSuccessMessage).then(() => {
-        localStorage.setItem("loggedIn", 'false');
+        sessionStorage.setItem("loggedIn", 'false');
         this.router.navigateByUrl("home").then(() => {
           this.events.publish('reloadSideMenuData');
         });
@@ -120,22 +120,22 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private determineUserLoggedIn() {
-    console.log("Is user online?:", localStorage.getItem("loggedIn"));
-    if (JSON.parse(localStorage.getItem("loggedIn")) === true) {
+    console.log("Is user online?:", sessionStorage.getItem("loggedIn"));
+    if (JSON.parse(sessionStorage.getItem("loggedIn")) === true) {
       this.authService.getCurrentUser().pipe(takeUntil(this.unsubscribe)).subscribe(
           (response: any) => {
             this.loggedInUser = response;
             console.log(this.loggedInUser);
             this.displayName = this.loggedInUser.firstName + " " + this.loggedInUser.lastName;
             this.loggedIn = true;
-            localStorage.setItem("loggedInUserEmail", this.loggedInUser.email);
+            sessionStorage.setItem("loggedInUserEmail", this.loggedInUser.email);
             // TODO: Correct place to ask for permissions \/
             this.notificationService.askForPermissions(this.loggedInUser);
           },
           (error: any) => {
             console.log(error);
             this.loggedIn = false;
-            localStorage.setItem("loggedIn", 'false');
+            sessionStorage.setItem("loggedIn", 'false');
           });
     } else {
       this.clearUserData();

@@ -51,7 +51,7 @@ export class RegisterPage implements OnInit {
             this.authService.register(form.value).subscribe(
                 (response: any) => {
                   console.log(response);
-                  localStorage.setItem("loggedIn", 'true');
+                  sessionStorage.setItem("loggedIn", 'true');
                   this.router.navigateByUrl("home").then(() => {
                     this.toastService.showTemporarySuccessMessage(Messages.registerSuccess);
                     this.authService.login(form.value.email, form.value.password).subscribe((response: any) => {

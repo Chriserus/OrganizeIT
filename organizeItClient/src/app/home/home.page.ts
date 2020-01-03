@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProjectService} from '../project/project.service';
 import {Project} from '../interfaces/project.model';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {finalize, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +12,7 @@ import {takeUntil} from 'rxjs/operators';
 export class HomePage implements OnInit, OnDestroy {
   projects: Project[] = [];
   unsubscribe: Subject<Project[]> = new Subject();
+  showProjectsSpinner: boolean;
   slideOptsOne = {
     initialSlide: 0,
     slidesPerView: 1,
@@ -28,7 +29,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   isUserLoggedIn() {
-    return JSON.parse(localStorage.getItem("loggedIn")) === true;
+    return JSON.parse(sessionStorage.getItem("loggedIn")) === true;
   }
 
   ngOnDestroy() {
@@ -37,8 +38,12 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   getProjects() {
-    this.projects = [];
-    this.projectService.getProjects().pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
+    this.showProjectsSpinner = true;
+    this.projectService.getProjects().pipe(takeUntil(this.unsubscribe))
+        .pipe(finalize(async () => {
+          this.showProjectsSpinner = false;
+        }))
+        .subscribe(projects => {
       console.log(projects);
       //TODO: Filter projects on backend, make an endpoint that uses clustered index
       this.projects = projects.filter(project => project.verified === true);

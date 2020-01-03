@@ -81,7 +81,7 @@ export class AuthService {
   }
 
   userHasAdminRole(user: User) {
-    if (JSON.parse(localStorage.getItem("loggedIn")) === false || JSON.parse(localStorage.getItem("loggedIn")) === null || user == null) {
+    if (JSON.parse(sessionStorage.getItem("loggedIn")) === false || JSON.parse(sessionStorage.getItem("loggedIn")) === null || user == null) {
       return false;
     } else {
       return user.roles.map(role => role.name).filter(name => name === "ROLE_ADMIN").pop() !== undefined;
@@ -90,7 +90,7 @@ export class AuthService {
 
   redirectAfterLogin(response: any, form) {
     console.log(response);
-    localStorage.setItem("loggedIn", 'true');
+    sessionStorage.setItem("loggedIn", 'true');
     this.toastService.showTemporarySuccessMessage(Messages.logInSuccess).then(() => {
       this.events.publish('reloadSideMenuData');
       this.router.navigateByUrl("home").then(() => {

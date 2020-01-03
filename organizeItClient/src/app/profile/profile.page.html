@@ -11,13 +11,13 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  <ion-spinner *ngIf="showProjectsSpinner"></ion-spinner>
   <ion-card>
     <ion-card-header>
       <ion-card-title>My projects</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-spinner *ngIf="projects.length === 0"></ion-spinner>
-      <ion-grid *ngIf="projects.length != 0">
+      <ion-grid>
         <ion-row>
           <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
             <ion-card class="project-card">

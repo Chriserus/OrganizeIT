@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {takeUntil} from "rxjs/operators";
+import {finalize, takeUntil} from "rxjs/operators";
 import {ProjectService} from "../project/project.service";
 import {Project} from "../interfaces/project.model";
 import {Subject} from "rxjs";
@@ -33,6 +33,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   shirtSizes: ShirtSize[];
   shirtTypes: ShirtType[] = [ShirtType.M, ShirtType.F];
   cities: City[] = [City.WRO, City.POZ];
+  showProjectsSpinner: boolean;
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
               private authService: AuthService, private membershipService: MembershipService, private events: Events,
@@ -65,10 +66,15 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   getProjects() {
-    this.projectService.getProjectsByOwnerOrMember(this.loggedInUser).pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
-      console.log(projects);
-      this.projects = projects;
-    });
+    this.showProjectsSpinner = true;
+    this.projectService.getProjectsByOwnerOrMember(this.loggedInUser).pipe(takeUntil(this.unsubscribe))
+        .pipe(finalize(async () => {
+          this.showProjectsSpinner = false;
+        }))
+        .subscribe(projects => {
+          console.log(projects);
+          this.projects = projects;
+        });
   }
 
   listPotentialMembers(project: Project) {
@@ -80,7 +86,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   isProjectOwner(project: Project) {
-    return localStorage.getItem("loggedInUserEmail") === project.owner.email;
+    return sessionStorage.getItem("loggedInUserEmail") === project.owner.email;
   }
 
   updateUser(form) {

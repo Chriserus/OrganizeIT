@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from "../interfaces/project.model";
 import {Subject} from "rxjs";
 import {ProjectService} from "../project/project.service";
-import {takeUntil} from "rxjs/operators";
+import {finalize, takeUntil} from "rxjs/operators";
 import {User} from "../interfaces/user.model";
 import {NotificationService} from "../notifications/notification.service";
 import {AuthService} from "../authentication/auth.service";
@@ -27,6 +27,8 @@ export class AdminPage implements OnInit, OnDestroy {
   showUnverifiedProjects: boolean;
   showVerifiedProjects: boolean;
   showUsersCard: boolean;
+  showProjectsSpinner: boolean;
+  showUsersSpinner: boolean;
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
               private authService: AuthService, private membershipService: MembershipService,
@@ -52,7 +54,7 @@ export class AdminPage implements OnInit, OnDestroy {
   }
 
   isUserLoggedIn() {
-    return JSON.parse(localStorage.getItem("loggedIn")) === true;
+    return JSON.parse(sessionStorage.getItem("loggedIn")) === true;
   }
 
   ngOnDestroy() {
@@ -61,7 +63,12 @@ export class AdminPage implements OnInit, OnDestroy {
   }
 
   getProjects() {
-    this.projectService.getProjects().pipe(takeUntil(this.unsubscribe)).subscribe(projects => {
+    this.showProjectsSpinner = true;
+    this.projectService.getProjects().pipe(takeUntil(this.unsubscribe))
+        .pipe(finalize(async () => {
+          this.showProjectsSpinner = false;
+        }))
+        .subscribe(projects => {
       console.log(projects);
       this.projects = projects;
       this.unverifiedProjects = projects.filter(project => !project.verified);
@@ -70,7 +77,12 @@ export class AdminPage implements OnInit, OnDestroy {
   }
 
   getUsers() {
-    this.authService.getAllUsers().pipe(takeUntil(this.unsubscribe)).subscribe(users => {
+    this.showUsersSpinner = true;
+    this.authService.getAllUsers().pipe(takeUntil(this.unsubscribe))
+        .pipe(finalize(async () => {
+          this.showUsersSpinner = false;
+        }))
+        .subscribe(users => {
       console.log(users);
       this.users = users;
     });
@@ -89,7 +101,7 @@ export class AdminPage implements OnInit, OnDestroy {
   }
 
   isProjectOwner(project: Project) {
-    return localStorage.getItem("loggedInUserEmail") === project.owner.email;
+    return sessionStorage.getItem("loggedInUserEmail") === project.owner.email;
   }
 
   async doRefresh(event) {
