@@ -61,14 +61,8 @@
         <insert tableName="user">
             <column name="first_name" value="Chris"/>
             <column name="last_name" value="Borowiecki"/>
-            <column name="email" value="chris.borowiecki@capgemini.com"/>
+            <column name="email" value="chris.borowiecki@cap.com"/>
             <column name="password" value="$2a$10$sUGBnUZFsk0AJNeDP0TnWOrvCWsMO90AE2hKqfy6UZpQiIVZur5vO"/>
-        </insert>
-        <insert tableName="user">
-            <column name="first_name" value="John"/>
-            <column name="last_name" value="Smith"/>
-            <column name="email" value="john.smith@capgemini.com"/>
-            <column name="password" value="$2a$10$h3u1P.m/Ihkvy0MG3oQqZeiw.D/wLZ5MeLD0Zde6.4TCm0jiuIE2e"/>
         </insert>
         <insert tableName="project">
             <column name="title" value="Best project ever"/>
