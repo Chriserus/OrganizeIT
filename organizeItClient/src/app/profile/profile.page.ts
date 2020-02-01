@@ -14,6 +14,7 @@ import {ShirtType} from "../interfaces/shirt-type.enum";
 import {ShirtSize} from "../interfaces/shirt-size";
 import {AlertService} from "../shared/alert.service";
 import {City} from "../interfaces/city.enum";
+import {Notification} from "../interfaces/notification";
 
 @Component({
   selector: 'app-profile',
@@ -23,6 +24,7 @@ import {City} from "../interfaces/city.enum";
 export class ProfilePage implements OnInit, OnDestroy {
   readonly RELOAD_DATA_EVENT_NAME = 'reloadProjectsProfilePage';
   projects: Project[] = [];
+  notifications: Notification[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
   loggedInUser: User;
   firstName: String;
@@ -34,6 +36,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   shirtTypes: ShirtType[] = [ShirtType.M, ShirtType.F];
   cities: City[] = [City.WRO, City.POZ];
   showProjectsSpinner: boolean;
+  showNotificationsSpinner: boolean;
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
               private authService: AuthService, private membershipService: MembershipService, private events: Events,
@@ -49,6 +52,7 @@ export class ProfilePage implements OnInit, OnDestroy {
         this.shirtType = user.shirtType;
         this.city = user.city;
         this.getProjects();
+        this.getNotifications();
       });
     })
   }
@@ -74,6 +78,18 @@ export class ProfilePage implements OnInit, OnDestroy {
         .subscribe(projects => {
           console.log(projects);
           this.projects = projects;
+        });
+  }
+
+  private getNotifications() {
+    this.showNotificationsSpinner = true;
+    this.notificationService.getNotificationsByRecipient(this.loggedInUser).pipe(takeUntil(this.unsubscribe))
+        .pipe(finalize(async () => {
+          this.showNotificationsSpinner = false;
+        }))
+        .subscribe((notifications: Notification[]) => {
+          console.log(notifications);
+          this.notifications = notifications;
         });
   }
 
@@ -122,6 +138,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   async doRefresh(event) {
     this.getProjects();
+    this.getNotifications();
     event.target.complete();
   }
 }

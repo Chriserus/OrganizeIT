@@ -11,7 +11,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-spinner *ngIf="showProjectsSpinner"></ion-spinner>
+  <ion-spinner *ngIf="showProjectsSpinner || showNotificationsSpinner"></ion-spinner>
   <ion-card>
     <ion-card-header>
       <ion-card-title>My projects</ion-card-title>
@@ -73,6 +73,22 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Notification log</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let notification of notifications">
+            <ion-label>
+              <h2>{{notification.title}}</h2>
+              <h3>{{notification.body}}</h3>
+              <p>{{notification.created | date: 'HH:MM | d-MMM-yyyy'}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
     </ion-card-content>
   </ion-card>
   <ion-card>

@@ -97,4 +97,8 @@ export class NotificationService {
           });
     });
   }
+
+  getNotificationsByRecipient(recipient: User) {
+    return this.http.get(this.NOTIFICATION_URL + "/" + recipient.id);
+  }
 }

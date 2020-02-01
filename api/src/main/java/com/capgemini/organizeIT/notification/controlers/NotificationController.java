@@ -1,9 +1,12 @@
 package com.capgemini.organizeIT.notification.controlers;
 
+import com.capgemini.organizeIT.notification.entities.Notification;
+import com.capgemini.organizeIT.notification.services.NotificationService;
 import com.capgemini.organizeIT.permission.entities.Permission;
 import com.capgemini.organizeIT.permission.services.PermissionService;
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.services.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,7 @@ import java.util.Set;
 @Log4j2
 @RestController
 @CrossOrigin
+@RequiredArgsConstructor
 public class NotificationController {
     private static final String AUTHENTICATION_KEY = "key=AAAAB-QRAc8:APA91bGFG3j-yLpZkMqzyVFJMLr5vwPLnr2ibds7RJezgRRjECsbF_AWhZn5Qdm7eIXIh06AmHIdLmNesBhiORLKM6T0OyxzkNzZsPzjRzR7WLzkG1q-2TlcanpWpSObA_4SgBuU-rgQ";
     private static final String GOOGLE_API_URL = "https://fcm.googleapis.com/fcm/send";
@@ -27,11 +31,7 @@ public class NotificationController {
     private static final String APPLICATION_JSON = "application/json";
     private final PermissionService permissionService;
     private final UserService userService;
-
-    public NotificationController(final PermissionService permissionService, final UserService userService) {
-        this.permissionService = permissionService;
-        this.userService = userService;
-    }
+    private final NotificationService notificationService;
 
     @PostMapping("/api/notifications/permissions/{userId}")
     public Permission register(@RequestBody Permission permission, @PathVariable Long userId) {
@@ -43,9 +43,20 @@ public class NotificationController {
     }
 
     @PostMapping("/api/notifications/{userId}")
-    public void sendNotificationToUser(@RequestBody Map<String, String> notificationJson, @PathVariable Long userId) {
-        log.info("Sending notification to: {}", userService.findById(userId).getEmail());
-        sendNotificationWithBodyToRecipient(notificationJson, "/topics/" + userService.findById(userId).getId());
+    public Notification sendNotificationToUser(@RequestBody Map<String, String> notificationJson, @PathVariable Long userId) {
+        User recipient = userService.findById(userId);
+        log.info("Sending notification to: {}", recipient.getEmail());
+        sendNotificationWithBodyToRecipient(notificationJson, "/topics/" + recipient.getId());
+        Notification notification = new Notification();
+        notification.setTitle(notificationJson.get("title"));
+        notification.setBody(notificationJson.get("body"));
+        notification.setRecipient(recipient);
+        return notificationService.save(notification);
+    }
+
+    @GetMapping("/api/notifications/{userId}")
+    public Set<Notification> getNotificationsForUser(@PathVariable final Long userId){
+        return notificationService.findByUserId(userId);
     }
 
     // TODO: Move below methods to service?

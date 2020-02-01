@@ -197,4 +197,20 @@
             <column name="city" type="ENUM('WRO', 'POZ')"/>
         </addColumn>
     </changeSet>
+    <changeSet id="createNotificationTable" author="Chriserus">
+        <createTable tableName="notification">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="recipient" type="int">
+                <constraints nullable="false" foreignKeyName="fk_recipient" references="user(id)"/>
+            </column>
+            <column name="title" type="varchar(255)"/>
+            <column name="body" type="varchar(255)"/>
+            <column name="created" type="datetime"/>
+        </createTable>
+        <addAutoIncrement columnDataType="int"
+                          columnName="id"
+                          tableName="notification"/>
+    </changeSet>
 </databaseChangeLog>
