@@ -70,12 +70,6 @@
                     value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sapien pellentesque habitant morbi tristique."/>
             <column name="owner" value="1"/>
         </insert>
-        <insert tableName="project">
-            <column name="title" value="Worst project ever"/>
-            <column name="description"
-                    value="Lobortis mattis aliquam faucibus purus in massa tempor nec feugiat. Sit amet purus gravida quis blandit turpis. Mi sit amet mauris commodo quis imperdiet massa."/>
-            <column name="owner" value="2"/>
-        </insert>
         <insert tableName="role">
             <column name="name" value="ROLE_ADMIN"/>
         </insert>
@@ -88,10 +82,6 @@
         </insert>
         <insert tableName="user_role">
             <column name="user_id" value="1"/>
-            <column name="role_id" value="2"/>
-        </insert>
-        <insert tableName="user_role">
-            <column name="user_id" value="2"/>
             <column name="role_id" value="2"/>
         </insert>
     </changeSet>

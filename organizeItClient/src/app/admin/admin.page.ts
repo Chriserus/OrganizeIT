@@ -121,4 +121,8 @@ export class AdminPage implements OnInit, OnDestroy {
       })
     }
   }
+
+  segmentChanged($event: CustomEvent) {
+    
+  }
 }

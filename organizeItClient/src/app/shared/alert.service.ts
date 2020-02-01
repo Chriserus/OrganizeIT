@@ -9,6 +9,7 @@ import {User} from "../interfaces/user.model";
 import {AuthService} from "../authentication/auth.service";
 import {MembershipService} from "../project/membership.service";
 import {ToastService} from "./toast.service";
+import {ProjectUser} from "../interfaces/project-user";
 
 @Injectable({
   providedIn: 'root'
@@ -164,6 +165,37 @@ export class AlertService {
                 error => {
                   console.log(error);
                 });
+          }
+        }]
+    });
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+  }
+
+  async deleteEnrollmentRequest(project: Project, potentialMember: ProjectUser, eventName: string) {
+    const alert = await this.alertController.create({
+      header: 'Deleting project enrollment request!',
+      message: 'You are rejecting enrollment request of: <p><strong>' + potentialMember.user.email + '</strong></p>',
+      inputs: [
+        {
+          name: 'reason',
+          type: 'text',
+          placeholder: 'Specify reason'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'DELETE',
+          cssClass: 'danger',
+          handler: data => {
+            this.membershipService.rejectMembershipRequest(project, potentialMember, data.reason, eventName);
           }
         }]
     });

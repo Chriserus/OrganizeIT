@@ -55,7 +55,7 @@
                         <ion-icon name="checkmark"></ion-icon>
                       </ion-button>
                       <ion-button size="small" slot="start" color="danger" shape="round"
-                                  (click)="membershipService.rejectMembershipRequest(project, potentialMember, RELOAD_DATA_EVENT_NAME)">
+                                  (click)="alertService.deleteEnrollmentRequest(project, potentialMember, RELOAD_DATA_EVENT_NAME)">
                         <ion-icon name="close"></ion-icon>
                       </ion-button>
                       {{potentialMember.user.email}}

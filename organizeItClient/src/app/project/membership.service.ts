@@ -39,13 +39,13 @@ export class MembershipService {
         });
   }
 
-  rejectMembershipRequest(project: Project, potentialMember: ProjectUser, eventName: string) {
+  rejectMembershipRequest(project: Project, potentialMember: ProjectUser, reason: string, eventName: string) {
     console.log("Rejecting user: " + potentialMember.user.email + ", project: " + project.title);
     this.deleteMemberFromProject(potentialMember.user, project).subscribe(
         response => {
           console.log(response);
           this.notificationService.sendNotification(potentialMember.user, "Enrollment submission rejected",
-              "Owner of project " + project.title + " has rejected your enrollment submission").subscribe(
+              "Owner of project " + project.title + " has rejected your enrollment submission. " + reason).subscribe(
               (response: any) => {
                 console.log(response);
                 this.events.publish(eventName);

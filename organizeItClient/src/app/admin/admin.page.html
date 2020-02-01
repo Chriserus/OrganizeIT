@@ -110,7 +110,7 @@
                         <ion-icon name="checkmark"></ion-icon>
                       </ion-button>
                       <ion-button size="small" slot="start" color="danger" shape="round"
-                                  (click)="membershipService.rejectMembershipRequest(project, potentialMember, RELOAD_DATA_EVENT_NAME)">
+                                  (click)="alertService.deleteEnrollmentRequest(project, potentialMember, RELOAD_DATA_EVENT_NAME)">
                         <ion-icon name="close"></ion-icon>
                       </ion-button>
                       {{potentialMember.user.email}}
@@ -136,6 +136,14 @@
     </ion-card-header>
     <ion-card-content>
       <ion-grid *ngIf="showUsersCard">
+<!--        <ion-segment (ionChange)="segmentChanged($event)">-->
+<!--          <ion-segment-button value="cards" checked>-->
+<!--            <ion-label>Cards</ion-label>-->
+<!--          </ion-segment-button>-->
+<!--          <ion-segment-button value="table">-->
+<!--            <ion-label>Table</ion-label>-->
+<!--          </ion-segment-button>-->
+<!--        </ion-segment>-->
         <ion-searchbar (ionChange)="onSearchChange($event)"></ion-searchbar>
         <ion-row>
           <ion-col *ngFor="let user of users" size-xs="12" size-sm="12" size-md="6" size-lg="6">
