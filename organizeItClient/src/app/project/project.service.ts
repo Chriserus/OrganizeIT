@@ -31,6 +31,7 @@ export class ProjectService {
     let jsonData = {
       'title': form.value.title,
       'description': form.value.description,
+      'technologies': form.value.technologies,
       'owner': owner,
       'maxMembers': form.value.maxMembers
     };

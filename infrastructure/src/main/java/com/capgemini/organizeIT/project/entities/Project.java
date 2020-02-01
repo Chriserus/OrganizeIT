@@ -18,6 +18,7 @@ public class Project {
     private Long id;
     private String title;
     private String description;
+    private String technologies;
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;

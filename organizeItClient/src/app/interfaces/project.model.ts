@@ -5,6 +5,7 @@ export interface Project {
   id: number;
   title: string;
   description: string;
+  technologies: string;
   owner: User;
   members: ProjectUser[];
   maxMembers: number;

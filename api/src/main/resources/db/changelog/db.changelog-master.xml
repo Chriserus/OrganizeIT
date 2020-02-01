@@ -213,4 +213,9 @@
                           columnName="id"
                           tableName="notification"/>
     </changeSet>
+    <changeSet id="addTechnologiesColumnToProject" author="Chriserus">
+        <addColumn tableName="project">
+            <column name="technologies" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

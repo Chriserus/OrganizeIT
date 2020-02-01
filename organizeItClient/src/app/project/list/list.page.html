@@ -24,6 +24,9 @@
             <div style="white-space:pre-wrap;">{{project.description}}</div>
             <ion-item-divider color="white">
             </ion-item-divider>
+            <ion-card-subtitle>Technologies: {{project.technologies}}</ion-card-subtitle>
+            <ion-item-divider color="white">
+            </ion-item-divider>
             Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}): {{projectService.listApprovedMembers(project)}}
             <ion-item-divider color="white">
             </ion-item-divider>

@@ -22,7 +22,7 @@ public class NotificationService {
     }
 
     public Set<Notification> findByUserId(Long userId) {
-        return notificationRepository.findByRecipient_Id_OrderByCreated(userId);
+        return notificationRepository.findTop10ByRecipient_Id_OrderByCreatedDesc(userId);
     }
 }
 

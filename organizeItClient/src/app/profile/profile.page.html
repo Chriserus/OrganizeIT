@@ -40,7 +40,13 @@
                 <div style="white-space:pre-wrap;">{{project.description}}</div>
                 <ion-item-divider color="white">
                 </ion-item-divider>
-                Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}): {{projectService.listApprovedMembers(project)}}
+                <ion-card-subtitle>Technologies: {{project.technologies}}</ion-card-subtitle>
+                <ion-item-divider color="white">
+                </ion-item-divider>
+                Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
+                <p *ngFor="let member of projectService.listApprovedMembers(project)">
+                  {{member}}
+                </p>
                 <ion-item-divider color="white">
                 </ion-item-divider>
                 <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>

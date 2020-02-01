@@ -8,5 +8,6 @@ import java.util.Set;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-    Set<Notification> findByRecipient_Id_OrderByCreated(Long id);
+    // TODO: Change Top10 to decide from frontend how many entities we want
+    Set<Notification> findTop10ByRecipient_Id_OrderByCreatedDesc(Long id);
 }

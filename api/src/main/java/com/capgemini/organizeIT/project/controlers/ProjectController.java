@@ -79,6 +79,10 @@ public class ProjectController {
                 log.info("Modifying description");
                 project.setDescription(modifiedProject.getDescription());
             }
+            if (!project.getTechnologies().equals(modifiedProject.getTechnologies())) {
+                log.info("Modifying technologies");
+                project.setTechnologies(modifiedProject.getTechnologies());
+            }
             projectService.save(project);
         });
     }

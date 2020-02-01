@@ -27,6 +27,10 @@
                               required></ion-textarea>
               </ion-item>
               <ion-item>
+                <ion-label position="stacked">Technologies</ion-label>
+                <ion-input name="technologies" type="text" autocapitalize="words" ngModel required></ion-input>
+              </ion-item>
+              <ion-item>
                 <ion-label>Join project</ion-label>
                 <ion-checkbox name="joinAsMember" slot="end" [checked]=true [(ngModel)]="joinAsMember"></ion-checkbox>
               </ion-item>
@@ -35,11 +39,6 @@
                 <ion-input name="maxMembers" type="number" min="1" required ngModel="1"
                            oninput="this.value = Math.abs(this.value)"></ion-input>
               </ion-item>
-              <!-- TODO: Add technologies field with chips and custom technologies -->
-              <!--              <ion-item>-->
-              <!--                <ion-label position="stacked">Technologies</ion-label>-->
-              <!--                <ion-input name="technologies" type="text" ngModel required></ion-input>-->
-              <!--              </ion-item>-->
               <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Submit
               </ion-button>
             </form>
