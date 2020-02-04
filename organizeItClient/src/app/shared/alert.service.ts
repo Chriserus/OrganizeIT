@@ -22,6 +22,38 @@ export class AlertService {
               private membershipService: MembershipService, private toastService: ToastService) {
   }
 
+  async presentMemberOptionsAlert(project: Project, member: User, eventName: string) {
+    const alert = await this.alertController.create({
+      header: member.firstName + " " + member.lastName,
+      message: member.email,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'DELETE',
+          cssClass: 'danger',
+          handler: () => {
+            console.log('Deleted!')
+            this.events.publish(eventName);
+          }
+        },
+        {
+          text: 'Promote to owner',
+          handler: () => {
+            console.log('Promoted')
+            this.events.publish(eventName);
+          }
+        }]
+    });
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+  }
+
   async presentDeleteProjectAlert(project: Project, eventName: string) {
     const alert = await this.alertController.create({
       header: 'Deleting project!',

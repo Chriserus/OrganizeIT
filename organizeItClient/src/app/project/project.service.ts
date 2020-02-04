@@ -66,6 +66,6 @@ export class ProjectService {
   }
 
   listApprovedMembers(project: Project) {
-    return project.members.filter(member => member.approved).map(member => " " + member.user.firstName + " " + member.user.lastName);
+    return project.members.filter(member => member.approved).map(member => member.user);
   }
 }

@@ -39,7 +39,10 @@
                 <ion-card-subtitle>Technologies: {{project.technologies}}</ion-card-subtitle>
                 <ion-item-divider color="white">
                 </ion-item-divider>
-                Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}): {{projectService.listApprovedMembers(project)}}
+                Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
+                <p *ngFor="let member of projectService.listApprovedMembers(project)">
+                  {{member.firstName + " " + member.lastName}}
+                </p>
                 <ion-item-divider color="white">
                 </ion-item-divider>
                 <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
@@ -101,7 +104,10 @@
                 <ion-card-subtitle>Technologies: {{project.technologies}}</ion-card-subtitle>
                 <ion-item-divider color="white">
                 </ion-item-divider>
-                Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}): {{projectService.listApprovedMembers(project)}}
+                Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
+                  <p *ngFor="let member of projectService.listApprovedMembers(project)">
+                    {{member.firstName + " " + member.lastName}}
+                  </p>
                 <ion-item-divider color="white">
                 </ion-item-divider>
                 <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>

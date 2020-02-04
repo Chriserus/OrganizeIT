@@ -27,7 +27,10 @@
             <ion-card-subtitle>Technologies: {{project.technologies}}</ion-card-subtitle>
             <ion-item-divider color="white">
             </ion-item-divider>
-            Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}): {{projectService.listApprovedMembers(project)}}
+            Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
+            <p *ngFor="let member of projectService.listApprovedMembers(project)">
+              {{member.firstName + " " + member.lastName}}
+            </p>
             <ion-item-divider color="white">
             </ion-item-divider>
             <!-- custom date format:  HH:MM | d-MMM-yyyy-->

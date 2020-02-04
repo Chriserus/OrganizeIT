@@ -24,7 +24,12 @@
           <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
           <ion-item class="title-font-size" lines="none">{{project.title}}</ion-item>
           <ion-text color="dark" class="project-description">{{project.description}}</ion-text>
-          <ion-card-subtitle>Technologies: {{project.technologies}}</ion-card-subtitle>
+          <ion-card-subtitle *ngIf="project.technologies">Technologies: {{project.technologies}}</ion-card-subtitle>
+          <p></p>
+          <ion-card-subtitle>Members:</ion-card-subtitle>
+          <ion-card-subtitle *ngFor="let member of projectService.listApprovedMembers(project)">
+            {{member.firstName + " " + member.lastName}}
+          </ion-card-subtitle>
           <p></p>
         </ion-slide>
       </ion-slides>
