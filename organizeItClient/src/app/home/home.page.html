@@ -21,7 +21,10 @@
       <ion-spinner *ngIf="showProjectsSpinner"></ion-spinner>
       <ion-slides pager [options]="slideOptsOne" > <!-- scrollbar -->
         <ion-slide *ngFor="let project of projects">
-          <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
+          <ion-card-subtitle>Owner(s):</ion-card-subtitle>
+          <ion-card-subtitle *ngFor="let owner of projectService.listOwners(project)">
+            {{owner.firstName + " " + owner.lastName}}
+          </ion-card-subtitle>
           <ion-item class="title-font-size" lines="none">{{project.title}}</ion-item>
           <ion-text color="dark" class="project-description">{{project.description}}</ion-text>
           <ion-card-subtitle *ngIf="project.technologies">Technologies: {{project.technologies}}</ion-card-subtitle>

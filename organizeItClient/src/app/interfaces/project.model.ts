@@ -1,16 +1,16 @@
 import {User} from './user.model';
 import {ProjectUser} from "./project-user";
+import {Ownership} from "./ownership";
 
 export interface Project {
   id: number;
   title: string;
   description: string;
   technologies: string;
-  owner: User;
+  owners: Ownership[];
   members: ProjectUser[];
   maxMembers: number;
   verified: boolean;
   created?: string;
   modified?: string;
-  // technologies: string[]; // TODO: introduce Technology type?
 }

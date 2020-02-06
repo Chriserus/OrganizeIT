@@ -218,4 +218,20 @@
             <column name="technologies" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+    <changeSet id="deleteOwnerColumnFromProjectTable" author="Chriserus">
+        <dropForeignKeyConstraint baseTableName="project" constraintName="fk_owner"/>
+        <dropColumn columnName="owner" tableName="project"/>
+    </changeSet>
+    <changeSet id="createOwnershipTable" author="Chriserus">
+        <createTable tableName="ownership">
+            <column name="project_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_project_owned" references="project(id)"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_owner" references="user(id)"/>
+            </column>
+            <column name="created" type="datetime"/>
+            <column name="modified" type="datetime"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

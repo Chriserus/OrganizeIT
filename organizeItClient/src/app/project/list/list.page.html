@@ -17,8 +17,14 @@
       <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
         <ion-card class="project-card">
           <ion-card-header>
-            <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
-            <ion-card-title>{{project.title}}<ion-chip color="primary">{{project.owner.city}}</ion-chip></ion-card-title>
+            <ion-card-subtitle>Owner(s):</ion-card-subtitle>
+            <ion-card-subtitle *ngFor="let owner of projectService.listOwners(project)">
+              {{owner.firstName + " " + owner.lastName}}
+            </ion-card-subtitle>
+                <!--TODO: Repair project city chip-->
+            <ion-card-title>{{project.title}}
+<!--              <ion-chip color="primary">{{project.owner.city}}</ion-chip>-->
+            </ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <div style="white-space:pre-wrap;">{{project.description}}</div>

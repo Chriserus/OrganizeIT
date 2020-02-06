@@ -22,7 +22,10 @@
           <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
             <ion-card class="project-card">
               <ion-card-header>
-                <ion-card-subtitle>Owner: {{project.owner.firstName + " " + project.owner.lastName}}</ion-card-subtitle>
+                <ion-card-subtitle>Owner(s):
+                  <p *ngFor="let owner of projectService.listOwners(project)">
+                    {{owner.firstName + " " + owner.lastName}}
+                  </p></ion-card-subtitle>
                 <ion-card-title>{{project.title}}</ion-card-title>
                 <ion-chip *ngIf="project.verified === false" color="danger" outline>
                   <ion-icon name="warning" color="warning"></ion-icon>

@@ -1,6 +1,7 @@
 package com.capgemini.organizeIT.user.entities;
 
 import com.capgemini.organizeIT.project.entities.Membership;
+import com.capgemini.organizeIT.project.entities.Ownership;
 import com.capgemini.organizeIT.role.entities.Role;
 import com.capgemini.organizeIT.shirt.entities.ShirtSize;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -49,5 +50,9 @@ public class User {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Membership> memberships;
-
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Ownership> ownerships;
 }

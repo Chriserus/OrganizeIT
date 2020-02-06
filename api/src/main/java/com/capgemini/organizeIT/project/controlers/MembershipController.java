@@ -29,7 +29,7 @@ public class MembershipController {
             Membership membership = new Membership();
             membership.setProject(project);
             membership.setUser(user);
-            if (user.getEmail().equals(project.getOwner().getEmail())) {
+            if(projectService.userIsProjectOwner(project, user)){
                 membership.setApproved(true);
             }
             project.getMembers().add(membership);
@@ -72,7 +72,7 @@ public class MembershipController {
     }
 
     private boolean loggedInUserNotProjectOwner(Project project) {
-        return !SecurityContextHolder.getContext().getAuthentication().getName().equals(project.getOwner().getEmail());
+        return !projectService.userIsProjectOwner(project, userService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
     private boolean loggedInUserIsAdmin() {

@@ -64,7 +64,7 @@ export class ListPage implements OnInit, OnDestroy {
 
   private sendNotificationAboutEnrollmentToProjectOwner(response: any, project: Project) {
     console.log(response);
-    this.notificationService.sendNotification(project.owner, "Enrollment request",
+    project.owners.map(ownership => ownership.user).forEach(user => this.notificationService.sendNotification(user, "Enrollment request",
         "User " + sessionStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
         (response: any) => {
           console.log(response);
@@ -73,7 +73,7 @@ export class ListPage implements OnInit, OnDestroy {
         },
         (error: any) => {
           console.log(error);
-        });
+        }))
   }
 
   isUserLoggedIn(): boolean {

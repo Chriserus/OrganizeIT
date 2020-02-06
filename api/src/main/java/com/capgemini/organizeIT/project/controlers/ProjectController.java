@@ -1,6 +1,7 @@
 package com.capgemini.organizeIT.project.controlers;
 
 import com.capgemini.organizeIT.project.entities.Membership;
+import com.capgemini.organizeIT.project.entities.Ownership;
 import com.capgemini.organizeIT.project.entities.Project;
 import com.capgemini.organizeIT.project.services.ProjectService;
 import com.capgemini.organizeIT.user.entities.User;
@@ -30,10 +31,21 @@ public class ProjectController {
     @PostMapping("/api/projects")
     public Project addProject(@RequestBody Project project, @RequestParam(required = false) boolean joinProject, Principal principal) {
         log.info(project);
+        addCurrentLoggedInUserAsOwner(project, principal);
         if (joinProject) {
             addOwnerAsProjectMember(project, principal);
         }
         return projectService.save(project);
+    }
+
+    private void addCurrentLoggedInUserAsOwner(@RequestBody Project project, Principal principal) {
+        User user = userService.findByEmail(principal.getName());
+        Ownership ownership = new Ownership();
+        ownership.setProject(project);
+        ownership.setUser(user);
+        project.getOwners().add(ownership);
+        log.info("Owners after: {}", project.getOwners());
+        userService.save(user);
     }
 
     private void addOwnerAsProjectMember(@RequestBody Project project, Principal principal) {
@@ -50,7 +62,7 @@ public class ProjectController {
     @DeleteMapping("/api/projects/{id}")
     public void deleteProject(@PathVariable Long id, Principal principal) {
         projectService.findById(id).ifPresent(project -> {
-            if (principal.getName().equals(project.getOwner().getEmail()) || loggedInUserIsAdmin()) {
+            if (projectService.userIsProjectOwner(project, userService.findByEmail(principal.getName())) || loggedInUserIsAdmin()) {
                 log.info("Deleting project: {}", project);
                 projectService.deleteById(id);
             }

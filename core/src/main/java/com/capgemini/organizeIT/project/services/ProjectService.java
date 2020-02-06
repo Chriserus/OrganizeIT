@@ -1,6 +1,7 @@
 package com.capgemini.organizeIT.project.services;
 
 import com.capgemini.organizeIT.project.entities.Membership;
+import com.capgemini.organizeIT.project.entities.Ownership;
 import com.capgemini.organizeIT.project.entities.Project;
 import com.capgemini.organizeIT.project.repositories.ProjectRepository;
 import com.capgemini.organizeIT.user.entities.User;
@@ -23,12 +24,12 @@ public class ProjectService {
 
     public List<Project> findAllThatContainUser(User user) {
         return findAllSortByDateNewFirst().stream()
-                .filter(project -> projectContainsMember(user, project) || userIsProjectOwner(user, project))
+                .filter(project -> projectContainsMember(user, project) || userIsProjectOwner(project, user))
                 .collect(Collectors.toList());
     }
 
-    private boolean userIsProjectOwner(User user, Project project) {
-        return project.getOwner().equals(user);
+    public boolean userIsProjectOwner(Project project, User user) {
+        return project.getOwners().stream().map(Ownership::getUser).anyMatch(owner -> user.getEmail().equals(owner.getEmail()));
     }
 
     private boolean projectContainsMember(User user, Project project) {
@@ -41,10 +42,6 @@ public class ProjectService {
 
     public Project save(Project project) {
         return projectRepository.save(project);
-    }
-
-    public List<Project> findAllByOwner(User owner) {
-        return projectRepository.findAllByOwner(owner);
     }
 
     public void deleteById(Long id) {

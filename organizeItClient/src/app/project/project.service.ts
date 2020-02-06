@@ -32,7 +32,6 @@ export class ProjectService {
       'title': form.value.title,
       'description': form.value.description,
       'technologies': form.value.technologies,
-      'owner': owner,
       'maxMembers': form.value.maxMembers
     };
     console.log(jsonData);
@@ -67,5 +66,9 @@ export class ProjectService {
 
   listApprovedMembers(project: Project) {
     return project.members.filter(member => member.approved).map(member => member.user);
+  }
+
+  listOwners(project: Project) {
+    return project.owners.map(owner => owner.user);
   }
 }

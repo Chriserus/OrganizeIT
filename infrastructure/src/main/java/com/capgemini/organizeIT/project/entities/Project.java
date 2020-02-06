@@ -19,11 +19,10 @@ public class Project {
     private String title;
     private String description;
     private String technologies;
-    @ManyToOne
-    @JoinColumn(name = "owner")
-    private User owner;
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Membership> members = new HashSet<>();
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Ownership> owners = new HashSet<>();
     private Integer maxMembers = 1;
     private Boolean verified = false;
     @CreationTimestamp

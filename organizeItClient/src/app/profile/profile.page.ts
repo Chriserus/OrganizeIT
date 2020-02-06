@@ -102,7 +102,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   isProjectOwner(project: Project) {
-    return sessionStorage.getItem("loggedInUserEmail") === project.owner.email;
+    return project.owners.map(owner => owner.user.email).filter(userEmail => userEmail === sessionStorage.getItem("loggedInUserEmail")).length != 0
   }
 
   updateUser(form) {
