@@ -21,7 +21,7 @@ public class OwnershipController {
     private final UserService userService;
 
     @PostMapping("/api/projects/{projectId}/ownerships/{ownerId}")
-    public Project addOwnerByEmail(@PathVariable Long projectId, @PathVariable Long ownerId) {
+    public Project giveOwnershipToUserById(@PathVariable Long projectId, @PathVariable Long ownerId) {
         return projectService.findById(projectId).map(project -> {
             log.info("Owners before: {}", project.getOwners());
             User user = userService.findById(ownerId);

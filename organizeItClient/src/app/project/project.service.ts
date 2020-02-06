@@ -71,4 +71,8 @@ export class ProjectService {
   listOwners(project: Project) {
     return project.owners.map(owner => owner.user);
   }
+
+  userIsProjectOwner(user: User, project: Project){
+    return project.owners.map(owner => owner.user).filter(owner => owner.email === user.email).length == 0;
+  }
 }

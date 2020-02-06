@@ -48,7 +48,7 @@
                 </ion-item-divider>
                 Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
                 <ion-chip color="primary" *ngFor="let member of projectService.listApprovedMembers(project)"
-                          (click)="alertService.presentMemberOptionsAlert(project, member, this.RELOAD_DATA_EVENT_NAME)">
+                          (click)="projectService.userIsProjectOwner(loggedInUser, project) || alertService.presentMemberOptionsAlert(project, member, this.RELOAD_DATA_EVENT_NAME)">
                   <ion-icon name="person"></ion-icon>
                   <ion-label>{{member.firstName + " " + member.lastName}}</ion-label>
                 </ion-chip>

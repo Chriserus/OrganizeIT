@@ -10,6 +10,7 @@ import {AuthService} from "../authentication/auth.service";
 import {MembershipService} from "../project/membership.service";
 import {ToastService} from "./toast.service";
 import {ProjectUser} from "../interfaces/project-user";
+import {OwnershipService} from "../project/ownership.service";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class AlertService {
   constructor(private alertController: AlertController, private projectService: ProjectService,
               private notificationService: NotificationService, private events: Events,
               private commentService: CommentService, private authService: AuthService,
-              private membershipService: MembershipService, private toastService: ToastService) {
+              private membershipService: MembershipService, private toastService: ToastService,
+              private ownershipService: OwnershipService) {
   }
 
   async presentMemberOptionsAlert(project: Project, member: User, eventName: string) {
@@ -37,14 +39,20 @@ export class AlertService {
           text: 'DELETE',
           cssClass: 'danger',
           handler: () => {
-            console.log('Deleted!')
-            this.events.publish(eventName);
+            this.membershipService.deleteMemberFromProject(member, project).subscribe(() => {
+              this.notificationService.sendNotification(member, "Removed from project",
+                  "Your membership in project: " + project.title + " has been deleted").subscribe(() => {
+                console.log('Deleted!');
+                this.events.publish(eventName);
+              });
+            });
           }
         },
         {
           text: 'Promote to owner',
           handler: () => {
-            console.log('Promoted')
+            this.ownershipService.grantOwnershipToUser(project, member, eventName);
+            console.log('Promoted');
             this.events.publish(eventName);
           }
         }]

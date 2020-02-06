@@ -16,4 +16,5 @@ export const Messages = {
   userInfoUpdateSuccessMessage: 'Data successfully updated',
   userInfoUpdateErrorMessage: 'Data update failure',
   userInfoUpdateWarningMessage: 'Data unchanged',
+  ownershipGrantedNotificationTitle: 'Ownership granted',
 };
