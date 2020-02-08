@@ -75,7 +75,7 @@ export class NotificationService {
   sendNotificationToProjectMembersAboutProjectDeletion(project: Project, reason: string) {
     project.members.filter(member => member.approved).map(member => member.user).forEach(user => {
       this.sendNotification(user, Messages.projectDeletedNotificationTitle,
-          "Project: " + project.title + " has been deleted. " + reason).subscribe(
+          "\"" + project.title + "\" has been deleted. " + reason).subscribe(
           (response: any) => {
             console.log(response);
           },
@@ -88,7 +88,7 @@ export class NotificationService {
   sendNotificationToProjectMembersAboutProjectVerification(project: Project) {
     project.members.filter(member => member.approved).map(member => member.user).forEach(user => {
       this.sendNotification(user, Messages.projectVerifiedNotificationTitle,
-          "Project: " + project.title + " has been verified").subscribe(
+          "\"" + project.title + "\" has been verified").subscribe(
           (response: any) => {
             console.log(response);
           },

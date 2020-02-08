@@ -11,6 +11,7 @@ import {MembershipService} from "../project/membership.service";
 import {ToastService} from "./toast.service";
 import {ProjectUser} from "../interfaces/project-user";
 import {OwnershipService} from "../project/ownership.service";
+import {Messages} from "./Messages";
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +41,8 @@ export class AlertService {
           cssClass: 'danger',
           handler: () => {
             this.membershipService.deleteMemberFromProject(member, project).subscribe(() => {
-              this.notificationService.sendNotification(member, "Removed from project",
-                  "Your membership in project: " + project.title + " has been deleted").subscribe(() => {
+              this.notificationService.sendNotification(member, Messages.removedFromProjectNotificationTitle,
+                  "You are no longer a member of: \"" + project.title + "\" project").subscribe(() => {
                 console.log('Deleted!');
                 this.events.publish(eventName);
               });
@@ -89,7 +90,7 @@ export class AlertService {
                   console.log(response);
                   this.notificationService.sendNotificationToProjectMembersAboutProjectDeletion(project, data.reason);
                   this.events.publish(eventName);
-                  this.toastService.showTemporarySuccessMessage("Project: " + project.title + " successfully deleted");
+                  this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" deleted");
                 },
                 error => {
                   console.log(error);
@@ -121,7 +122,7 @@ export class AlertService {
                   console.log(response);
                   this.notificationService.sendNotificationToProjectMembersAboutProjectVerification(project);
                   this.events.publish(eventName);
-                  this.toastService.showTemporarySuccessMessage("Project: " + project.title + " successfully verified");
+                  this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" verified");
                 },
                 error => {
                   console.log(error);
@@ -175,7 +176,7 @@ export class AlertService {
                 response => {
                   console.log(response);
                   this.events.publish(eventName);
-                  this.toastService.showTemporarySuccessMessage("Project: " + project.title + " successfully modified");
+                  this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" successfully modified");
                 },
                 error => {
                   console.log(error);
@@ -207,7 +208,7 @@ export class AlertService {
                 response => {
                   console.log(response);
                   this.events.publish(eventName);
-                  this.toastService.showTemporarySuccessMessage("Comment successfully deleted");
+                  this.toastService.showTemporarySuccessMessage(Messages.commentDeletedSuccessfullyMessage);
                 },
                 error => {
                   console.log(error);
@@ -273,7 +274,7 @@ export class AlertService {
                       response => {
                         console.log(response);
                         this.events.publish(eventName);
-                        this.toastService.showTemporarySuccessMessage("Enrollment request for project: " + project.title + " successfully cancelled");
+                        this.toastService.showTemporarySuccessMessage("Enrollment request for: \"" + project.title + "\" cancelled");
                       },
                       error => {
                         console.log(error);
@@ -309,7 +310,7 @@ export class AlertService {
                 response => {
                   console.log(response);
                   this.events.publish(eventName);
-                  this.toastService.showTemporarySuccessMessage("User: " + user.email + " successfully deleted");
+                  this.toastService.showTemporarySuccessMessage("\"" + user.email + "\" deleted");
                 },
                 error => {
                   console.log(error);

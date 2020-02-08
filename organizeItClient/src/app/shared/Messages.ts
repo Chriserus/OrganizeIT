@@ -6,8 +6,9 @@ export const Messages = {
   wrongCredentials: 'Login failed, wrong user credentials',
   logInSuccess: 'Logged in successfully!',
   loggedOutSuccessMessage: 'Logged out successfully!',
-  loggedOutErrorMessage: 'Logging out unsuccessful!',
+  loggedOutErrorMessage: 'Logging out unsuccessful',
   serverUnavailable: 'Server unavailable',
+  commentDeletedSuccessfullyMessage: 'Comment successfully deleted',
   enrollmentSuccessfulNotificationTitle: 'Enrollment successful',
   projectDeletedNotificationTitle: 'Project deleted',
   projectVerifiedNotificationTitle: 'Project verified',
@@ -17,4 +18,5 @@ export const Messages = {
   userInfoUpdateErrorMessage: 'Data update failure',
   userInfoUpdateWarningMessage: 'Data unchanged',
   ownershipGrantedNotificationTitle: 'Ownership granted',
+  removedFromProjectNotificationTitle: 'Removed from project',
 };
