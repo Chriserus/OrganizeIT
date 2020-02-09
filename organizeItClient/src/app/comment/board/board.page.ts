@@ -7,8 +7,8 @@ import {Comment} from "../../interfaces/comment.model";
 import {SubmitService} from "../../shared/submit.service";
 import {AuthService} from "../../authentication/auth.service";
 import {User} from "../../interfaces/user.model";
-import {Events} from "@ionic/angular";
 import {AlertService} from "../../shared/alert.service";
+import {DataService} from "../../shared/data.service";
 
 @Component({
   selector: 'app-board',
@@ -16,7 +16,6 @@ import {AlertService} from "../../shared/alert.service";
   styleUrls: ['./board.page.scss'],
 })
 export class BoardPage implements OnInit, OnDestroy {
-  readonly RELOAD_DATA_EVENT_NAME = 'reloadCommentsBoardPage';
   comments: Comment[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
   public loggedInUser: User;
@@ -24,18 +23,13 @@ export class BoardPage implements OnInit, OnDestroy {
   showCommentsSpinner: boolean;
 
   constructor(private commentService: CommentService, public authService: AuthService, public alertService: AlertService,
-              private events: Events, private submitService: SubmitService) {
+              private submitService: SubmitService, private data: DataService) {
     this.announcement = false;
-    this.listenForDataReloadEvent();
-  }
-
-  private listenForDataReloadEvent() {
-    this.events.subscribe(this.RELOAD_DATA_EVENT_NAME, () => {
-      this.getComments();
-    });
+    this.data.currentComments.subscribe(comments => this.comments = comments);
   }
 
   ngOnInit() {
+    this.data.currentComments.subscribe(comments => this.comments = comments);
     if (JSON.parse(sessionStorage.getItem("loggedIn")) === true) {
       this.getComments();
       this.authService.getCurrentUser().subscribe(
@@ -59,7 +53,7 @@ export class BoardPage implements OnInit, OnDestroy {
         }))
         .subscribe(comments => {
           console.log(comments);
-          this.comments = comments;
+          this.data.changeComments(comments);
         });
   }
 

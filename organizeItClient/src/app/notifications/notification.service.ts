@@ -10,7 +10,6 @@ import {Messages} from "../shared/Messages";
   providedIn: 'root'
 })
 export class NotificationService {
-
   readonly NOTIFICATION_URL = "/api/notifications";
   readonly NOTIFICATION_PERMISSION_URL = "/api/notifications/permissions";
 
@@ -78,6 +77,7 @@ export class NotificationService {
           "\"" + project.title + "\" has been deleted. " + reason).subscribe(
           (response: any) => {
             console.log(response);
+
           },
           (error: any) => {
             console.log(error);

@@ -4,8 +4,8 @@ import {User} from "../interfaces/user.model";
 import {Messages} from "../shared/Messages";
 import {Router} from "@angular/router";
 import {ToastService} from "../shared/toast.service";
-import {Events} from "@ionic/angular";
 import {ShirtSize} from "../interfaces/shirt-size";
+import {DataService} from "../shared/data.service";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class AuthService {
   readonly LOGGED_IN_USER_URL = '/api/user';
   readonly USER_BY_USERNAME_URL = '/api/users/emails/';
 
-  constructor(private http: HttpClient, private  router: Router, private toastService: ToastService, public events: Events) {
+  constructor(private http: HttpClient, private  router: Router, private toastService: ToastService, public data: DataService) {
   }
 
   getCurrentUser() {
@@ -92,7 +92,9 @@ export class AuthService {
     console.log(response);
     sessionStorage.setItem("loggedIn", 'true');
     this.toastService.showTemporarySuccessMessage(Messages.logInSuccess).then(() => {
-      this.events.publish('reloadSideMenuData');
+      this.getCurrentUser().subscribe((user: User) => {
+        this.data.changeCurrentUser(user);
+      });
       this.router.navigateByUrl("home").then(() => {
         form.reset();
       });

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Project} from "../interfaces/project.model";
-import {AlertController, Events} from "@ionic/angular";
+import {AlertController} from "@ionic/angular";
 import {ProjectService} from "../project/project.service";
 import {NotificationService} from "../notifications/notification.service";
 import {Comment} from "../interfaces/comment.model";
@@ -12,17 +12,22 @@ import {ToastService} from "./toast.service";
 import {ProjectUser} from "../interfaces/project-user";
 import {OwnershipService} from "../project/ownership.service";
 import {Messages} from "./Messages";
+import {DataService} from "./data.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlertService {
+  loggedInUser: User;
 
   constructor(private alertController: AlertController, private projectService: ProjectService,
-              private notificationService: NotificationService, private events: Events,
+              private notificationService: NotificationService,
               private commentService: CommentService, private authService: AuthService,
               private membershipService: MembershipService, private toastService: ToastService,
-              private ownershipService: OwnershipService) {
+              private ownershipService: OwnershipService, private data: DataService) {
+    this.authService.getCurrentUser().subscribe((user: User) => {
+      this.loggedInUser = user;
+    });
   }
 
   async presentMemberOptionsAlert(project: Project, member: User, eventName: string) {
@@ -44,7 +49,7 @@ export class AlertService {
               this.notificationService.sendNotification(member, Messages.removedFromProjectNotificationTitle,
                   "You are no longer a member of: \"" + project.title + "\" project").subscribe(() => {
                 console.log('Deleted!');
-                this.events.publish(eventName);
+                this.projectService.updateProjects();
               });
             });
           }
@@ -54,7 +59,12 @@ export class AlertService {
           handler: () => {
             this.ownershipService.grantOwnershipToUser(project, member, eventName);
             console.log('Promoted');
-            this.events.publish(eventName);
+            this.projectService.getProjectsByOwnerOrMember(this.loggedInUser).subscribe((projects: Project[]) => {
+              this.data.changeUserProjects(projects);
+            });
+            this.projectService.getProjects().subscribe((projects: Project[]) => {
+              this.data.changeProjects(projects);
+            });
           }
         }]
     });
@@ -89,7 +99,7 @@ export class AlertService {
                 response => {
                   console.log(response);
                   this.notificationService.sendNotificationToProjectMembersAboutProjectDeletion(project, data.reason);
-                  this.events.publish(eventName);
+                  this.projectService.updateProjects();
                   this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" deleted");
                 },
                 error => {
@@ -121,7 +131,7 @@ export class AlertService {
                 response => {
                   console.log(response);
                   this.notificationService.sendNotificationToProjectMembersAboutProjectVerification(project);
-                  this.events.publish(eventName);
+                  this.projectService.updateProjects();
                   this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" verified");
                 },
                 error => {
@@ -175,7 +185,7 @@ export class AlertService {
             this.projectService.modifyProject(project).subscribe(
                 response => {
                   console.log(response);
-                  this.events.publish(eventName);
+                  this.projectService.updateProjects();
                   this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" successfully modified");
                 },
                 error => {
@@ -207,7 +217,9 @@ export class AlertService {
             this.commentService.deleteComment(comment.id).subscribe(
                 response => {
                   console.log(response);
-                  this.events.publish(eventName);
+                  this.commentService.getComments().subscribe((comments: Comment[]) => {
+                    this.data.changeComments(comments);
+                  });
                   this.toastService.showTemporarySuccessMessage(Messages.commentDeletedSuccessfullyMessage);
                 },
                 error => {
@@ -273,7 +285,7 @@ export class AlertService {
                   this.membershipService.deleteMemberFromProject(user, project).subscribe(
                       response => {
                         console.log(response);
-                        this.events.publish(eventName);
+                        this.projectService.updateProjects();
                         this.toastService.showTemporarySuccessMessage("Enrollment request for: \"" + project.title + "\" cancelled");
                       },
                       error => {
@@ -305,11 +317,13 @@ export class AlertService {
         }, {
           text: 'DELETE',
           cssClass: 'danger',
-          handler: data => {
+          handler: () => {
             this.authService.deleteUser(user).subscribe(
                 response => {
                   console.log(response);
-                  this.events.publish(eventName);
+                  this.authService.getAllUsers().subscribe((users: User[]) => {
+                    this.data.changeUsers(users);
+                  });
                   this.toastService.showTemporarySuccessMessage("\"" + user.email + "\" deleted");
                 },
                 error => {

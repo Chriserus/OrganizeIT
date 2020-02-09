@@ -9,8 +9,8 @@ import {User} from "../../interfaces/user.model";
 import {ToastService} from "../../shared/toast.service";
 import {Messages} from "../../shared/Messages";
 import {MembershipService} from "../membership.service";
-import {Events} from "@ionic/angular";
 import {AlertService} from "../../shared/alert.service";
+import {DataService} from "../../shared/data.service";
 
 @Component({
   selector: 'app-list',
@@ -18,19 +18,18 @@ import {AlertService} from "../../shared/alert.service";
   styleUrls: ['list.page.scss']
 })
 export class ListPage implements OnInit, OnDestroy {
-  readonly RELOAD_DATA_EVENT_NAME = 'reloadProjectsListPage';
-  projects: Project[] = [];
+  projects: Project[];
   private unsubscribe: Subject<Project[]> = new Subject();
   showProjectsSpinner: boolean;
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
               private authService: AuthService, private membershipService: MembershipService,
-              private toastService: ToastService, private events: Events,
-              private alertService: AlertService) {
-    this.listenForDataReloadEvent();
+              private toastService: ToastService, private alertService: AlertService, private data: DataService) {
+    this.data.currentProjects.subscribe(projects => this.projects = projects.filter(project => project.verified));
   }
 
   ngOnInit() {
+    this.data.currentProjects.subscribe(projects => this.projects = projects.filter(project => project.verified));
     this.getProjects();
   }
 
@@ -39,7 +38,6 @@ export class ListPage implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  // TODO: Create clustered index of verified projects
   getProjects() {
     this.showProjectsSpinner = true;
     this.projectService.getProjects().pipe(takeUntil(this.unsubscribe))
@@ -48,7 +46,9 @@ export class ListPage implements OnInit, OnDestroy {
         }))
         .subscribe(projects => {
           console.log(projects);
-          this.projects = projects.filter(project => project.verified);
+          this.projectService.getProjects().subscribe((projects: Project[]) => {
+            this.data.changeProjects(projects);
+          });
         });
   }
 
@@ -65,7 +65,7 @@ export class ListPage implements OnInit, OnDestroy {
   private sendNotificationAboutEnrollmentToProjectOwner(response: any, project: Project) {
     console.log(response);
     project.owners.map(ownership => ownership.user).forEach(user => this.notificationService.sendNotification(user, "Enrollment request",
-        "User " + sessionStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
+        sessionStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
         (response: any) => {
           console.log(response);
           this.toastService.showClosableInformationMessage(Messages.enrollmentRequestSentMessage);
@@ -78,12 +78,6 @@ export class ListPage implements OnInit, OnDestroy {
 
   isUserLoggedIn(): boolean {
     return JSON.parse(sessionStorage.getItem("loggedIn"));
-  }
-
-  private listenForDataReloadEvent() {
-    this.events.subscribe(this.RELOAD_DATA_EVENT_NAME, () => {
-      this.getProjects();
-    });
   }
 
   async doRefresh(event) {

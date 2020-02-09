@@ -5,7 +5,6 @@ import {Project} from "../interfaces/project.model";
 import {Subject} from "rxjs";
 import {NotificationService} from "../notifications/notification.service";
 import {AuthService} from "../authentication/auth.service";
-import {Events} from "@ionic/angular";
 import {Messages} from "../shared/Messages";
 import {User} from "../interfaces/user.model";
 import {MembershipService} from "../project/membership.service";
@@ -15,6 +14,7 @@ import {ShirtSize} from "../interfaces/shirt-size";
 import {AlertService} from "../shared/alert.service";
 import {City} from "../interfaces/city.enum";
 import {Notification} from "../interfaces/notification";
+import {DataService} from "../shared/data.service";
 
 @Component({
   selector: 'app-profile',
@@ -23,7 +23,7 @@ import {Notification} from "../interfaces/notification";
 })
 export class ProfilePage implements OnInit, OnDestroy {
   readonly RELOAD_DATA_EVENT_NAME = 'reloadProjectsProfilePage';
-  projects: Project[] = [];
+  projects: Project[];
   notifications: Notification[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
   loggedInUser: User;
@@ -39,9 +39,11 @@ export class ProfilePage implements OnInit, OnDestroy {
   showNotificationsSpinner: boolean;
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
-              private authService: AuthService, private membershipService: MembershipService, private events: Events,
-              private toastService: ToastService, private alertService: AlertService) {
-    this.listenForDataReloadEvent();
+              private authService: AuthService, private membershipService: MembershipService,
+              private toastService: ToastService, private alertService: AlertService, private data: DataService) {
+    this.data.currentUserProjects.subscribe(projects => this.projects = projects);
+    this.data.currentUser.subscribe(user => this.loggedInUser = user);
+    this.data.currentUserNotifications.subscribe(notifications => this.notifications = notifications);
     this.authService.getAllShirtSizes().subscribe((shirtSizes: ShirtSize[]) => {
       this.shirtSizes = shirtSizes;
       this.authService.getCurrentUser().subscribe((user: User) => {
@@ -58,6 +60,9 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.data.currentUserProjects.subscribe(projects => this.projects = projects);
+    this.data.currentUser.subscribe(user => this.loggedInUser = user);
+    this.data.currentUserNotifications.subscribe(notifications => this.notifications = notifications);
   }
 
   compareShirtSizes(s1: ShirtSize, s2: ShirtSize) {
@@ -77,7 +82,7 @@ export class ProfilePage implements OnInit, OnDestroy {
         }))
         .subscribe(projects => {
           console.log(projects);
-          this.projects = projects;
+          this.data.changeUserProjects(projects);
         });
   }
 
@@ -89,7 +94,7 @@ export class ProfilePage implements OnInit, OnDestroy {
         }))
         .subscribe((notifications: Notification[]) => {
           console.log(notifications);
-          this.notifications = notifications;
+          this.data.changeUserNotifications(notifications);
         });
   }
 
@@ -114,8 +119,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.authService.updateInfo(form.value, this.loggedInUser).subscribe(
         (user: User) => {
           console.log(user);
-          this.loggedInUser = user;
-          this.events.publish('reloadSideMenuData');
+          this.data.changeCurrentUser(user);
           this.toastService.showTemporarySuccessMessage(Messages.userInfoUpdateSuccessMessage);
         },
         error => {
@@ -128,12 +132,6 @@ export class ProfilePage implements OnInit, OnDestroy {
     return this.loggedInUser.firstName === form.value.firstName && this.loggedInUser.lastName === form.value.lastName
         && this.compareShirtSizes(this.loggedInUser.shirtSize, form.value.shirtSize) && this.loggedInUser.shirtType === form.value.shirtType
         && this.loggedInUser.city === form.value.city;
-  }
-
-  private listenForDataReloadEvent() {
-    this.events.subscribe(this.RELOAD_DATA_EVENT_NAME, () => {
-      this.getProjects();
-    });
   }
 
   async doRefresh(event) {

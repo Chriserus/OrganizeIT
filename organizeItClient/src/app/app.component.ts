@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {Events, Platform} from '@ionic/angular';
+import {Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AuthService} from "./authentication/auth.service";
@@ -14,6 +14,8 @@ import {NotificationService} from "./notifications/notification.service";
 import firebase from '@firebase/app';
 import {Network} from "@ngx-pwa/offline";
 import {ThemeService} from "./shared/theme.service";
+import {DataService} from "./shared/data.service";
+import {Notification} from "./interfaces/notification";
 
 @Component({
   selector: 'app-root',
@@ -70,17 +72,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private platform: Platform, private splashScreen: SplashScreen, private statusBar: StatusBar,
               public authService: AuthService, private toastService: ToastService, private router: Router,
-              private notificationService: NotificationService, private network: Network, public events: Events,
-              public themeService: ThemeService) {
-    this.listenForDataReloadEvent();
-    this.initializeApp();
-  }
-
-  //TODO: Maybe provide a Events enum that holds events names and use it instead of hard coded strings
-  private listenForDataReloadEvent() {
-    this.events.subscribe('reloadSideMenuData', () => {
+              private notificationService: NotificationService, private network: Network,
+              public themeService: ThemeService, private data: DataService) {
+    this.data.currentUser.subscribe(user => {
+      this.loggedInUser = user;
       this.determineUserLoggedIn();
     });
+    this.initializeApp();
   }
 
   initializeApp() {
@@ -94,6 +92,9 @@ export class AppComponent implements OnInit, OnDestroy {
         navigator.serviceWorker.ready.then(registration => {
           registration.showNotification(title, options);
         });
+        this.notificationService.getNotificationsByRecipient(this.loggedInUser).subscribe((notifications: Notification[]) => {
+          this.data.changeUserNotifications(notifications);
+        });
       });
     });
   }
@@ -104,7 +105,8 @@ export class AppComponent implements OnInit, OnDestroy {
       this.toastService.showTemporarySuccessMessage(Messages.loggedOutSuccessMessage).then(() => {
         sessionStorage.setItem("loggedIn", 'false');
         this.router.navigateByUrl("home").then(() => {
-          this.events.publish('reloadSideMenuData');
+          this.data.changeCurrentUser(null);
+          // this.events.publish('reloadSideMenuData');
         });
       });
     }, error => {
@@ -115,11 +117,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.determineUserLoggedIn();
+    this.data.currentUser.subscribe(user => {
+      this.loggedInUser = user;
+      this.determineUserLoggedIn();
+    });
     // this.notificationService.askForPermissions();
   }
 
-  private determineUserLoggedIn() {
+  determineUserLoggedIn() {
     console.log("Is user online?:", sessionStorage.getItem("loggedIn"));
     if (JSON.parse(sessionStorage.getItem("loggedIn")) === true) {
       this.authService.getCurrentUser().pipe(takeUntil(this.unsubscribe)).subscribe(

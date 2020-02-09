@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {AlertController, Events} from "@ionic/angular";
+import {AlertController} from "@ionic/angular";
 import {AuthService} from "../authentication/auth.service";
 import {NotificationService} from "../notifications/notification.service";
 import {User} from "../interfaces/user.model";
 import {Project} from "../interfaces/project.model";
 import {Messages} from "../shared/Messages";
+import {ProjectService} from "./project.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class OwnershipService {
   readonly OWNERSHIP_URL = '/ownerships';
 
   constructor(private http: HttpClient, private alertController: AlertController, private authService: AuthService,
-              private events: Events, private notificationService: NotificationService) {
+              private notificationService: NotificationService, private projectService: ProjectService) {
   }
 
   grantOwnershipToUser(project: Project, owner: User, eventName: string) {
@@ -27,7 +28,7 @@ export class OwnershipService {
               "You have been granted ownership rights to project: " + project.title).subscribe(
               (response: any) => {
                 console.log(response);
-                this.events.publish(eventName);
+                this.projectService.updateProjects();
               },
               (error: any) => {
                 console.log(error);

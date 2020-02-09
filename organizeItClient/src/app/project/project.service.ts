@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Project} from '../interfaces/project.model';
 import {User} from "../interfaces/user.model";
+import {DataService} from "../shared/data.service";
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,10 @@ import {User} from "../interfaces/user.model";
 export class ProjectService {
   readonly PROJECTS_URL = '/api/projects';
   readonly USERS_URL = '/api/users';
+  private loggedInUser: User;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private data: DataService) {
+    this.data.currentUser.subscribe(user => this.loggedInUser = user);
   }
 
   getProjects() {
@@ -58,6 +61,9 @@ export class ProjectService {
     if (project.description != data.description) {
       project.description = data.description;
     }
+    if (project.technologies != data.technologies) {
+      project.technologies = data.technologies;
+    }
   }
 
   countApprovedMembers(project: Project) {
@@ -74,5 +80,14 @@ export class ProjectService {
 
   userIsProjectOwner(user: User, project: Project){
     return project.owners.map(owner => owner.user).filter(owner => owner.email === user.email).length == 0;
+  }
+
+  updateProjects(){
+    this.getProjectsByOwnerOrMember(this.loggedInUser).subscribe((projects: Project[]) => {
+      this.data.changeUserProjects(projects);
+    });
+    this.getProjects().subscribe((projects: Project[]) => {
+      this.data.changeProjects(projects);
+    });
   }
 }
