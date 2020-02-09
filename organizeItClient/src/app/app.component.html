@@ -7,9 +7,7 @@
           <ion-buttons slot="end">
             <div *ngIf="online$ | async; else offline"></div>
             <ng-template #offline>
-              <ion-chip color="warning">
-                <ion-label>Offline</ion-label>
-              </ion-chip>
+              <ion-icon name="cloud-offline"></ion-icon>
             </ng-template>
           </ion-buttons>
         </ion-toolbar>
@@ -24,7 +22,10 @@
               <ion-label>
                 <h3>{{displayName}}</h3>
                 <ion-button [routerDirection]="'root'" [routerLink]="['/profile']">My profile</ion-button>
-                <ion-button (click)="logout()">Logout</ion-button>
+                <ion-button  (click)="logout()">
+                  Logout
+                  <ion-icon slot="end" name="log-out"></ion-icon>
+                </ion-button>
               </ion-label>
             </ion-item>
             <ion-item *ngIf="!loggedIn">

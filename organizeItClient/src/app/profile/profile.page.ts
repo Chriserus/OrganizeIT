@@ -76,6 +76,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   getProjects() {
     this.showProjectsSpinner = true;
+    console.log(this.loggedInUser); //TODO: Null here
     this.projectService.getProjectsByOwnerOrMember(this.loggedInUser).pipe(takeUntil(this.unsubscribe))
         .pipe(finalize(async () => {
           this.showProjectsSpinner = false;

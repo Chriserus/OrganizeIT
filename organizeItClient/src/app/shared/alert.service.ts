@@ -160,7 +160,7 @@ export class AlertService {
           name: 'description',
           placeholder: 'Description',
           value: project.description,
-          type: "text" // TODO: Known bug: no textarea, formatting does not work -> Ionic team is working on adding it
+          type: "textarea"
         },
         {
           label: 'Technologies',

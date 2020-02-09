@@ -43,7 +43,10 @@ export class ToastService {
       message: message,
       duration: this.closableToastDuration,
       color: 'secondary',
-      showCloseButton: true
+      buttons: [{
+        text: 'Close',
+        role: 'close'
+      }]
     });
     await toast.present();
   }

@@ -54,7 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
     {
       title: 'Discussion board',
       url: '/board',
-      icon: 'contacts'
+      icon: 'people'
     }
   ];
 
