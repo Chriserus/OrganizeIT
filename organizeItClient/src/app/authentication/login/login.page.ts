@@ -27,9 +27,6 @@ export class LoginPage implements OnInit {
     }
     this.authService.login(form.value.email, form.value.password).subscribe(
         (response: any) => {
-          //TODO: Check correctness, for now after a timeout user is being logged out
-          const source = timer(1800000); //1 800 000 ms = 30 min -> default spring security timeout
-          const subscribe = source.subscribe(val => this.appComponent.logout());
           this.authService.redirectAfterLogin(response, form);
         },
         (error: any) => {

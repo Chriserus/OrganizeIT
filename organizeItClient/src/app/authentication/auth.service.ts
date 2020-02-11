@@ -94,9 +94,9 @@ export class AuthService {
     this.toastService.showTemporarySuccessMessage(Messages.logInSuccess).then(() => {
       this.getCurrentUser().subscribe((user: User) => {
         this.data.changeCurrentUser(user);
-      });
-      this.router.navigateByUrl("home").then(() => {
-        form.reset();
+        this.router.navigateByUrl("home").then(() => {
+          form.reset();
+        });
       });
     });
   }

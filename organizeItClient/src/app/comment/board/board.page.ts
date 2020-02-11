@@ -26,18 +26,14 @@ export class BoardPage implements OnInit, OnDestroy {
               private submitService: SubmitService, private data: DataService) {
     this.announcement = false;
     this.data.currentComments.subscribe(comments => this.comments = comments);
+    this.data.currentUser.subscribe(user => this.loggedInUser = user);
+    this.authService.getCurrentUser().subscribe((user: User) => this.data.changeCurrentUser(user));
   }
 
   ngOnInit() {
     this.data.currentComments.subscribe(comments => this.comments = comments);
-    if (JSON.parse(sessionStorage.getItem("loggedIn")) === true) {
-      this.getComments();
-      this.authService.getCurrentUser().subscribe(
-          (user: User) => {
-            this.loggedInUser = user
-          }
-      )
-    }
+    this.data.currentUser.subscribe(user => this.loggedInUser = user);
+    this.getComments();
   }
 
   ngOnDestroy() {
@@ -60,17 +56,12 @@ export class BoardPage implements OnInit, OnDestroy {
   registerComment(form) {
     console.log(form.value);
     if (!this.submitService.isButtonDisabled('submitButton')) {
-      this.authService.getCurrentUser().subscribe(
-          (user: any) => {
-            this.commentService.addComment(form, user).subscribe(
-                (response: any) => {
-                  console.log(response);
-                  form.reset();
-                  if (JSON.parse(sessionStorage.getItem("loggedIn")) === true) {
-                    this.getComments();
-                  }
-                })
-          });
+      this.commentService.addComment(form, this.loggedInUser).subscribe(
+          (response: any) => {
+            console.log(response);
+            form.reset();
+            this.getComments();
+          })
     }
   }
 

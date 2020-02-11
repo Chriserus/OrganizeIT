@@ -5,8 +5,7 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AuthService} from "./authentication/auth.service";
 import {User} from "./interfaces/user.model";
-import {Subject} from "rxjs";
-import {takeUntil} from "rxjs/operators";
+import {Subject, timer} from "rxjs";
 import {ToastService} from "./shared/toast.service";
 import {Router} from "@angular/router";
 import {Messages} from "./shared/Messages";
@@ -74,11 +73,26 @@ export class AppComponent implements OnInit, OnDestroy {
               public authService: AuthService, private toastService: ToastService, private router: Router,
               private notificationService: NotificationService, private network: Network,
               public themeService: ThemeService, private data: DataService) {
+    this.authService.getCurrentUser().subscribe((user: User) => {
+      this.data.changeCurrentUser(user);
+    });
     this.data.currentUser.subscribe(user => {
       this.loggedInUser = user;
+      sessionStorage.setItem("loggedIn", String(user != null));
+      this.loggedIn = user != null;
       this.determineUserLoggedIn();
     });
     this.initializeApp();
+  }
+
+  async ngOnInit() {
+    this.data.currentUser.subscribe(user => {
+      this.loggedInUser = user;
+      sessionStorage.setItem("loggedIn", String(user != null));
+      this.loggedIn = user != null;
+      this.determineUserLoggedIn();
+    });
+    // this.notificationService.askForPermissions();
   }
 
   initializeApp() {
@@ -103,10 +117,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.authService.logout().subscribe(response => {
       console.log(response);
       this.toastService.showTemporarySuccessMessage(Messages.loggedOutSuccessMessage).then(() => {
-        sessionStorage.setItem("loggedIn", 'false');
         this.router.navigateByUrl("home").then(() => {
           this.data.changeCurrentUser(null);
-          // this.events.publish('reloadSideMenuData');
+          console.log("User after logout:", this.loggedInUser);
         });
       });
     }, error => {
@@ -116,41 +129,29 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  async ngOnInit() {
-    this.data.currentUser.subscribe(user => {
-      this.loggedInUser = user;
-      this.determineUserLoggedIn();
-    });
-    // this.notificationService.askForPermissions();
-  }
-
   determineUserLoggedIn() {
-    console.log("Is user online?:", sessionStorage.getItem("loggedIn"));
     if (JSON.parse(sessionStorage.getItem("loggedIn")) === true) {
-      this.authService.getCurrentUser().pipe(takeUntil(this.unsubscribe)).subscribe(
-          (response: any) => {
-            this.loggedInUser = response;
-            console.log(this.loggedInUser);
-            this.displayName = this.loggedInUser.firstName + " " + this.loggedInUser.lastName;
-            this.loggedIn = true;
-            sessionStorage.setItem("loggedInUserEmail", this.loggedInUser.email);
-            // TODO: Correct place to ask for permissions \/
-            this.notificationService.askForPermissions(this.loggedInUser);
-          },
-          (error: any) => {
-            console.log(error);
-            this.loggedIn = false;
-            sessionStorage.setItem("loggedIn", 'false');
-          });
+      //TODO: Check correctness, for now after a timeout user is being logged out
+      const source = timer(1801000); //1 800 000 ms = 30 min -> default spring security timeout
+      const subscribe = source.subscribe(val => this.authService.getCurrentUser().subscribe((user: User) => {
+        this.data.changeCurrentUser(user)
+      }));
+      console.log("Is user online?", this.loggedInUser);
+      this.displayName = this.loggedInUser.firstName + " " + this.loggedInUser.lastName;
+      this.loggedIn = true;
+      sessionStorage.setItem("loggedInUserEmail", this.loggedInUser.email);
+      // TODO: Correct place to ask for permissions \/
+      this.notificationService.askForPermissions(this.loggedInUser);
     } else {
       this.clearUserData();
     }
   }
 
   private clearUserData() {
-    this.loggedInUser = undefined;
     this.displayName = undefined;
     this.loggedIn = false;
+    sessionStorage.removeItem("loggedInUserEmail");
+    sessionStorage.removeItem("loggedIn");
   }
 
   sendTestNotification() {
