@@ -19,7 +19,7 @@
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="showProjectsSpinner"></ion-spinner>
-      <ion-slides pager [options]="slideOptsOne" > <!-- scrollbar -->
+      <ion-slides pager="true" [options]="slideOptsOne" > <!-- scrollbar -->
         <ion-slide *ngFor="let project of projects">
           <ion-card-subtitle>Owner(s):</ion-card-subtitle>
           <ion-card-subtitle *ngFor="let owner of projectService.listOwners(project)">
@@ -33,7 +33,7 @@
           <ion-card-subtitle *ngFor="let member of projectService.listApprovedMembers(project)">
             {{member.firstName + " " + member.lastName}}
           </ion-card-subtitle>
-          <p></p>
+          <br/>
         </ion-slide>
       </ion-slides>
     </ion-card-content>

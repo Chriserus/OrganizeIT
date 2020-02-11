@@ -123,7 +123,7 @@
               </ion-item>
               <ion-item *ngIf="shirtSize">
                 <ion-label position="stacked">Shirt size</ion-label>
-                <ion-select name="shirtSize" value="{{shirtSize}}" [(ngModel)]="shirtSize"
+                <ion-select name="shirtSize"  [(ngModel)]="shirtSize"
                             [compareWith]="compareShirtSizes" required>
                   <ion-select-option *ngFor="let shirtSize of shirtSizes"
                                      [value]="shirtSize">{{shirtSize.size}}</ion-select-option>

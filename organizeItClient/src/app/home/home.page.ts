@@ -3,6 +3,7 @@ import {ProjectService} from '../project/project.service';
 import {Project} from '../interfaces/project.model';
 import {Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
+import {DataService} from "../shared/data.service";
 
 @Component({
   selector: 'app-home',
@@ -16,16 +17,23 @@ export class HomePage implements OnInit, OnDestroy {
   slideOptsOne = {
     initialSlide: 0,
     slidesPerView: 1,
+    speed: 1000,
     autoplay: {
       disableOnInteraction: false
     }
   };
 
-  constructor(public projectService: ProjectService) {
+  constructor(public projectService: ProjectService, private data: DataService) {
+    this.getProjects();
+    this.data.currentProjects.subscribe(projects => {
+      this.projects = projects.filter(project => project.verified);
+    });
   }
 
   ngOnInit() {
-    this.getProjects();
+    this.data.currentProjects.subscribe(projects => {
+      this.projects = projects.filter(project => project.verified);
+    });
   }
 
   isUserLoggedIn() {
@@ -44,9 +52,9 @@ export class HomePage implements OnInit, OnDestroy {
           this.showProjectsSpinner = false;
         }))
         .subscribe(projects => {
-      console.log(projects);
-      //TODO: Filter projects on backend, make an endpoint that uses clustered index
-      this.projects = projects.filter(project => project.verified === true);
-    });
+          console.log(projects);
+          //TODO: Filter projects on backend, make an endpoint that uses clustered index
+          this.data.changeProjects(projects);
+        });
   }
 }
