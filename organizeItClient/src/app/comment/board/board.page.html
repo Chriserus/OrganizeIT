@@ -46,7 +46,7 @@
                 , {{comment.created | date: 'medium'}}</ion-card-subtitle>
               <ion-button *ngIf="loggedInUserIsAuthor(comment) || authService.userHasAdminRole(this.loggedInUser)"
                           fill="clear" slot="end" color="danger"
-                          (click)="alertService.presentDeleteCommentAlert(comment, RELOAD_DATA_EVENT_NAME)">
+                          (click)="alertService.presentDeleteCommentAlert(comment)">
                 <ion-icon slot="icon-only" name="trash"></ion-icon>
               </ion-button>
             </ion-item>

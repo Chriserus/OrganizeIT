@@ -57,11 +57,11 @@
                   <div *ngFor="let potentialMember of listPotentialMembers(project)">
                     <ion-buttons>
                       <ion-button size="small" slot="start" color="success" shape="round"
-                                  (click)="membershipService.acceptMembershipRequest(project, potentialMember, RELOAD_DATA_EVENT_NAME)">
+                                  (click)="membershipService.acceptMembershipRequest(project, potentialMember)">
                         <ion-icon name="checkmark"></ion-icon>
                       </ion-button>
                       <ion-button size="small" slot="start" color="danger" shape="round"
-                                  (click)="alertService.deleteEnrollmentRequest(project, potentialMember, RELOAD_DATA_EVENT_NAME)">
+                                  (click)="alertService.deleteEnrollmentRequest(project, potentialMember)">
                         <ion-icon name="close"></ion-icon>
                       </ion-button>
                       {{potentialMember.user.email}}
@@ -70,10 +70,10 @@
                 </div>
               </ion-card-content>
               <ion-button *ngIf="project.verified === false" expand="block"
-                          (click)="alertService.presentVerifyProjectAlert(project, RELOAD_DATA_EVENT_NAME)" color="success">Verify project
+                          (click)="alertService.presentVerifyProjectAlert(project)" color="success">Verify project
               </ion-button>
               <ion-button expand="block"
-                          (click)="alertService.presentDeleteProjectAlert(project, RELOAD_DATA_EVENT_NAME)" color="danger">Delete project
+                          (click)="alertService.presentDeleteProjectAlert(project)" color="danger">Delete project
               </ion-button>
             </ion-card>
           </ion-col>
@@ -125,11 +125,11 @@
                   <div *ngFor="let potentialMember of listPotentialMembers(project)">
                     <ion-buttons>
                       <ion-button size="small" slot="start" color="success" shape="round"
-                                  (click)="membershipService.acceptMembershipRequest(project, potentialMember, RELOAD_DATA_EVENT_NAME)">
+                                  (click)="membershipService.acceptMembershipRequest(project, potentialMember)">
                         <ion-icon name="checkmark"></ion-icon>
                       </ion-button>
                       <ion-button size="small" slot="start" color="danger" shape="round"
-                                  (click)="alertService.deleteEnrollmentRequest(project, potentialMember, RELOAD_DATA_EVENT_NAME)">
+                                  (click)="alertService.deleteEnrollmentRequest(project, potentialMember)">
                         <ion-icon name="close"></ion-icon>
                       </ion-button>
                       {{potentialMember.user.email}}
@@ -138,7 +138,7 @@
                 </div>
               </ion-card-content>
               <ion-button expand="block"
-                          (click)="alertService.presentDeleteProjectAlert(project, RELOAD_DATA_EVENT_NAME)" color="danger">Delete project
+                          (click)="alertService.presentDeleteProjectAlert(project)" color="danger">Delete project
               </ion-button>
             </ion-card>
           </ion-col>
@@ -186,7 +186,7 @@
                 </ion-item>
               </ion-card-content>
               <ion-button expand="block"
-                          (click)="alertService.presentDeleteUserAlert(user, RELOAD_USERS_DATA_EVENT_NAME)" color="danger">Delete user
+                          (click)="alertService.presentDeleteUserAlert(user)" color="danger">Delete user
               </ion-button>
             </ion-card>
           </ion-col>

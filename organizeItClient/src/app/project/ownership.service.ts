@@ -19,7 +19,7 @@ export class OwnershipService {
               private notificationService: NotificationService, private projectService: ProjectService) {
   }
 
-  grantOwnershipToUser(project: Project, owner: User, eventName: string) {
+  grantOwnershipToUser(project: Project, owner: User) {
     console.log("Granting owner: " + owner.email + " to project: " + project.title);
     this.addOwnershipToUser(owner, project).subscribe(
         response => {

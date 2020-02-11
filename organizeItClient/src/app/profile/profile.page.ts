@@ -22,7 +22,6 @@ import {DataService} from "../shared/data.service";
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit, OnDestroy {
-  readonly RELOAD_DATA_EVENT_NAME = 'reloadProjectsProfilePage';
   projects: Project[];
   notifications: Notification[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();

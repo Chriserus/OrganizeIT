@@ -32,7 +32,7 @@
                   <ion-label>Not verified yet</ion-label>
                 </ion-chip>
                 <ion-chip *ngIf="membershipService.userEnrollmentPending(project) && !isProjectOwner(project)"
-                          (click)="alertService.cancelEnrollmentRequest(project, RELOAD_DATA_EVENT_NAME)"
+                          (click)="alertService.cancelEnrollmentRequest(project)"
                           color="danger" outline>
                   <ion-icon name="alert"></ion-icon>
                   <ion-label>Enrollment request pending</ion-label>
@@ -48,7 +48,7 @@
                 </ion-item-divider>
                 Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
                 <ion-chip color="primary" *ngFor="let member of projectService.listApprovedMembers(project)"
-                          (click)="projectService.userIsProjectOwner(loggedInUser, project) || alertService.presentMemberOptionsAlert(project, member, this.RELOAD_DATA_EVENT_NAME)">
+                          (click)="projectService.userIsProjectOwner(loggedInUser, project) || alertService.presentMemberOptionsAlert(project, member)">
                   <ion-icon name="person"></ion-icon>
                   <ion-label>{{member.firstName + " " + member.lastName}}</ion-label>
                 </ion-chip>
@@ -62,11 +62,11 @@
                   <div *ngFor="let potentialMember of listPotentialMembers(project)">
                     <ion-buttons>
                       <ion-button size="small" slot="start" color="success" shape="round"
-                                  (click)="membershipService.acceptMembershipRequest(project, potentialMember, RELOAD_DATA_EVENT_NAME)">
+                                  (click)="membershipService.acceptMembershipRequest(project, potentialMember)">
                         <ion-icon name="checkmark"></ion-icon>
                       </ion-button>
                       <ion-button size="small" slot="start" color="danger" shape="round"
-                                  (click)="alertService.deleteEnrollmentRequest(project, potentialMember, RELOAD_DATA_EVENT_NAME)">
+                                  (click)="alertService.deleteEnrollmentRequest(project, potentialMember)">
                         <ion-icon name="close"></ion-icon>
                       </ion-button>
                       {{potentialMember.user.email}}
@@ -75,10 +75,10 @@
                 </div>
               </ion-card-content>
               <ion-button *ngIf="isProjectOwner(project)" id="modifyButton" expand="block"
-                          (click)="alertService.presentModifyProjectAlert(project, RELOAD_DATA_EVENT_NAME)">Modify project
+                          (click)="alertService.presentModifyProjectAlert(project)">Modify project
               </ion-button>
               <ion-button *ngIf="isProjectOwner(project)" id="deleteButton" expand="block"
-                          (click)="alertService.presentDeleteProjectAlert(project, RELOAD_DATA_EVENT_NAME)" color="danger">Delete project
+                          (click)="alertService.presentDeleteProjectAlert(project)" color="danger">Delete project
               </ion-button>
             </ion-card>
           </ion-col>
@@ -123,8 +123,7 @@
               </ion-item>
               <ion-item *ngIf="shirtSize">
                 <ion-label position="stacked">Shirt size</ion-label>
-                <ion-select name="shirtSize"  [(ngModel)]="shirtSize"
-                            [compareWith]="compareShirtSizes" required>
+                <ion-select name="shirtSize"  [(ngModel)]="shirtSize" [compareWith]="compareShirtSizes" required>
                   <ion-select-option *ngFor="let shirtSize of shirtSizes"
                                      [value]="shirtSize">{{shirtSize.size}}</ion-select-option>
                 </ion-select>

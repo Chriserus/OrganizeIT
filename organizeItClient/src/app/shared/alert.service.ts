@@ -30,7 +30,7 @@ export class AlertService {
     });
   }
 
-  async presentMemberOptionsAlert(project: Project, member: User, eventName: string) {
+  async presentMemberOptionsAlert(project: Project, member: User) {
     const alert = await this.alertController.create({
       header: member.firstName + " " + member.lastName,
       message: member.email,
@@ -57,7 +57,7 @@ export class AlertService {
         {
           text: 'Promote to owner',
           handler: () => {
-            this.ownershipService.grantOwnershipToUser(project, member, eventName);
+            this.ownershipService.grantOwnershipToUser(project, member);
             console.log('Promoted');
             this.projectService.getProjectsByOwnerOrMember(this.loggedInUser).subscribe((projects: Project[]) => {
               this.data.changeUserProjects(projects);
@@ -73,7 +73,7 @@ export class AlertService {
     console.log(result);
   }
 
-  async presentDeleteProjectAlert(project: Project, eventName: string) {
+  async presentDeleteProjectAlert(project: Project) {
     const alert = await this.alertController.create({
       header: 'Deleting project!',
       message: 'You are deleting project: <p><strong>' + project.title + '</strong></p>',
@@ -113,7 +113,7 @@ export class AlertService {
     console.log(result);
   }
 
-  async presentVerifyProjectAlert(project: Project, eventName: string) {
+  async presentVerifyProjectAlert(project: Project) {
     const alert = await this.alertController.create({
       header: 'Verifying project!',
       message: 'You are verifying project: <p><strong>' + project.title + '</strong></p>',
@@ -145,7 +145,7 @@ export class AlertService {
     console.log(result);
   }
 
-  async presentModifyProjectAlert(project: Project, eventName: string) {
+  async presentModifyProjectAlert(project: Project) {
     const alert = await this.alertController.create({
       header: 'Modifying project!',
       inputs: [
@@ -199,7 +199,7 @@ export class AlertService {
     console.log(result);
   }
 
-  async presentDeleteCommentAlert(comment: Comment, eventName: string) {
+  async presentDeleteCommentAlert(comment: Comment) {
     const alert = await this.alertController.create({
       header: 'Deleting comment!',
       message: 'You are deleting comment with content: <p><strong>' + comment.content + '</strong></p>',
@@ -233,7 +233,7 @@ export class AlertService {
     console.log(result);
   }
 
-  async deleteEnrollmentRequest(project: Project, potentialMember: ProjectUser, eventName: string) {
+  async deleteEnrollmentRequest(project: Project, potentialMember: ProjectUser) {
     const alert = await this.alertController.create({
       header: 'Deleting project enrollment request!',
       message: 'You are rejecting enrollment request of: <p><strong>' + potentialMember.user.email + '</strong></p>',
@@ -255,7 +255,7 @@ export class AlertService {
           text: 'DELETE',
           cssClass: 'danger',
           handler: data => {
-            this.membershipService.rejectMembershipRequest(project, potentialMember, data.reason, eventName);
+            this.membershipService.rejectMembershipRequest(project, potentialMember, data.reason);
           }
         }]
     });
@@ -264,7 +264,7 @@ export class AlertService {
     console.log(result);
   }
 
-  async cancelEnrollmentRequest(project: Project, eventName: string) {
+  async cancelEnrollmentRequest(project: Project) {
     const alert = await this.alertController.create({
       header: 'Deleting project enrollment request!',
       message: 'You are deleting your enrollment request for project: <p><strong>' + project.title + '</strong></p>',
@@ -303,7 +303,7 @@ export class AlertService {
     console.log(result);
   }
 
-  async presentDeleteUserAlert(user: User, eventName: string) {
+  async presentDeleteUserAlert(user: User) {
     const alert = await this.alertController.create({
       header: 'Deleting user!',
       message: user.firstName + ' ' + user.lastName + '<p>Email: <strong>' + user.email + '</strong></p>',

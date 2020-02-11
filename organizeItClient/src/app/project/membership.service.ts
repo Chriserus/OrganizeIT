@@ -23,7 +23,7 @@ export class MembershipService {
     this.data.currentUser.subscribe(user => this.loggedInUser = user);
   }
 
-  acceptMembershipRequest(project: Project, potentialMember: ProjectUser, eventName: string) {
+  acceptMembershipRequest(project: Project, potentialMember: ProjectUser) {
     console.log("Accepting member: " + potentialMember.user.email + " to project: " + project.title);
     this.approveMemberToProject(potentialMember.user, project).subscribe(
         response => {
@@ -43,7 +43,7 @@ export class MembershipService {
         });
   }
 
-  rejectMembershipRequest(project: Project, potentialMember: ProjectUser, reason: string, eventName: string) {
+  rejectMembershipRequest(project: Project, potentialMember: ProjectUser, reason: string) {
     console.log("Rejecting user: " + potentialMember.user.email + ", project: " + project.title);
     this.deleteMemberFromProject(potentialMember.user, project).subscribe(
         response => {

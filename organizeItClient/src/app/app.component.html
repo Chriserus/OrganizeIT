@@ -7,7 +7,7 @@
           <ion-buttons slot="end">
             <div *ngIf="online$ | async; else offline"></div>
             <ng-template #offline>
-              <ion-icon name="cloud-offline"></ion-icon>
+              <ion-icon name="cloud-offline" color="warning"></ion-icon>
             </ng-template>
           </ion-buttons>
         </ion-toolbar>
