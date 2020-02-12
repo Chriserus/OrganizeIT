@@ -1,7 +1,10 @@
 package com.capgemini.organizeIT.comment.controlers;
 
 import com.capgemini.organizeIT.comment.entities.Comment;
+import com.capgemini.organizeIT.comment.mappers.CommentMapper;
+import com.capgemini.organizeIT.comment.model.CommentDto;
 import com.capgemini.organizeIT.comment.services.CommentService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,26 +12,25 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @RestController
 @CrossOrigin
+@RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
-
-    public CommentController(final CommentService commentService) {
-        this.commentService = commentService;
-    }
+    private final CommentMapper commentMapper;
 
     @GetMapping("/api/comments")
-    public List<Comment> findAllComments() {
-        return commentService.findAll();
+    public List<CommentDto> findAllComments() {
+        return commentService.findAll().stream().map(commentMapper::convertToDto).collect(Collectors.toList());
     }
 
     @PostMapping("/api/comments")
-    public Comment register(@RequestBody Comment comment) {
-        log.info(comment);
-        return commentService.save(comment);
+    public CommentDto register(@RequestBody CommentDto commentDto) {
+        Comment comment = commentMapper.convertToEntity(commentDto);
+        return commentMapper.convertToDto(commentService.save(comment));
     }
 
     @DeleteMapping("/api/comments/{id}")

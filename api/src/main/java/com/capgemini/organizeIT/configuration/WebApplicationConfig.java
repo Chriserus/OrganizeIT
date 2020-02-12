@@ -1,5 +1,6 @@
 package com.capgemini.organizeIT.configuration;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -23,6 +24,11 @@ public class WebApplicationConfig implements WebMvcConfigurer {
     public WebServerFactoryCustomizer<ConfigurableWebServerFactory> containerCustomizer() {
         return container -> container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,
                 "/notFound"));
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 
 }

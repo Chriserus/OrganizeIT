@@ -1,8 +1,12 @@
 package com.capgemini.organizeIT.notification.controlers;
 
 import com.capgemini.organizeIT.notification.entities.Notification;
+import com.capgemini.organizeIT.notification.mappers.NotificationMapper;
+import com.capgemini.organizeIT.notification.model.NotificationDto;
 import com.capgemini.organizeIT.notification.services.NotificationService;
 import com.capgemini.organizeIT.permission.entities.Permission;
+import com.capgemini.organizeIT.permission.mappers.PermissionMapper;
+import com.capgemini.organizeIT.permission.model.PermissionDto;
 import com.capgemini.organizeIT.permission.services.PermissionService;
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.services.UserService;
@@ -19,6 +23,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Log4j2
 @RestController
@@ -32,18 +37,21 @@ public class NotificationController {
     private final PermissionService permissionService;
     private final UserService userService;
     private final NotificationService notificationService;
+    private final PermissionMapper permissionMapper;
+    private final NotificationMapper notificationMapper;
 
     @PostMapping("/api/notifications/permissions/{userId}")
-    public Permission register(@RequestBody Permission permission, @PathVariable Long userId) {
+    public PermissionDto register(@RequestBody PermissionDto permissionDto, @PathVariable Long userId) {
+        Permission permission = permissionMapper.convertToEntity(permissionDto);
         User user = userService.findById(userId);
         permission.setHolder(user);
         registerTokenToTopic(Set.of(permission.getToken()), user.getId());
         log.info(permission);
-        return permissionService.save(permission);
+        return permissionMapper.convertToDto(permissionService.save(permission));
     }
 
     @PostMapping("/api/notifications/{userId}")
-    public Notification sendNotificationToUser(@RequestBody Map<String, String> notificationJson, @PathVariable Long userId) {
+    public NotificationDto sendNotificationToUser(@RequestBody Map<String, String> notificationJson, @PathVariable Long userId) {
         User recipient = userService.findById(userId);
         log.info("Sending notification to: {}", recipient.getEmail());
         sendNotificationWithBodyToRecipient(notificationJson, "/topics/" + recipient.getId());
@@ -51,15 +59,16 @@ public class NotificationController {
         notification.setTitle(notificationJson.get("title"));
         notification.setBody(notificationJson.get("body"));
         notification.setRecipient(recipient);
-        return notificationService.save(notification);
+        return notificationMapper.convertToDto(notificationService.save(notification));
     }
 
     @GetMapping("/api/notifications/{userId}")
-    public Set<Notification> getNotificationsForUser(@PathVariable final Long userId){
-        return notificationService.findByUserId(userId);
+    public Set<NotificationDto> getNotificationsForUser(@PathVariable final Long userId) {
+        return notificationService.findByUserId(userId).stream().map(notificationMapper::convertToDto).collect(Collectors.toSet());
     }
 
     // TODO: Move below methods to service?
+
     /**
      * Method used to send notification to certain token or topic passed as recipient parameter
      *

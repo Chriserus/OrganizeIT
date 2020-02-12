@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,5 +19,9 @@ public class ShirtSizeService {
 
     public ShirtSize findBySize(String size) {
         return shirtSizeRepository.findBySize(size);
+    }
+
+    public Optional<ShirtSize> findById(Long id) {
+        return shirtSizeRepository.findById(id);
     }
 }

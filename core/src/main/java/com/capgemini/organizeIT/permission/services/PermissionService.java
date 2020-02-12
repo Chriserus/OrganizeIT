@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -23,5 +24,9 @@ public class PermissionService {
 
     public Set<Permission> findByEmail(String email) {
         return permissionRepository.findByHolder_Email(email);
+    }
+
+    public Optional<Permission> findById(Long id) {
+        return permissionRepository.findById(id);
     }
 }

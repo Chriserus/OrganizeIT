@@ -1,6 +1,5 @@
 package com.capgemini.organizeIT.project.entities;
 
-import com.capgemini.organizeIT.user.entities.User;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

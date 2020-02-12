@@ -1,10 +1,15 @@
 package com.capgemini.organizeIT.user.controlers;
 
-import com.capgemini.organizeIT.project.entities.Project;
+import com.capgemini.organizeIT.project.mappers.ProjectMapper;
+import com.capgemini.organizeIT.project.model.ProjectDto;
 import com.capgemini.organizeIT.project.services.ProjectService;
 import com.capgemini.organizeIT.role.services.RoleService;
+import com.capgemini.organizeIT.shirt.mappers.ShirtSizeMapper;
 import com.capgemini.organizeIT.shirt.services.ShirtSizeService;
 import com.capgemini.organizeIT.user.entities.User;
+import com.capgemini.organizeIT.user.mappers.UserMapper;
+import com.capgemini.organizeIT.user.model.AuthDto;
+import com.capgemini.organizeIT.user.model.UserDto;
 import com.capgemini.organizeIT.user.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -26,22 +32,25 @@ public class UserController {
     private final ProjectService projectService;
     private final ShirtSizeService shirtSizeService;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
+    private final ProjectMapper projectMapper;
+    private final ShirtSizeMapper shirtSizeMapper;
 
     @GetMapping("/api/user")
-    public User currentUser(Principal principal) {
+    public UserDto currentUser(Principal principal) {
         if (principal == null)
             return null;
-        return userService.findByEmail(principal.getName());
+        return userMapper.convertToDto(userService.findByEmail(principal.getName()));
     }
 
     @GetMapping("/api/users")
-    public List<User> allUsers() {
-        return userService.findAll();
+    public List<UserDto> allUsers() {
+        return userService.findAll().stream().map(userMapper::convertToDto).collect(Collectors.toList());
     }
 
     @GetMapping("/api/users/{userId}")
-    public User user(@PathVariable final Long userId) {
-        return userService.findById(userId);
+    public UserDto user(@PathVariable final Long userId) {
+        return userMapper.convertToDto(userService.findById(userId));
     }
 
     @DeleteMapping("/api/users/{userId}")
@@ -50,52 +59,53 @@ public class UserController {
     }
 
     @GetMapping("/api/users/emails/{email}/")
-    public User userByEmail(@PathVariable final String email) {
-        log.info(email);
-        return userService.findByEmail(email);
+    public UserDto userByEmail(@PathVariable final String email) {
+        if (userService.findByEmail(email) == null) {
+            return null;
+        }
+        return userMapper.convertToDto(userService.findByEmail(email));
     }
 
     @GetMapping("/api/users/{userId}/projects")
-    public List<Project> projectsThatContainUser(@PathVariable final Long userId) {
-        return projectService.findAllThatContainUser(userService.findById(userId));
+    public List<ProjectDto> projectsThatContainUser(@PathVariable final Long userId) {
+        return projectService.findAllThatContainUser(userService.findById(userId)).stream().map(projectMapper::convertToDto).collect(Collectors.toList());
     }
 
     @PostMapping("/api/register")
-    public User register(@RequestBody User user) {
+    public UserDto register(@RequestBody AuthDto authDto) {
+        User user = userMapper.convertFromAuthToEntity(authDto);
         user.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        log.info(user);
-        return userService.save(user);
+        return userMapper.convertToDto(userService.save(user));
     }
 
     // TODO: Verify, that user is allowed to do this (logged in user sent it)
     @PutMapping("/api/users/{userId}")
-    public User updateUser(@RequestBody User modifiedUser, @PathVariable Long userId) {
+    public UserDto updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
         User originalUser = userService.findById(userId);
-        if (validateData(modifiedUser)) {
-            return originalUser;
+        if (validateData(userDto)) {
+            return userMapper.convertToDto(originalUser);
         }
-        if (!originalUser.getFirstName().equals(modifiedUser.getFirstName())) {
-            originalUser.setFirstName(modifiedUser.getFirstName());
+        if (!originalUser.getFirstName().equals(userDto.getFirstName())) {
+            originalUser.setFirstName(userDto.getFirstName());
         }
-        if (!originalUser.getLastName().equals(modifiedUser.getLastName())) {
-            originalUser.setLastName(modifiedUser.getLastName());
+        if (!originalUser.getLastName().equals(userDto.getLastName())) {
+            originalUser.setLastName(userDto.getLastName());
         }
-        if (!originalUser.getShirtSize().equals(modifiedUser.getShirtSize())) {
-            originalUser.setShirtSize(modifiedUser.getShirtSize());
+        if (!originalUser.getShirtSize().equals(shirtSizeMapper.convertToEntity(userDto.getShirtSize()))) {
+            originalUser.setShirtSize(shirtSizeMapper.convertToEntity(userDto.getShirtSize()));
         }
-        if (!originalUser.getShirtType().equals(modifiedUser.getShirtType())) {
-            originalUser.setShirtType(modifiedUser.getShirtType());
+        if (!originalUser.getShirtType().equals(userDto.getShirtType())) {
+            originalUser.setShirtType(userDto.getShirtType());
         }
-        if (!originalUser.getCity().equals(modifiedUser.getCity())) {
-            originalUser.setCity(modifiedUser.getCity());
+        if (!originalUser.getCity().equals(userDto.getCity())) {
+            originalUser.setCity(userDto.getCity());
         }
-        log.info(originalUser);
-        return userService.save(originalUser);
+        return userMapper.convertToDto(userService.save(originalUser));
     }
 
-    private boolean validateData(@RequestBody User modifiedUser) {
-        return modifiedUser.getFirstName() == null || modifiedUser.getFirstName().equals("")
-                || modifiedUser.getLastName() == null || modifiedUser.getLastName().equals("");
+    private boolean validateData(@RequestBody UserDto userDto) {
+        return userDto.getFirstName() == null || userDto.getFirstName().equals("")
+                || userDto.getLastName() == null || userDto.getLastName().equals("");
     }
 }

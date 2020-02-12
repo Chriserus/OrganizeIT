@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -23,6 +24,10 @@ public class NotificationService {
 
     public Set<Notification> findByUserId(Long userId) {
         return notificationRepository.findTop10ByRecipient_Id_OrderByCreatedDesc(userId);
+    }
+
+    public Optional<Notification> findById(Long id) {
+        return notificationRepository.findById(id);
     }
 }
 

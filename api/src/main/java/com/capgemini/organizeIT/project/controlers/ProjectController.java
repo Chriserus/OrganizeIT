@@ -3,6 +3,8 @@ package com.capgemini.organizeIT.project.controlers;
 import com.capgemini.organizeIT.project.entities.Membership;
 import com.capgemini.organizeIT.project.entities.Ownership;
 import com.capgemini.organizeIT.project.entities.Project;
+import com.capgemini.organizeIT.project.mappers.ProjectMapper;
+import com.capgemini.organizeIT.project.model.ProjectDto;
 import com.capgemini.organizeIT.project.services.ProjectService;
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.services.UserService;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @CrossOrigin
@@ -21,24 +24,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectController {
     private final ProjectService projectService;
+    private final ProjectMapper projectMapper;
     private final UserService userService;
 
     @GetMapping("/api/projects")
-    public List<Project> findAllProjects() {
-        return projectService.findAllSortByDateNewFirst();
+    public List<ProjectDto> findAllProjects() {
+        return projectService.findAllSortByDateNewFirst().stream().map(projectMapper::convertToDto).collect(Collectors.toList());
     }
 
     @PostMapping("/api/projects")
-    public Project addProject(@RequestBody Project project, @RequestParam(required = false) boolean joinProject, Principal principal) {
-        log.info(project);
+    public ProjectDto addProject(@RequestBody ProjectDto projectDto, @RequestParam(required = false) boolean joinProject, Principal principal) {
+        log.info(projectDto);
+        Project project = projectMapper.convertToEntity(projectDto);
         addCurrentLoggedInUserAsOwner(project, principal);
         if (joinProject) {
             addOwnerAsProjectMember(project, principal);
         }
-        return projectService.save(project);
+        return projectMapper.convertToDto(projectService.save(project));
     }
 
-    private void addCurrentLoggedInUserAsOwner(@RequestBody Project project, Principal principal) {
+    private void addCurrentLoggedInUserAsOwner(Project project, Principal principal) {
         User user = userService.findByEmail(principal.getName());
         Ownership ownership = new Ownership();
         ownership.setProject(project);
@@ -48,7 +53,7 @@ public class ProjectController {
         userService.save(user);
     }
 
-    private void addOwnerAsProjectMember(@RequestBody Project project, Principal principal) {
+    private void addOwnerAsProjectMember(Project project, Principal principal) {
         User user = userService.findByEmail(principal.getName());
         Membership membership = new Membership();
         membership.setProject(project);
@@ -81,19 +86,19 @@ public class ProjectController {
     }
 
     @PutMapping("/api/projects")
-    public void modifyProject(@RequestBody Project modifiedProject) {
-        projectService.findById(modifiedProject.getId()).ifPresent(project -> {
-            if (!project.getTitle().equals(modifiedProject.getTitle())) {
+    public void modifyProject(@RequestBody ProjectDto projectDto) {
+        projectService.findById(projectDto.getId()).ifPresent(project -> {
+            if (!project.getTitle().equals(projectDto.getTitle())) {
                 log.info("Modifying title");
-                project.setTitle(modifiedProject.getTitle());
+                project.setTitle(projectDto.getTitle());
             }
-            if (!project.getDescription().equals(modifiedProject.getDescription())) {
+            if (!project.getDescription().equals(projectDto.getDescription())) {
                 log.info("Modifying description");
-                project.setDescription(modifiedProject.getDescription());
+                project.setDescription(projectDto.getDescription());
             }
-            if (!project.getTechnologies().equals(modifiedProject.getTechnologies())) {
+            if (!project.getTechnologies().equals(projectDto.getTechnologies())) {
                 log.info("Modifying technologies");
-                project.setTechnologies(modifiedProject.getTechnologies());
+                project.setTechnologies(projectDto.getTechnologies());
             }
             projectService.save(project);
         });

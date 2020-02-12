@@ -1,9 +1,12 @@
 package com.capgemini.organizeIT.project.controlers;
 
 import com.capgemini.organizeIT.project.entities.Ownership;
-import com.capgemini.organizeIT.project.entities.Project;
+import com.capgemini.organizeIT.project.mappers.ProjectMapper;
+import com.capgemini.organizeIT.project.model.ProjectDto;
 import com.capgemini.organizeIT.project.services.ProjectService;
 import com.capgemini.organizeIT.user.entities.User;
+import com.capgemini.organizeIT.user.mappers.UserMapper;
+import com.capgemini.organizeIT.user.model.UserDto;
 import com.capgemini.organizeIT.user.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,9 +22,11 @@ import java.util.stream.Collectors;
 public class OwnershipController {
     private final ProjectService projectService;
     private final UserService userService;
+    private final ProjectMapper projectMapper;
+    private final UserMapper userMapper;
 
     @PostMapping("/api/projects/{projectId}/ownerships/{ownerId}")
-    public Project giveOwnershipToUserById(@PathVariable Long projectId, @PathVariable Long ownerId) {
+    public ProjectDto giveOwnershipToUserById(@PathVariable Long projectId, @PathVariable Long ownerId) {
         return projectService.findById(projectId).map(project -> {
             log.info("Owners before: {}", project.getOwners());
             User user = userService.findById(ownerId);
@@ -31,14 +36,12 @@ public class OwnershipController {
             project.getOwners().add(ownership);
             log.info("Owners after: {}", project.getOwners());
             userService.save(user);
-            return projectService.save(project);
+            return projectMapper.convertToDto(projectService.save(project));
         }).orElse(null);
     }
 
     @GetMapping("/api/projects/{projectId}/ownerships")
-    public Set<User> getProjectOwners(@PathVariable Long projectId) {
-        return projectService.findById(projectId).map(project -> {
-            return project.getOwners().stream().map(Ownership::getUser).collect(Collectors.toSet());
-        }).orElse(null);
+    public Set<UserDto> getProjectOwners(@PathVariable Long projectId) {
+        return projectService.findById(projectId).map(project -> project.getOwners().stream().map(Ownership::getUser).map(userMapper::convertToDto).collect(Collectors.toSet())).orElse(null);
     }
 }
