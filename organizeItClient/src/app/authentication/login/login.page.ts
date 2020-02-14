@@ -15,7 +15,7 @@ import {AppComponent} from "../../app.component";
 export class LoginPage implements OnInit {
 
   constructor(private authService: AuthService, private router: Router, private toastService: ToastService,
-              private submitService: SubmitService, private appComponent: AppComponent) {
+              private submitService: SubmitService) {
   }
 
   ngOnInit() {

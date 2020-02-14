@@ -18,6 +18,7 @@ export class AuthService {
   readonly USERS_URL = '/api/users';
   readonly LOGGED_IN_USER_URL = '/api/user';
   readonly USER_BY_USERNAME_URL = '/api/users/emails/';
+  interval;
 
   constructor(private http: HttpClient, private  router: Router, private toastService: ToastService, public data: DataService) {
   }
@@ -34,6 +35,7 @@ export class AuthService {
   }
 
   logout() {
+    clearInterval(this.interval);
     return this.http.post(this.LOGOUT_URL, {}, {responseType: 'text'});
   }
 
@@ -79,6 +81,13 @@ export class AuthService {
         this.data.changeCurrentUser(user);
         this.router.navigateByUrl("home").then(() => {
           form.reset();
+          this.interval = setInterval(() => {
+            this.getCurrentUser().subscribe((user: User) => {
+              this.data.changeCurrentUser(user);
+            }, () => {
+              this.data.changeCurrentUser(null);
+            })
+          }, 300000); // 300000 ms = 5 min
         });
       });
     });

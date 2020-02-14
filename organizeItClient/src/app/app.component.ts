@@ -5,7 +5,7 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AuthService} from "./authentication/auth.service";
 import {User} from "./interfaces/user.model";
-import {Subject, timer} from "rxjs";
+import {Subject} from "rxjs";
 import {ToastService} from "./shared/toast.service";
 import {Router} from "@angular/router";
 import {Messages} from "./shared/Messages";
@@ -79,7 +79,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.data.currentUser.subscribe(user => {
       this.loggedInUser = user;
       sessionStorage.setItem("loggedIn", String(user != null));
-      this.loggedIn = user != null;
       this.determineUserLoggedIn();
     });
     this.initializeApp();
@@ -89,7 +88,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.data.currentUser.subscribe(user => {
       this.loggedInUser = user;
       sessionStorage.setItem("loggedIn", String(user != null));
-      this.loggedIn = user != null;
       this.determineUserLoggedIn();
     });
     // this.notificationService.askForPermissions();
@@ -132,11 +130,6 @@ export class AppComponent implements OnInit, OnDestroy {
   determineUserLoggedIn() {
     if (JSON.parse(sessionStorage.getItem("loggedIn")) === true) {
       //TODO: Check correctness, for now after a timeout user is being logged out
-      const source = timer(1801000); //1 800 000 ms = 30 min -> default spring security timeout
-      const subscribe = source.subscribe(val => this.authService.getCurrentUser().subscribe((user: User) => {
-        this.data.changeCurrentUser(user)
-      }));
-      console.log("Is user online?", this.loggedInUser);
       this.displayName = this.loggedInUser.firstName + " " + this.loggedInUser.lastName;
       this.loggedIn = true;
       sessionStorage.setItem("loggedInUserEmail", this.loggedInUser.email);
