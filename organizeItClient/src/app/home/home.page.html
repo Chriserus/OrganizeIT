@@ -3,23 +3,19 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>
-      Home
-    </ion-title>
+    <ion-title>Home</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card class="welcome-card">
-    <img src="../../assets/banner.png" alt=""/>
-  </ion-card>
+  <img class="welcome-card" src="../../assets/03-robot_shadows_square_transparent.png" alt=""/>
   <ion-card>
     <ion-card-header>
       <ion-card-title>Newest projects:</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-spinner *ngIf="showProjectsSpinner"></ion-spinner>
-      <ion-slides pager="true" [options]="slideOptsOne" > <!-- scrollbar -->
+      <ion-slides pager="true" [options]="slideOptsOne"> <!-- scrollbar -->
         <ion-slide *ngFor="let project of projects">
           <ion-card-subtitle>Owner(s):</ion-card-subtitle>
           <ion-card-subtitle *ngFor="let owner of projectService.listOwners(project)">
