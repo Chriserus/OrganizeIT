@@ -73,7 +73,7 @@ public class UserController {
 
     @PostMapping("/api/register")
     public UserDto register(@RequestBody AuthDto authDto) {
-        User user = userMapper.convertFromAuthToEntity(authDto);
+        User user = userMapper.convertToEntity(authDto);
         user.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userMapper.convertToDto(userService.save(user));
@@ -100,6 +100,9 @@ public class UserController {
         }
         if (!originalUser.getCity().equals(userDto.getCity())) {
             originalUser.setCity(userDto.getCity());
+        }
+        if (!originalUser.getPolishSpeaker().equals(userDto.getPolishSpeaker())) {
+            originalUser.setPolishSpeaker(userDto.getPolishSpeaker());
         }
         return userMapper.convertToDto(userService.save(originalUser));
     }

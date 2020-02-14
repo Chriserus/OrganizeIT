@@ -44,19 +44,9 @@ export class AuthService {
         responseType: 'json'
       })
     };
-
-    let jsonData = {
-      'firstName': form.firstName,
-      'lastName': form.lastName,
-      'email': form.email,
-      'password': form.password,
-      'shirtType': form.shirtType,
-      'shirtSize': form.shirtSize,
-      'city': form.city
-    };
     console.log("Sending data:");
-    console.log(jsonData);
-    return this.http.post(this.REGISTER_URL, jsonData, httpOptions);
+    console.log(form.value);
+    return this.http.post(this.REGISTER_URL, JSON.stringify(form.value), httpOptions);
   }
 
   updateInfo(form: any, user: User) {
@@ -66,14 +56,7 @@ export class AuthService {
         responseType: 'json'
       })
     };
-    let jsonData = {
-      'firstName': form.firstName,
-      'lastName': form.lastName,
-      'shirtSize': form.shirtSize,
-      'shirtType': form.shirtType,
-      'city': form.city
-    };
-    return this.http.put(this.USERS_URL + "/" + user.id, jsonData, httpOptions);
+    return this.http.put(this.USERS_URL + "/" + user.id, JSON.stringify(form.value), httpOptions);
   }
 
   getByEmail(email: string) {

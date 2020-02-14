@@ -21,6 +21,7 @@ export class RegisterPage implements OnInit {
   shirtTypes: ShirtType[] = [ShirtType.M, ShirtType.F];
   cities: City[] = [City.WRO, City.POZ];
   city: City;
+  polishSpeaker = true;
 
   constructor(private authService: AuthService, private  router: Router, private toastService: ToastService,
               private geolocation: Geolocation, private submitService: SubmitService) {
@@ -45,10 +46,7 @@ export class RegisterPage implements OnInit {
         data => {
           console.log(data);
           if (data === null) {
-            console.log("Registering user with email: " + form.value.email);
-            console.log("Chosen size: " + form.value.shirtSize);
-            console.log("Chosen type: " + form.value.shirtType);
-            this.authService.register(form.value).subscribe(
+            this.authService.register(form).subscribe(
                 (response: any) => {
                   console.log(response);
                   sessionStorage.setItem("loggedIn", 'true');

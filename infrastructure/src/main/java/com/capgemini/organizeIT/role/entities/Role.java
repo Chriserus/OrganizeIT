@@ -18,7 +18,6 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

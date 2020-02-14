@@ -13,4 +13,5 @@ export interface User {
   shirtSize: ShirtSize;
   shirtType: ShirtType;
   city: City;
+  polishSpeaker: boolean;
 }

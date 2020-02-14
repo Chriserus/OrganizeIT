@@ -37,8 +37,7 @@
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Repeat password</ion-label>
-                <ion-input name="passwordConfirm" type="password" ngModel required
-                           (keyup.enter)="register(form)"></ion-input>
+                <ion-input name="passwordConfirm" type="password" ngModel required></ion-input>
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Shirt size</ion-label>
@@ -61,6 +60,10 @@
                 </ion-select>
               </ion-item>
               <ion-button (click)="checkUserLocation()">Use current location</ion-button>
+              <ion-item>
+                <ion-label>I speak Polish</ion-label>
+                <ion-checkbox name="polishSpeaker" slot="end" [checked]=true [(ngModel)]="polishSpeaker"></ion-checkbox>
+              </ion-item>
               <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid"
                           (keydown.enter)="register(form)" expand="block">Register
               </ion-button>

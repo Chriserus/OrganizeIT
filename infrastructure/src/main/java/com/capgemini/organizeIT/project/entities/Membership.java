@@ -27,7 +27,7 @@ public class Membership implements Serializable {
     @ManyToOne
     @JoinColumn
     private User user;
-    private boolean approved = false;
+    private Boolean approved = false;
     @CreationTimestamp
     private Date created;
     @UpdateTimestamp

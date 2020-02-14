@@ -12,11 +12,10 @@ import {Messages} from "../../shared/Messages";
   styleUrls: ['./submission.page.scss'],
 })
 export class SubmissionPage implements OnInit {
-  joinAsMember: boolean;
+  joinAsMember = true;
 
   constructor(private projectService: ProjectService, private authService: AuthService, private  router: Router,
               private toastService: ToastService, private submitService: SubmitService) {
-    this.joinAsMember = true;
   }
 
   ngOnInit() {
@@ -25,19 +24,17 @@ export class SubmissionPage implements OnInit {
   // TODO: Add notification sending to admins?
   registerProject(form) {
     if (!this.submitService.isButtonDisabled('submitButton')) {
-      this.authService.getCurrentUser().subscribe(
+      if (form.value.maxMembers === 0) {
+        form.value.maxMembers = 1;
+      }
+      this.projectService.addProject(form).subscribe(
           (response: any) => {
-            if (form.value.maxMembers === 0) {
-              form.value.maxMembers = 1;
-            }
-            this.projectService.addProject(form, response).subscribe(
-                (response: any) => {
-                  console.log(response);
-                  form.reset();
-                  this.toastService.showClosableInformationMessage(Messages.projectSubmittedMessage);
-                  this.router.navigateByUrl("home");
-                })
-          });
+            console.log(response);
+            form.reset();
+            this.toastService.showClosableInformationMessage(Messages.projectSubmittedMessage);
+            this.router.navigateByUrl("home");
+          })
+
     }
   }
 }

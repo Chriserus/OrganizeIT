@@ -34,6 +34,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   shirtSizes: ShirtSize[];
   shirtTypes: ShirtType[] = [ShirtType.M, ShirtType.F];
   cities: City[] = [City.WRO, City.POZ];
+  polishSpeaker: boolean;
   showProjectsSpinner: boolean;
   showNotificationsSpinner: boolean;
 
@@ -52,6 +53,7 @@ export class ProfilePage implements OnInit, OnDestroy {
         this.shirtSize = user.shirtSize;
         this.shirtType = user.shirtType;
         this.city = user.city;
+        this.polishSpeaker = user.polishSpeaker;
         this.getProjects();
         this.getNotifications();
       });
@@ -116,7 +118,7 @@ export class ProfilePage implements OnInit, OnDestroy {
       this.toastService.showTemporaryWarningMessage(Messages.userInfoUpdateWarningMessage);
       return;
     }
-    this.authService.updateInfo(form.value, this.loggedInUser).subscribe(
+    this.authService.updateInfo(form, this.loggedInUser).subscribe(
         (user: User) => {
           console.log(user);
           this.data.changeCurrentUser(user);
@@ -131,7 +133,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   private userDataUnchanged(form) {
     return this.loggedInUser.firstName === form.value.firstName && this.loggedInUser.lastName === form.value.lastName
         && this.compareShirtSizes(this.loggedInUser.shirtSize, form.value.shirtSize) && this.loggedInUser.shirtType === form.value.shirtType
-        && this.loggedInUser.city === form.value.city;
+        && this.loggedInUser.city === form.value.city && this.loggedInUser.polishSpeaker === form.value.polishSpeaker;
   }
 
   async doRefresh(event) {

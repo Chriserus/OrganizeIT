@@ -14,8 +14,13 @@ public class UserMapper {
     private final ModelMapper modelMapper;
     private final UserService userService;
 
-    public User convertFromAuthToEntity(AuthDto authDto){
-        return modelMapper.map(authDto, User.class);
+    public User convertToEntity(AuthDto authDto){
+        User user = modelMapper.map(authDto, User.class);
+        if (authDto.getId() != null) {
+            User oldUser = userService.findById(authDto.getId());
+            user.setId(oldUser.getId());
+        }
+        return user;
     }
 
     public User convertToEntity(UserDto userDto) {

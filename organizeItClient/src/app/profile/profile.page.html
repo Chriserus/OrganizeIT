@@ -142,6 +142,10 @@
                                      [value]="city">{{city}}</ion-select-option>
                 </ion-select>
               </ion-item>
+              <ion-item>
+                <ion-label>I speak Polish</ion-label>
+                <ion-checkbox name="polishSpeaker" slot="end" value="{{polishSpeaker}}}" [(ngModel)]="polishSpeaker"></ion-checkbox>
+              </ion-item>
               <ion-button id="submitButton" type="submit" [disabled]="form.invalid">Update</ion-button>
             </ion-col>
           </ion-row>

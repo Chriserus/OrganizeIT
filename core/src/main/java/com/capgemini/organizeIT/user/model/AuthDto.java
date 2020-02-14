@@ -8,9 +8,11 @@ import lombok.Data;
 
 @Data
 public class AuthDto {
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
+    private Boolean polishSpeaker;
     private ShirtType shirtType;
     private City city;
     private ShirtSizeDto shirtSize;

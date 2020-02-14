@@ -112,9 +112,9 @@
                 <ion-item-divider color="white">
                 </ion-item-divider>
                 Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
-                  <p *ngFor="let member of projectService.listApprovedMembers(project)">
-                    {{member.firstName + " " + member.lastName}}
-                  </p>
+                <p *ngFor="let member of projectService.listApprovedMembers(project)">
+                  {{member.firstName + " " + member.lastName}}
+                </p>
                 <ion-item-divider color="white">
                 </ion-item-divider>
                 <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
@@ -155,14 +155,14 @@
     </ion-card-header>
     <ion-card-content>
       <ion-grid *ngIf="showUsersCard">
-<!--        <ion-segment (ionChange)="segmentChanged($event)">-->
-<!--          <ion-segment-button value="cards" checked>-->
-<!--            <ion-label>Cards</ion-label>-->
-<!--          </ion-segment-button>-->
-<!--          <ion-segment-button value="table">-->
-<!--            <ion-label>Table</ion-label>-->
-<!--          </ion-segment-button>-->
-<!--        </ion-segment>-->
+        <!--        <ion-segment (ionChange)="segmentChanged($event)">-->
+        <!--          <ion-segment-button value="cards" checked>-->
+        <!--            <ion-label>Cards</ion-label>-->
+        <!--          </ion-segment-button>-->
+        <!--          <ion-segment-button value="table">-->
+        <!--            <ion-label>Table</ion-label>-->
+        <!--          </ion-segment-button>-->
+        <!--        </ion-segment>-->
         <ion-searchbar (ionChange)="onSearchChange($event)"></ion-searchbar>
         <ion-row>
           <ion-col *ngFor="let user of users" size-xs="12" size-sm="12" size-md="6" size-lg="6">
@@ -183,6 +183,10 @@
                 <ion-item>
                   <ion-label position="stacked">City</ion-label>
                   <ion-input value="{{user.city}}" readonly="true"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">I speak Polish</ion-label>
+                  <ion-checkbox value="{{user.polishSpeaker}}" [checked]="user.polishSpeaker" [disabled]="true"></ion-checkbox>
                 </ion-item>
               </ion-card-content>
               <ion-button expand="block"

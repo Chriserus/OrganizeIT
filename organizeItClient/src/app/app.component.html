@@ -22,7 +22,7 @@
               <ion-label>
                 <h3>{{displayName}}</h3>
                 <ion-button [routerDirection]="'root'" [routerLink]="['/profile']">My profile</ion-button>
-                <ion-button  (click)="logout()">
+                <ion-button (click)="logout()">
                   Logout
                   <ion-icon slot="end" name="log-out"></ion-icon>
                 </ion-button>
@@ -46,7 +46,8 @@
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
-            <ion-item *ngIf="authService.userHasAdminRole(this.loggedInUser)" [routerDirection]="'root'" [routerLink]="[adminPanel.url]">
+            <ion-item *ngIf="authService.userHasAdminRole(this.loggedInUser)" [routerDirection]="'root'"
+                      [routerLink]="[adminPanel.url]">
               <ion-icon slot="start" [name]="adminPanel.icon"></ion-icon>
               <ion-label>{{adminPanel.title}}</ion-label>
             </ion-item>
@@ -54,10 +55,10 @@
         </ion-list>
       </ion-content>
       <ion-footer>
-          <ion-item>
-            <ion-label>Dark mode</ion-label>
-            <ion-toggle [ngModel]="themeService.darkMode" (ngModelChange)="themeService.toggleAppTheme()"></ion-toggle>
-          </ion-item>
+        <ion-item>
+          <ion-label>Dark mode</ion-label>
+          <ion-toggle [ngModel]="themeService.darkMode" (ngModelChange)="themeService.toggleAppTheme()"></ion-toggle>
+        </ion-item>
       </ion-footer>
     </ion-menu>
     <ion-router-outlet id="my-content"></ion-router-outlet>

@@ -234,4 +234,9 @@
             <column name="modified" type="datetime"/>
         </createTable>
     </changeSet>
+    <changeSet id="addSpeaksPolishColumnToUser" author="Chriserus">
+        <addColumn tableName="user">
+            <column name="polish_speaker" type="boolean"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

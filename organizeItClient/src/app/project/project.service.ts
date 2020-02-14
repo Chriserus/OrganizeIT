@@ -24,22 +24,15 @@ export class ProjectService {
     return this.http.get<Project[]>(this.USERS_URL + "/" + user.id + "/projects", {responseType: 'json'});
   }
 
-  addProject(form: any, owner: User) {
+  addProject(form: any) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         responseType: 'json'
       })
     };
-    let jsonData = {
-      'title': form.value.title,
-      'description': form.value.description,
-      'technologies': form.value.technologies,
-      'maxMembers': form.value.maxMembers
-    };
-    console.log(jsonData);
     // TODO: Secure this endpoint (or change something, that only get is allowed)
-    return this.http.post(this.PROJECTS_URL + "?joinProject=" + form.value.joinAsMember, jsonData, httpOptions);
+    return this.http.post(this.PROJECTS_URL + "?joinProject=" + form.value.joinAsMember, JSON.stringify(form.value), httpOptions);
   }
 
   deleteProject(project: Project) {
@@ -78,11 +71,11 @@ export class ProjectService {
     return project.owners.map(owner => owner.user);
   }
 
-  userIsProjectOwner(user: User, project: Project){
+  userIsProjectOwner(user: User, project: Project) {
     return project.owners.map(owner => owner.user).filter(owner => owner.email === user.email).length == 0;
   }
 
-  updateProjects(){
+  updateProjects() {
     this.getProjectsByOwnerOrMember(this.loggedInUser).subscribe((projects: Project[]) => {
       this.data.changeUserProjects(projects);
     });
