@@ -99,8 +99,19 @@ public class ProjectController {
                 log.info("Modifying technologies");
                 project.setTechnologies(projectDto.getTechnologies());
             }
+            if (!project.getMaxMembers().equals(projectDto.getMaxMembers()) &&
+                    projectDto.getMaxMembers() >= countApprovedMembers(project)) {
+                log.info("Modifying maximum number of members");
+                log.info("Old: " + countApprovedMembers(project) + "/" + project.getMaxMembers());
+                log.info("New: " + countApprovedMembers(project) + "/" + projectDto.getMaxMembers());
+                project.setMaxMembers(projectDto.getMaxMembers());
+            }
             projectService.save(project);
         });
+    }
+
+    private long countApprovedMembers(Project project) {
+        return project.getMembers().stream().filter(Membership::getApproved).count();
     }
 
     //TODO: Check if it works

@@ -150,24 +150,28 @@ export class AlertService {
       header: 'Modifying project!',
       inputs: [
         {
-          label: 'Title',
           name: 'title',
           placeholder: 'Title',
           value: project.title
         },
         {
-          label: 'Description',
           name: 'description',
           placeholder: 'Description',
           value: project.description,
           type: "textarea"
         },
         {
-          label: 'Technologies',
           name: 'technologies',
           placeholder: 'Technologies',
           value: project.technologies,
           type: "text"
+        },
+        {
+          name: 'maxMembers',
+          value: project.maxMembers,
+          min: 1,
+          max: 5,
+          type: "number"
         }
       ],
       buttons: [

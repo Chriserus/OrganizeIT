@@ -48,6 +48,9 @@ public class MembershipController {
             if (loggedInUserNotProjectOwner(project) && !loggedInUserIsAdmin()) {
                 return projectMapper.convertToDto(project);
             }
+            if (memberWouldExceedMaxCapacity(project)) {
+                return null;
+            }
             User user = userService.findById(memberId);
             Optional<Membership> optionalMember = extractOptionalMemberById(memberId, project);
             optionalMember.ifPresent(member -> {
@@ -57,6 +60,12 @@ public class MembershipController {
             userService.save(user);
             return projectMapper.convertToDto(projectService.save(project));
         }).orElse(null);
+    }
+
+    private boolean memberWouldExceedMaxCapacity(Project project) {
+        log.info("Would be: {}/{}",
+                project.getMembers().stream().filter(Membership::getApproved).count() + 1, project.getMaxMembers());
+        return project.getMembers().stream().filter(Membership::getApproved).count() + 1 > project.getMaxMembers();
     }
 
     @DeleteMapping("/api/projects/{projectId}/memberships/{memberId}")

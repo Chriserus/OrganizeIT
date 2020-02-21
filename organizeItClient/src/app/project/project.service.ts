@@ -61,6 +61,9 @@ export class ProjectService {
     if (project.technologies != data.technologies) {
       project.technologies = data.technologies;
     }
+    if (project.maxMembers != data.maxMembers) {
+      project.maxMembers = data.maxMembers;
+    }
   }
 
   countApprovedMembers(project: Project) {
@@ -86,5 +89,9 @@ export class ProjectService {
     this.getProjects().subscribe((projects: Project[]) => {
       this.data.changeProjects(projects);
     });
+  }
+
+  maxMembersCapacityReached(project: Project) {
+    return project.maxMembers === this.countApprovedMembers(project);
   }
 }

@@ -122,9 +122,12 @@
                   <ion-item-divider color="white">
                   </ion-item-divider>
                   Requests:
+                  <ion-text *ngIf="projectService.maxMembersCapacityReached(project)" color="danger">
+                    Max members capacity reached!</ion-text>
                   <div *ngFor="let potentialMember of listPotentialMembers(project)">
                     <ion-buttons>
                       <ion-button size="small" slot="start" color="success" shape="round"
+                                  [disabled]="projectService.maxMembersCapacityReached(project)"
                                   (click)="membershipService.acceptMembershipRequest(project, potentialMember)">
                         <ion-icon name="checkmark"></ion-icon>
                       </ion-button>
