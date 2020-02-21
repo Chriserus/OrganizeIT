@@ -21,6 +21,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -63,8 +64,8 @@ public class NotificationController {
     }
 
     @GetMapping("/api/notifications/{userId}")
-    public Set<NotificationDto> getNotificationsForUser(@PathVariable final Long userId) {
-        return notificationService.findByUserId(userId).stream().map(notificationMapper::convertToDto).collect(Collectors.toSet());
+    public List<NotificationDto> getNotificationsForUser(@PathVariable final Long userId) {
+        return notificationService.findByUser(userService.findById(userId)).stream().map(notificationMapper::convertToDto).collect(Collectors.toList());
     }
 
     // TODO: Move below methods to service?

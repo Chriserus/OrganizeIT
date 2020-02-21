@@ -1,4 +1,3 @@
-import {User} from './user.model';
 import {ProjectUser} from "./project-user";
 import {Ownership} from "./ownership";
 

@@ -95,11 +95,11 @@
     </ion-card-header>
     <ion-card-content>
         <ion-list>
-          <ion-item *ngFor="let notification of notifications">
+          <ion-item *ngFor="let notification of notifications|slice:0:10">
             <ion-label>
               <h2>{{notification.title}}</h2>
               <h3>{{notification.body}}</h3>
-              <p>{{notification.created | date: 'HH:MM | d-MMM-yyyy'}}</p>
+              <p>{{notification.created | date: 'HH:mm:SS | d-MMM-yyyy'}}</p>
             </ion-label>
           </ion-item>
         </ion-list>

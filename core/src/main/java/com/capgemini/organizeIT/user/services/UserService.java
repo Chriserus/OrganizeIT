@@ -2,6 +2,7 @@ package com.capgemini.organizeIT.user.services;
 
 import com.capgemini.organizeIT.user.entities.User;
 import com.capgemini.organizeIT.user.repositories.UserRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class UserService {
     }
 
     public List<User> findAll() {
-        return userRepository.findAll();
+        return userRepository.findAll(Sort.by(Sort.Direction.DESC, "created"));
     }
 
     public User save(User user) {
