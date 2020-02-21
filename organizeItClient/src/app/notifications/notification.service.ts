@@ -111,8 +111,20 @@ export class NotificationService {
     });
   }
 
+  sendNotificationToProjectMembersAboutProjectConfirmation(project: Project) {
+    project.members.filter(member => member.approved).map(member => member.user).forEach(user => {
+      this.sendNotification(user, Messages.projectConfirmedNotificationTitle,
+          "\"" + project.title + "\" has been confirmed").subscribe(
+          (response: any) => {
+            console.log(response);
+          },
+          (error: any) => {
+            console.log(error);
+          });
+    });
+  }
+
   getNotificationsByRecipient(recipient: User) {
     return this.http.get(this.NOTIFICATION_URL + "/" + recipient.id);
   }
-
 }

@@ -47,6 +47,14 @@ export class ProjectService {
     return this.http.put<Project>(this.PROJECTS_URL + "/" + project.id + "?verifyProject=" + false, {}, {responseType: 'json'});
   }
 
+  confirmProject(project: Project) {
+    return this.http.patch<Project>(this.PROJECTS_URL + "/" + project.id + "?confirmProject=" + true, {}, {responseType: 'json'});
+  }
+
+  unconfirmProject(project: Project) {
+    return this.http.patch<Project>(this.PROJECTS_URL + "/" + project.id + "?confirmProject=" + false, {}, {responseType: 'json'});
+  }
+
   modifyProject(project: Project) {
     return this.http.put<Project>(this.PROJECTS_URL, project);
   }

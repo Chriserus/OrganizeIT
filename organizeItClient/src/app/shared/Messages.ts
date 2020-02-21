@@ -12,6 +12,7 @@ export const Messages = {
   enrollmentSuccessfulNotificationTitle: 'Enrollment successful',
   projectDeletedNotificationTitle: 'Project deleted',
   projectVerifiedNotificationTitle: 'Project verified',
+  projectConfirmedNotificationTitle: 'Project confirmed',
   projectInvalidatedNotificationTitle: 'Project invalidated',
   enrollmentRequestSentMessage: 'Enrollment request sent',
   projectSubmittedMessage: 'Project submitted for verification',
@@ -20,5 +21,6 @@ export const Messages = {
   userInfoUpdateWarningMessage: 'Data unchanged',
   ownershipGrantedNotificationTitle: 'Ownership granted',
   removedFromProjectNotificationTitle: 'Removed from project',
+
 
 };

@@ -239,4 +239,9 @@
             <column name="polish_speaker" type="boolean"/>
         </addColumn>
     </changeSet>
+    <changeSet id="addConfirmedColumnToProject" author="Chriserus">
+        <addColumn tableName="project">
+            <column name="confirmed" type="boolean"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

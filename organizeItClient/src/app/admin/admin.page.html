@@ -140,6 +140,9 @@
                   </div>
                 </div>
               </ion-card-content>
+              <ion-button *ngIf="project.confirmed === false" expand="block"
+                          (click)="alertService.presentConfirmProjectAlert(project)" color="success">Confirm project
+              </ion-button>
               <ion-button expand="block"
                           (click)="alertService.presentInvalidateProjectAlert(project)" color="warning">Invalidate project
               </ion-button>

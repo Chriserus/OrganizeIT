@@ -11,6 +11,7 @@ export interface Project {
   members: ProjectUser[];
   maxMembers: number;
   verified: boolean;
+  confirmed: boolean;
   created?: string;
   modified?: string;
 }

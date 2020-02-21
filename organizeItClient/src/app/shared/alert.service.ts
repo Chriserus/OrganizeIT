@@ -380,4 +380,36 @@ export class AlertService {
     let result = await alert.onDidDismiss();
     console.log(result);
   }
+
+  async presentConfirmProjectAlert(project: Project) {
+    const alert = await this.alertController.create({
+      header: 'Confirming project!',
+      message: 'You are confirming project: <p><strong>' + project.title + '</strong></p>',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'CONFIRM',
+          handler: () => {
+            this.projectService.confirmProject(project).subscribe(
+                response => {
+                  console.log(response);
+                  this.notificationService.sendNotificationToProjectMembersAboutProjectConfirmation(project);
+                  this.projectService.updateProjects();
+                  this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" confirmed");
+                },
+                error => {
+                  console.log(error);
+                });
+          }
+        }]
+    });
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+  }
 }

@@ -16,6 +16,7 @@ public class ProjectDto {
     private Set<OwnershipDto> owners = new HashSet<>();
     private Integer maxMembers = 1;
     private boolean verified = false;
+    private boolean confirmed = false;
     private Date created;
     private Date modified;
 }

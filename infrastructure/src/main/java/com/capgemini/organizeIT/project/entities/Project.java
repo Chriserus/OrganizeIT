@@ -24,6 +24,7 @@ public class Project {
     private Set<Ownership> owners = new HashSet<>();
     private Integer maxMembers = 1;
     private Boolean verified = false;
+    private Boolean confirmed = false;
     @CreationTimestamp
     private Date created;
     @UpdateTimestamp

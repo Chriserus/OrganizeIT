@@ -84,6 +84,16 @@ public class ProjectController {
         });
     }
 
+    @PatchMapping("/api/projects/{id}")
+    public void confirmProject(@PathVariable Long id, @RequestParam boolean confirmProject) {
+        projectService.findById(id).ifPresent(project -> {
+            if (loggedInUserIsAdmin() && project.getVerified()) {
+                project.setConfirmed(confirmProject);
+                projectService.save(project);
+            }
+        });
+    }
+
     @PutMapping("/api/projects")
     public void modifyProject(@RequestBody ProjectDto projectDto) {
         projectService.findById(projectDto.getId()).ifPresent(project -> {
@@ -98,6 +108,9 @@ public class ProjectController {
             if (!project.getTechnologies().equals(projectDto.getTechnologies())) {
                 log.info("Modifying technologies");
                 project.setTechnologies(projectDto.getTechnologies());
+            }
+            if(projectDto.getMaxMembers() > 5){
+                projectDto.setMaxMembers(5);
             }
             if (!project.getMaxMembers().equals(projectDto.getMaxMembers()) &&
                     projectDto.getMaxMembers() >= countApprovedMembers(project)) {
