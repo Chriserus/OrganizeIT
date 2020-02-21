@@ -98,7 +98,21 @@ export class NotificationService {
     });
   }
 
+  sendNotificationToProjectMembersAboutProjectInvalidation(project: Project, reason: string) {
+    project.members.filter(member => member.approved).map(member => member.user).forEach(user => {
+      this.sendNotification(user, Messages.projectInvalidatedNotificationTitle,
+          "\"" + project.title + "\" has been invalidated. " + reason).subscribe(
+          (response: any) => {
+            console.log(response);
+          },
+          (error: any) => {
+            console.log(error);
+          });
+    });
+  }
+
   getNotificationsByRecipient(recipient: User) {
     return this.http.get(this.NOTIFICATION_URL + "/" + recipient.id);
   }
+
 }

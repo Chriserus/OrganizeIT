@@ -138,6 +138,9 @@
                 </div>
               </ion-card-content>
               <ion-button expand="block"
+                          (click)="alertService.presentInvalidateProjectAlert(project)" color="warning">Invalidate project
+              </ion-button>
+              <ion-button expand="block"
                           (click)="alertService.presentDeleteProjectAlert(project)" color="danger">Delete project
               </ion-button>
             </ion-card>

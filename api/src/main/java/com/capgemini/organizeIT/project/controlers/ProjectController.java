@@ -75,11 +75,10 @@ public class ProjectController {
     }
 
     @PutMapping("/api/projects/{id}")
-    public void verifyProject(@PathVariable Long id) {
+    public void verifyProject(@PathVariable Long id, @RequestParam boolean verifyProject) {
         projectService.findById(id).ifPresent(project -> {
             if (loggedInUserIsAdmin()) {
-                log.info("Verifying project: {}", project);
-                project.setVerified(true);
+                project.setVerified(verifyProject);
                 projectService.save(project);
             }
         });

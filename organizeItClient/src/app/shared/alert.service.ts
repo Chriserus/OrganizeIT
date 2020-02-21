@@ -306,7 +306,8 @@ export class AlertService {
   async presentDeleteUserAlert(user: User) {
     const alert = await this.alertController.create({
       header: 'Deleting user!',
-      message: user.firstName + ' ' + user.lastName + '<p>Email: <strong>' + user.email + '</strong></p>',
+      subHeader: user.firstName + ' ' + user.lastName,
+      message: '<p>Email: <strong>' + user.email + '</strong></p>',
       buttons: [
         {
           text: 'Cancel',
@@ -325,6 +326,45 @@ export class AlertService {
                     this.data.changeUsers(users);
                   });
                   this.toastService.showTemporarySuccessMessage("\"" + user.email + "\" deleted");
+                },
+                error => {
+                  console.log(error);
+                });
+          }
+        }]
+    });
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+  }
+
+  async presentInvalidateProjectAlert(project: Project) {
+    const alert = await this.alertController.create({
+      header: 'Invalidating project project!',
+      message: 'You are invalidating project: <p><strong>' + project.title + '</strong></p>',
+      inputs: [
+        {
+          name: 'reason',
+          type: 'text',
+          placeholder: 'Specify reason'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'INVALIDATE',
+          handler: data => {
+            this.projectService.invalidateProject(project).subscribe(
+                response => {
+                  console.log(response);
+                  this.notificationService.sendNotificationToProjectMembersAboutProjectInvalidation(project, data.reason);
+                  this.projectService.updateProjects();
+                  this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" invalidated");
                 },
                 error => {
                   console.log(error);

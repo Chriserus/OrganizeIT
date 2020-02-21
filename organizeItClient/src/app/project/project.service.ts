@@ -40,7 +40,11 @@ export class ProjectService {
   }
 
   verifyProject(project: Project) {
-    return this.http.put<Project>(this.PROJECTS_URL + "/" + project.id, {}, {responseType: 'json'});
+    return this.http.put<Project>(this.PROJECTS_URL + "/" + project.id + "?verifyProject=" + true, {}, {responseType: 'json'});
+  }
+
+  invalidateProject(project: Project) {
+    return this.http.put<Project>(this.PROJECTS_URL + "/" + project.id + "?verifyProject=" + false, {}, {responseType: 'json'});
   }
 
   modifyProject(project: Project) {
