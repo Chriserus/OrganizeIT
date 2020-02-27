@@ -32,7 +32,7 @@ export class SubmissionPage implements OnInit {
             console.log(response);
             form.reset();
             this.toastService.showClosableInformationMessage(Messages.projectSubmittedMessage);
-            this.router.navigateByUrl("home");
+            this.router.navigateByUrl("profile");
           })
 
     }

@@ -5,8 +5,8 @@ import {ToastController} from "@ionic/angular";
   providedIn: 'root'
 })
 export class ToastService {
-  private temporaryToastDuration = 2000;
-  private closableToastDuration = 5000;
+  private temporaryToastDuration = 3000;
+  private closableToastDuration = 10000;
 
   constructor(private toastController: ToastController) {
   }

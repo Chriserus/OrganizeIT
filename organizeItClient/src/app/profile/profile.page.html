@@ -26,7 +26,12 @@
                   <p *ngFor="let owner of projectService.listOwners(project)">
                     {{owner.firstName + " " + owner.lastName}}
                   </p></ion-card-subtitle>
-                <ion-card-title>{{project.title}}</ion-card-title>
+                <ion-card-title>{{project.title}}
+                  <ion-chip *ngIf="project.confirmed" color="success" outline>
+                    <ion-icon name="star" color="success"></ion-icon>
+                    <ion-label>Selected for development</ion-label>
+                  </ion-chip>
+                </ion-card-title>
                 <ion-chip *ngIf="project.verified === false" color="danger" outline>
                   <ion-icon name="warning" color="warning"></ion-icon>
                   <ion-label>Not verified yet</ion-label>

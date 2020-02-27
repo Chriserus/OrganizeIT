@@ -82,27 +82,104 @@
     </ion-card-content>
   </ion-card>
   <ion-card>
+  <ion-card-header>
+    <ion-item>
+      <ion-card-title>Verified projects</ion-card-title>
+      <ion-toggle slot="end" color="secondary" [(ngModel)]="showVerifiedProjects"></ion-toggle>
+    </ion-item>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-grid *ngIf="showVerifiedProjects">
+      <ion-row>
+        <ion-col *ngFor="let project of verifiedProjects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
+          <ion-card class="project-card">
+            <ion-card-header>
+              <ion-card-subtitle>Owner(s):
+                <p *ngFor="let owner of projectService.listOwners(project)">
+                  {{owner.firstName + " " + owner.lastName}}
+                </p></ion-card-subtitle>
+              <ion-card-title>{{project.title}}</ion-card-title>
+              <ion-chip *ngIf="project.verified === false" color="danger" outline>
+                <ion-icon name="warning" color="warning"></ion-icon>
+                <ion-label>Not verified yet</ion-label>
+              </ion-chip>
+            </ion-card-header>
+            <ion-card-content>
+              <div style="white-space:pre-wrap;">{{project.description}}</div>
+              <ion-item-divider color="white">
+              </ion-item-divider>
+              <ion-card-subtitle>Technologies: {{project.technologies}}</ion-card-subtitle>
+              <ion-item-divider color="white">
+              </ion-item-divider>
+              Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
+              <p *ngFor="let member of projectService.listApprovedMembers(project)">
+                {{member.firstName + " " + member.lastName}}
+              </p>
+              <ion-item-divider color="white">
+              </ion-item-divider>
+              <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
+              <div *ngIf="projectHasRequests(project)">
+                <ion-item-divider color="white">
+                </ion-item-divider>
+                Requests:
+                <ion-text *ngIf="projectService.maxMembersCapacityReached(project)" color="danger">
+                  Max members capacity reached!
+                </ion-text>
+                <div *ngFor="let potentialMember of listPotentialMembers(project)">
+                  <ion-buttons>
+                    <ion-button size="small" slot="start" color="success" shape="round"
+                                [disabled]="projectService.maxMembersCapacityReached(project)"
+                                (click)="membershipService.acceptMembershipRequest(project, potentialMember)">
+                      <ion-icon name="checkmark"></ion-icon>
+                    </ion-button>
+                    <ion-button size="small" slot="start" color="danger" shape="round"
+                                (click)="alertService.deleteEnrollmentRequest(project, potentialMember)">
+                      <ion-icon name="close"></ion-icon>
+                    </ion-button>
+                    {{potentialMember.user.email}}
+                  </ion-buttons>
+                </div>
+              </div>
+            </ion-card-content>
+            <ion-button *ngIf="!project.confirmed" expand="block"
+                        (click)="alertService.presentConfirmProjectAlert(project)" color="success">Confirm project
+            </ion-button>
+            <ion-button expand="block"
+                        (click)="alertService.presentInvalidateProjectAlert(project)" color="warning">Invalidate project
+            </ion-button>
+            <ion-button expand="block"
+                        (click)="alertService.presentDeleteProjectAlert(project)" color="danger">Delete project
+            </ion-button>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+  </ion-card>
+  <ion-card>
     <ion-card-header>
       <ion-item>
-        <ion-card-title>Verified projects</ion-card-title>
-        <ion-toggle slot="end" color="secondary" [(ngModel)]="showVerifiedProjects"></ion-toggle>
+        <ion-card-title>Confirmed projects</ion-card-title>
+        <ion-toggle slot="end" color="secondary" [(ngModel)]="showConfirmedProjects"></ion-toggle>
       </ion-item>
     </ion-card-header>
     <ion-card-content>
-      <ion-grid *ngIf="showVerifiedProjects">
+      <ion-grid *ngIf="showConfirmedProjects">
         <ion-row>
-          <ion-col *ngFor="let project of verifiedProjects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
+          <ion-col *ngFor="let project of confirmedProjects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
             <ion-card class="project-card">
               <ion-card-header>
                 <ion-card-subtitle>Owner(s):
                   <p *ngFor="let owner of projectService.listOwners(project)">
                     {{owner.firstName + " " + owner.lastName}}
-                  </p></ion-card-subtitle>
-                <ion-card-title>{{project.title}}</ion-card-title>
-                <ion-chip *ngIf="project.verified === false" color="danger" outline>
-                  <ion-icon name="warning" color="warning"></ion-icon>
-                  <ion-label>Not verified yet</ion-label>
-                </ion-chip>
+                  </p>
+                </ion-card-subtitle>
+                <ion-card-title>{{project.title}}
+                  <ion-chip *ngIf="project.confirmed" color="success" outline>
+                    <ion-icon name="star" color="success"></ion-icon>
+                    <ion-label>Selected for development</ion-label>
+                  </ion-chip>
+                </ion-card-title>
               </ion-card-header>
               <ion-card-content>
                 <div style="white-space:pre-wrap;">{{project.description}}</div>
@@ -122,12 +199,9 @@
                   <ion-item-divider color="white">
                   </ion-item-divider>
                   Requests:
-                  <ion-text *ngIf="projectService.maxMembersCapacityReached(project)" color="danger">
-                    Max members capacity reached!</ion-text>
                   <div *ngFor="let potentialMember of listPotentialMembers(project)">
                     <ion-buttons>
                       <ion-button size="small" slot="start" color="success" shape="round"
-                                  [disabled]="projectService.maxMembersCapacityReached(project)"
                                   (click)="membershipService.acceptMembershipRequest(project, potentialMember)">
                         <ion-icon name="checkmark"></ion-icon>
                       </ion-button>
@@ -140,11 +214,8 @@
                   </div>
                 </div>
               </ion-card-content>
-              <ion-button *ngIf="project.confirmed === false" expand="block"
-                          (click)="alertService.presentConfirmProjectAlert(project)" color="success">Confirm project
-              </ion-button>
-              <ion-button expand="block"
-                          (click)="alertService.presentInvalidateProjectAlert(project)" color="warning">Invalidate project
+              <ion-button *ngIf="project.confirmed" expand="block"
+                          (click)="alertService.presentUnconfirmProjectAlert(project)" color="warning">Unconfirm project
               </ion-button>
               <ion-button expand="block"
                           (click)="alertService.presentDeleteProjectAlert(project)" color="danger">Delete project
@@ -195,7 +266,8 @@
                 </ion-item>
                 <ion-item>
                   <ion-label position="stacked">I speak Polish</ion-label>
-                  <ion-checkbox value="{{user.polishSpeaker}}" [checked]="user.polishSpeaker" [disabled]="true"></ion-checkbox>
+                  <ion-checkbox value="{{user.polishSpeaker}}" [checked]="user.polishSpeaker"
+                                [disabled]="true"></ion-checkbox>
                 </ion-item>
               </ion-card-content>
               <ion-button expand="block"

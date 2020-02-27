@@ -57,14 +57,16 @@ export class AlertService {
         {
           text: 'Promote to owner',
           handler: () => {
-            this.ownershipService.grantOwnershipToUser(project, member);
-            console.log('Promoted');
-            this.projectService.getProjectsByOwnerOrMember(this.loggedInUser).subscribe((projects: Project[]) => {
-              this.data.changeUserProjects(projects);
-            });
-            this.projectService.getProjects().subscribe((projects: Project[]) => {
-              this.data.changeProjects(projects);
-            });
+            if(this.projectService.userIsProjectOwner(member, project)){
+              this.ownershipService.grantOwnershipToUser(project, member);
+              console.log('Promoted');
+              this.projectService.getProjectsByOwnerOrMember(this.loggedInUser).subscribe((projects: Project[]) => {
+                this.data.changeUserProjects(projects);
+              });
+              this.projectService.getProjects().subscribe((projects: Project[]) => {
+                this.data.changeProjects(projects);
+              });
+            }
           }
         }]
     });
@@ -401,6 +403,45 @@ export class AlertService {
                   this.notificationService.sendNotificationToProjectMembersAboutProjectConfirmation(project);
                   this.projectService.updateProjects();
                   this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" confirmed");
+                },
+                error => {
+                  console.log(error);
+                });
+          }
+        }]
+    });
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+  }
+
+  async presentUnconfirmProjectAlert(project: Project) {
+    const alert = await this.alertController.create({
+      header: 'Unconfirming project project!',
+      message: 'You are unconfirming project: <p><strong>' + project.title + '</strong></p>',
+      inputs: [
+        {
+          name: 'reason',
+          type: 'text',
+          placeholder: 'Specify reason'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'UNCONFIRM',
+          handler: data => {
+            this.projectService.unconfirmProject(project).subscribe(
+                response => {
+                  console.log(response);
+                  this.notificationService.sendNotificationToProjectMembersAboutProjectUnconfirmation(project, data.reason);
+                  this.projectService.updateProjects();
+                  this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" unconfirmed");
                 },
                 error => {
                   console.log(error);

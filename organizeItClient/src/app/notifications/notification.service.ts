@@ -127,4 +127,17 @@ export class NotificationService {
   getNotificationsByRecipient(recipient: User) {
     return this.http.get(this.NOTIFICATION_URL + "/" + recipient.id);
   }
+
+  sendNotificationToProjectMembersAboutProjectUnconfirmation(project: Project, reason: string) {
+    project.members.filter(member => member.approved).map(member => member.user).forEach(user => {
+      this.sendNotification(user, Messages.projectUnconfirmedNotificationTitle,
+          "\"" + project.title + "\" has been unconfirmed. " + reason).subscribe(
+          (response: any) => {
+            console.log(response);
+          },
+          (error: any) => {
+            console.log(error);
+          });
+    });
+  }
 }

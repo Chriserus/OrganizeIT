@@ -34,31 +34,22 @@
       </ion-slides>
     </ion-card-content>
   </ion-card>
-  <ion-card *ngIf="isUserLoggedIn()">
-    <ion-card-header>
-      <ion-card-title>Submit your project now! Or join a friend!</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-button [routerDirection]="'root'" [routerLink]="['/submission']">New project</ion-button>
-      <ion-button [routerDirection]="'root'" [routerLink]="['/list']">Join project</ion-button>
-    </ion-card-content>
-  </ion-card>
+
   <ion-card>
     <ion-card-header>
       <ion-card-title>About Ship It Day</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-list>
-        <ion-list-header>
-          <ion-label>Ship It Day (a.k.a. Exploration Days) to impreza "hackerska" (niekoniecznie programistyczna!),
-            która daje Ci
-            możliwość:
-          </ion-label>
-        </ion-list-header>
-        <ion-item>- wykazania się Twoją kreatywnością</ion-item>
-        <ion-item>- zrealizowania pomysłów, które od jakiegoś czasu siedzą Ci w głowie</ion-item>
-        <ion-item>- wymiany doświadczeń i umiejętności z ludźmi spoza Twojego projektu</ion-item>
-      </ion-list>
+      <ion-text color="dark" class="project-description">Ship IT Day is an internal hackathon which gives you an
+        opportunity of showing your creativity and skills, getting to know other workers, exchanging experience and
+        having fun, for which you might not have time in other circumstances.<br/>
+        <br/>On April the 3rd in Business Garden Wrocław and Business Garden Poznań you and your team will have a chance
+        to create/design/test/play around with a tool which you would like to implement or get to know more. Some of
+        them could be later developed and used in our company.<br/>
+        <br/>Ship IT Day is open for any kind of technology project.<br/>
+        <br/>Rewards for winners!<br/>
+        <br/>Create an account and propose a project or join an existing one!
+      </ion-text>
     </ion-card-content>
   </ion-card>
 
@@ -67,17 +58,37 @@
       <ion-card-title>Regulations</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-list>
-        <ion-item>- każdy może wziąć udział w Ship It Day</ion-item>
-        <ion-item>- każdy może zgłosić swój projekt, bądź chęć wsparcia już zaproponowanego pomysłu do zrealizowania w
-          ramach
-          wydarzenia
-        </ion-item>
-        <ion-item>- do realizacji jednego pomysłu wymagane są grupy maksymalnie 5-osobowe</ion-item>
-        <ion-item>- do udziału w wydarzeniu wymagana jest zgoda przełożonego oraz uzgodnienie nieobecności w projekcie
-        </ion-item>
-        <ion-item>- w trakcie eventu przewidziany jest catering</ion-item>
-      </ion-list>
+      <ion-text color="dark" class="project-description">
+        <ion-list>
+          <ion-item>
+            Every employee from Wrocław and Poznań can participate in this event.
+          </ion-item>
+          <ion-item>
+            Apply using this application - propose a project or join an existing one.
+          </ion-item>
+          <ion-item>
+            Build a group of 1-5 people.
+          </ion-item>
+          <ion-item>
+            We have limited number of spots: 42, so if more people will sign up, we will have to choose projects
+            selected for development.
+          </ion-item>
+          <ion-item>
+            We will provide lunch and snacks during the hackathon on April the 3rd.
+          </ion-item>
+          <ion-item>
+            It is required to have an approval for participation from your PDL and Project Lead.
+          </ion-item>
+          <ion-item>
+            When applying for the event you agree to be photographed and filmed during the event.
+          </ion-item>
+          <ion-item>
+            <div>For more details, calendar, information meetings visit our <a
+                    href="https://capgemini.sharepoint.com/sites/craftsmanship/SitePages/ShipITDay2020.aspx"
+                    target="_blank" title="Craftsmanship Community">website</a></div>
+          </ion-item>
+        </ion-list>
+      </ion-text>
     </ion-card-content>
   </ion-card>
 </ion-content>

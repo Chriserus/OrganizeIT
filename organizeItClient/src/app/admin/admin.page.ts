@@ -20,12 +20,14 @@ export class AdminPage implements OnInit, OnDestroy {
   projects: Project[] = [];
   unverifiedProjects: Project[] = [];
   verifiedProjects: Project[] = [];
+  confirmedProjects: Project[] = [];
   users: User[] = [];
   usersCopy: User[] = [];
   private unsubscribe: Subject<Project[]> = new Subject();
-  showUnverifiedProjects: boolean;
-  showVerifiedProjects: boolean;
-  showUsersCard: boolean;
+  showUnverifiedProjects: boolean = true;
+  showVerifiedProjects: boolean = true;
+  showConfirmedProjects: boolean = true;
+  showUsersCard: boolean = true;
   showProjectsSpinner: boolean;
   showUsersSpinner: boolean;
 
@@ -36,14 +38,12 @@ export class AdminPage implements OnInit, OnDestroy {
       this.projects = projects;
       this.unverifiedProjects = projects.filter(project => !project.verified);
       this.verifiedProjects = projects.filter(project => project.verified);
+      this.confirmedProjects = projects.filter(project => project.confirmed);
     });
     this.data.currentUsers.subscribe(users => {
       this.users = users;
       this.usersCopy = users;
     });
-    this.showUnverifiedProjects = true;
-    this.showVerifiedProjects = true;
-    this.showUsersCard = true;
   }
 
   ngOnInit() {

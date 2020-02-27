@@ -36,7 +36,7 @@
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Maximum team members</ion-label>
-                <ion-input name="maxMembers" type="number" min="1" required ngModel="1"
+                <ion-input name="maxMembers" type="number" min="1" required ngModel="1" max="5" pattern="[0-5]"
                            oninput="this.value = Math.abs(this.value)"></ion-input>
               </ion-item>
               <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Submit

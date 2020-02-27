@@ -36,10 +36,6 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  isUserLoggedIn() {
-    return JSON.parse(sessionStorage.getItem("loggedIn")) === true;
-  }
-
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();

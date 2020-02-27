@@ -20,15 +20,17 @@
             <ion-col>
               <ion-item>
                 <ion-label position="stacked">Email</ion-label>
+                <p></p>
                 <ion-input name="email" type="email" ngModel required></ion-input>
               </ion-item>
               <ion-item>
                 <ion-label position="stacked">Password</ion-label>
+                <p></p>
                 <ion-input name="password" type="password" ngModel required (keyup.enter)="login(form)"></ion-input>
               </ion-item>
-              <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Login</ion-button>
-              If you don't have an account, please <a routerLink='/register'>
-              register</a> first!
+              <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Login
+              </ion-button>
+              If you don't have an account, please <a routerLink='/register'>register</a> first!
             </ion-col>
           </ion-row>
         </ion-grid>

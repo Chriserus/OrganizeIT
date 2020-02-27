@@ -21,10 +21,14 @@
             <ion-card-subtitle *ngFor="let owner of projectService.listOwners(project)">
               {{owner.firstName + " " + owner.lastName}}
             </ion-card-subtitle>
-                <!--TODO: Repair project city chip-->
+            <!--TODO: Repair project city chip-->
             <ion-card-title>{{project.title}}
-<!--              <ion-chip color="primary">{{project.owner.city}}</ion-chip>-->
+              <ion-chip *ngIf="project.confirmed" color="success" outline>
+                <ion-icon name="star" color="success"></ion-icon>
+                <ion-label>Selected for development</ion-label>
+              </ion-chip>
             </ion-card-title>
+            <!--              <ion-chip color="primary">{{project.owner.city}}</ion-chip>-->
           </ion-card-header>
           <ion-card-content>
             <div style="white-space:pre-wrap;">{{project.description}}</div>
