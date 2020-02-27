@@ -1,35 +1,42 @@
 package com.capgemini.organizeIT.core.comment.services;
 
-import com.capgemini.organizeIT.infrastructure.comment.entities.Comment;
-import com.capgemini.organizeIT.infrastructure.comment.repositories.CommentRepository;
-import org.springframework.data.domain.Sort;
+import com.capgemini.organizeIT.core.comment.adapters.ICommentRepository;
+import com.capgemini.organizeIT.core.comment.model.CommentDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
+    private final ICommentRepository iCommentRepository;
 
-    private final CommentRepository commentRepository;
-
-    public CommentService(final CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
+    public List<CommentDto> findAll() {
+        return iCommentRepository.findAllCommentsSortedByDate();
     }
 
-    public List<Comment> findAll() {
-        return commentRepository.findAll(Sort.by(Sort.Direction.DESC, "created"));
+    public CommentDto createOrUpdate(CommentDto commentDto) {
+        if (commentDto.getId() != null) {
+            return updateComment(commentDto);
+        }
+        return iCommentRepository.save(commentDto);
     }
 
-    public Comment save(Comment comment) {
-        return commentRepository.save(comment);
+    private CommentDto updateComment(CommentDto commentDto) {
+        Optional<CommentDto> oldComment = iCommentRepository.findById(commentDto.getId());
+        if (oldComment.isPresent()) {
+            commentDto.setId(oldComment.get().getId());
+        }
+        return iCommentRepository.save(commentDto);
     }
 
-    public Optional<Comment> findById(Long id) {
-        return commentRepository.findById(id);
+    public Optional<CommentDto> findById(Long id) {
+        return iCommentRepository.findById(id);
     }
 
     public void deleteById(Long id) {
-        commentRepository.deleteById(id);
+        iCommentRepository.deleteById(id);
     }
 }
