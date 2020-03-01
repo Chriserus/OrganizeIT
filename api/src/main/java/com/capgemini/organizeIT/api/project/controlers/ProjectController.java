@@ -49,6 +49,7 @@ public class ProjectController {
         ownership.setProject(project);
         ownership.setUser(user);
         project.getOwners().add(ownership);
+        project.setCity(user.getCity());
         log.info("Owners after: {}", project.getOwners());
         userService.save(user);
     }
@@ -118,6 +119,10 @@ public class ProjectController {
                 log.info("Old: " + countApprovedMembers(project) + "/" + project.getMaxMembers());
                 log.info("New: " + countApprovedMembers(project) + "/" + projectDto.getMaxMembers());
                 project.setMaxMembers(projectDto.getMaxMembers());
+            }
+            if (!project.getCity().equals(projectDto.getCity())) {
+                log.info("Modifying city");
+                project.setCity(projectDto.getCity());
             }
             projectService.save(project);
         });

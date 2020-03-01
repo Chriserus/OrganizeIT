@@ -66,7 +66,7 @@ export class NotificationService {
     let jsonData = {
       "title": title,
       "body": body,
-      "click_action": "/profile"
+      "click_action": "/home"
     };
     return this.http.post(this.NOTIFICATION_URL + "/" + user.id, jsonData, httpOptions);
   }
@@ -77,7 +77,6 @@ export class NotificationService {
           "\"" + project.title + "\" has been deleted. " + reason).subscribe(
           (response: any) => {
             console.log(response);
-
           },
           (error: any) => {
             console.log(error);

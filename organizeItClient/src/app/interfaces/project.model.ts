@@ -1,5 +1,6 @@
 import {ProjectUser} from "./project-user";
 import {Ownership} from "./ownership";
+import {City} from "./city.enum";
 
 export interface Project {
   id: number;
@@ -11,6 +12,7 @@ export interface Project {
   maxMembers: number;
   verified: boolean;
   confirmed: boolean;
+  city: City;
   created?: string;
   modified?: string;
 }

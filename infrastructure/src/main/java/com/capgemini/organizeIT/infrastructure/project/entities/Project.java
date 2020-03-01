@@ -1,5 +1,6 @@
 package com.capgemini.organizeIT.infrastructure.project.entities;
 
+import com.capgemini.organizeIT.infrastructure.user.entities.City;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,6 +26,8 @@ public class Project {
     private Integer maxMembers = 1;
     private Boolean verified = false;
     private Boolean confirmed = false;
+    @Enumerated(EnumType.STRING)
+    private City city;
     @CreationTimestamp
     private Date created;
     @UpdateTimestamp

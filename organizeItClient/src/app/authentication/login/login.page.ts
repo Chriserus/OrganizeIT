@@ -4,8 +4,6 @@ import {AuthService} from '../auth.service';
 import {ToastService} from "../../shared/toast.service";
 import {SubmitService} from "../../shared/submit.service";
 import {Messages} from "../../shared/Messages";
-import {timer} from "rxjs";
-import {AppComponent} from "../../app.component";
 
 @Component({
   selector: 'app-login',

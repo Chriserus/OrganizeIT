@@ -13,6 +13,7 @@ import {ProjectUser} from "../interfaces/project-user";
 import {OwnershipService} from "../project/ownership.service";
 import {Messages} from "./Messages";
 import {DataService} from "./data.service";
+import {City} from "../interfaces/city.enum";
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +58,7 @@ export class AlertService {
         {
           text: 'Promote to owner',
           handler: () => {
-            if(this.projectService.userIsProjectOwner(member, project)){
+            if (this.projectService.userIsProjectOwner(member, project)) {
               this.ownershipService.grantOwnershipToUser(project, member);
               console.log('Promoted');
               this.projectService.getProjectsByOwnerOrMember(this.loggedInUser).subscribe((projects: Project[]) => {
@@ -193,6 +194,53 @@ export class AlertService {
                   console.log(response);
                   this.projectService.updateProjects();
                   this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" successfully modified");
+                },
+                error => {
+                  console.log(error);
+                });
+          }
+        }]
+    });
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+  }
+
+  async presentModifyProjectCityAlert(project: Project) {
+    const alert = await this.alertController.create({
+      header: 'Modifying city!',
+      inputs: [
+        {
+          name: 'wro',
+          type: 'radio',
+          label: 'Wro',
+          value: City.WRO,
+          checked: project.city === City.WRO
+        },
+        {
+          name: 'poz',
+          type: 'radio',
+          label: 'Poz',
+          value: City.POZ,
+          checked: project.city === City.POZ
+        }],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'SAVE',
+          handler: data => {
+            console.log(data);
+            project.city = data;
+            this.projectService.modifyProject(project).subscribe(
+                response => {
+                  console.log(response);
+                  this.projectService.updateProjects();
+                  this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" city modified");
                 },
                 error => {
                   console.log(error);

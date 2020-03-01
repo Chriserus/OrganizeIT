@@ -25,12 +25,20 @@
           <ion-col *ngFor="let project of unverifiedProjects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
             <ion-card class="project-card">
               <ion-card-header>
-                <ion-card-subtitle>Owner(s):
-                  <p *ngFor="let owner of projectService.listOwners(project)">
-                    {{owner.firstName + " " + owner.lastName}}
-                  </p>
+                <ion-card-subtitle>
+                  <ion-text style="float: left;">Owner(s):
+                    <p *ngFor="let owner of projectService.listOwners(project)">
+                      {{owner.firstName + " " + owner.lastName}}
+                    </p>
+                  </ion-text>
+                  <ion-chip style="float: right;" (click)="alertService.presentModifyProjectCityAlert(project)"
+                            color="primary" outline>
+                    <ion-icon name="location" color="primary"></ion-icon>
+                    <ion-label>{{project.city}}</ion-label>
+                    <ion-icon name="create"></ion-icon>
+                  </ion-chip>
                 </ion-card-subtitle>
-                <ion-card-title>{{project.title}}</ion-card-title>
+                <ion-card-title style="clear: both;">{{project.title}}</ion-card-title>
                 <ion-chip *ngIf="project.verified === false" color="danger" outline>
                   <ion-icon name="warning" color="warning"></ion-icon>
                   <ion-label>Not verified yet</ion-label>
@@ -94,11 +102,20 @@
         <ion-col *ngFor="let project of verifiedProjects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
           <ion-card class="project-card">
             <ion-card-header>
-              <ion-card-subtitle>Owner(s):
-                <p *ngFor="let owner of projectService.listOwners(project)">
-                  {{owner.firstName + " " + owner.lastName}}
-                </p></ion-card-subtitle>
-              <ion-card-title>{{project.title}}</ion-card-title>
+              <ion-card-subtitle>
+                <ion-text style="float: left;">Owner(s):
+                  <p *ngFor="let owner of projectService.listOwners(project)">
+                    {{owner.firstName + " " + owner.lastName}}
+                  </p>
+                </ion-text>
+                <ion-chip style="float: right;" (click)="alertService.presentModifyProjectCityAlert(project)"
+                          color="primary" outline>
+                  <ion-icon name="location" color="primary"></ion-icon>
+                  <ion-label>{{project.city}}</ion-label>
+                  <ion-icon name="create"></ion-icon>
+                </ion-chip>
+              </ion-card-subtitle>
+              <ion-card-title style="clear: both;">{{project.title}}</ion-card-title>
               <ion-chip *ngIf="project.verified === false" color="danger" outline>
                 <ion-icon name="warning" color="warning"></ion-icon>
                 <ion-label>Not verified yet</ion-label>
@@ -169,12 +186,20 @@
           <ion-col *ngFor="let project of confirmedProjects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
             <ion-card class="project-card">
               <ion-card-header>
-                <ion-card-subtitle>Owner(s):
-                  <p *ngFor="let owner of projectService.listOwners(project)">
-                    {{owner.firstName + " " + owner.lastName}}
-                  </p>
+                <ion-card-subtitle>
+                  <ion-text style="float: left;">Owner(s):
+                    <p *ngFor="let owner of projectService.listOwners(project)">
+                      {{owner.firstName + " " + owner.lastName}}
+                    </p>
+                  </ion-text>
+                  <ion-chip style="float: right;" (click)="alertService.presentModifyProjectCityAlert(project)"
+                            color="primary" outline>
+                    <ion-icon name="location" color="primary"></ion-icon>
+                    <ion-label>{{project.city}}</ion-label>
+                    <ion-icon name="create"></ion-icon>
+                  </ion-chip>
                 </ion-card-subtitle>
-                <ion-card-title>{{project.title}}
+                <ion-card-title style="clear: both;">{{project.title}}
                   <ion-chip *ngIf="project.confirmed" color="success" outline>
                     <ion-icon name="star" color="success"></ion-icon>
                     <ion-label>Selected for development</ion-label>
@@ -199,9 +224,13 @@
                   <ion-item-divider color="white">
                   </ion-item-divider>
                   Requests:
+                  <ion-text *ngIf="projectService.maxMembersCapacityReached(project)" color="danger">
+                    Max members capacity reached!
+                  </ion-text>
                   <div *ngFor="let potentialMember of listPotentialMembers(project)">
                     <ion-buttons>
                       <ion-button size="small" slot="start" color="success" shape="round"
+                                  [disabled]="projectService.maxMembersCapacityReached(project)"
                                   (click)="membershipService.acceptMembershipRequest(project, potentialMember)">
                         <ion-icon name="checkmark"></ion-icon>
                       </ion-button>

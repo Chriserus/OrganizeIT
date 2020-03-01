@@ -1,5 +1,6 @@
 package com.capgemini.organizeIT.core.project.model;
 
+import com.capgemini.organizeIT.infrastructure.user.entities.City;
 import lombok.Data;
 
 import java.util.Date;
@@ -17,6 +18,7 @@ public class ProjectDto {
     private Integer maxMembers = 1;
     private boolean verified = false;
     private boolean confirmed = false;
+    private City city;
     private Date created;
     private Date modified;
 }

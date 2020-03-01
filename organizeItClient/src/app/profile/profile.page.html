@@ -22,20 +22,29 @@
           <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
             <ion-card class="project-card">
               <ion-card-header>
-                <ion-card-subtitle>Owner(s):
-                  <p *ngFor="let owner of projectService.listOwners(project)">
-                    {{owner.firstName + " " + owner.lastName}}
-                  </p></ion-card-subtitle>
-                <ion-card-title>{{project.title}}
+                <ion-card-subtitle>
+                  <ion-text style="float: left;">Owner(s):
+                    <p *ngFor="let owner of projectService.listOwners(project)">
+                      {{owner.firstName + " " + owner.lastName}}
+                    </p>
+                  </ion-text>
+                  <ion-chip style="float: right;" (click)="isProjectOwner(project) && alertService.presentModifyProjectCityAlert(project)"
+                            color="primary" outline>
+                    <ion-icon name="location" color="primary"></ion-icon>
+                    <ion-label>{{project.city}}</ion-label>
+                    <ion-icon *ngIf="isProjectOwner(project)" name="create"></ion-icon>
+                  </ion-chip>
+                </ion-card-subtitle>
+                <ion-card-title style="clear: both;">{{project.title}}
                   <ion-chip *ngIf="project.confirmed" color="success" outline>
                     <ion-icon name="star" color="success"></ion-icon>
                     <ion-label>Selected for development</ion-label>
                   </ion-chip>
+                  <ion-chip *ngIf="!project.verified" color="danger" outline>
+                    <ion-icon name="warning" color="warning"></ion-icon>
+                    <ion-label>Not verified yet</ion-label>
+                  </ion-chip>
                 </ion-card-title>
-                <ion-chip *ngIf="project.verified === false" color="danger" outline>
-                  <ion-icon name="warning" color="warning"></ion-icon>
-                  <ion-label>Not verified yet</ion-label>
-                </ion-chip>
                 <ion-chip *ngIf="membershipService.userEnrollmentPending(project) && !isProjectOwner(project)"
                           (click)="alertService.cancelEnrollmentRequest(project)"
                           color="danger" outline>

@@ -244,4 +244,9 @@
             <column name="confirmed" type="boolean"/>
         </addColumn>
     </changeSet>
+    <changeSet id="addCityColumnToProject" author="Chriserus">
+        <addColumn tableName="project">
+            <column name="city" type="ENUM('WRO', 'POZ')"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
