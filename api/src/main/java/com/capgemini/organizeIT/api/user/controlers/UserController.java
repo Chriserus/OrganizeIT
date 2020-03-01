@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class UserController {
     private static final String DEFAULT_ROLE = "ROLE_USER";
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
-    private static final String SENDGRID_API_KEY = "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";
+    private static final String SENDGRID_API_KEY = "";
     private final UserService userService;
     private final RoleService roleService;
     private final ProjectService projectService;
