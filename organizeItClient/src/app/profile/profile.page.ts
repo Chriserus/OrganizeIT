@@ -28,6 +28,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   loggedInUser: User;
   firstName: String;
   lastName: String;
+  foodPreferences: String;
   shirtSize: ShirtSize;
   shirtType: ShirtType;
   city: City;
@@ -50,6 +51,7 @@ export class ProfilePage implements OnInit, OnDestroy {
         this.loggedInUser = user;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
+        this.foodPreferences = user.foodPreferences;
         this.shirtSize = user.shirtSize;
         this.shirtType = user.shirtType;
         this.city = user.city;
@@ -77,13 +79,11 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   getProjects() {
     this.showProjectsSpinner = true;
-    console.log(this.loggedInUser); //TODO: Null here
     this.projectService.getProjectsByOwnerOrMember(this.loggedInUser).pipe(takeUntil(this.unsubscribe))
         .pipe(finalize(async () => {
           this.showProjectsSpinner = false;
         }))
         .subscribe(projects => {
-          console.log(projects);
           this.data.changeUserProjects(projects);
         });
   }
@@ -95,7 +95,6 @@ export class ProfilePage implements OnInit, OnDestroy {
           this.showNotificationsSpinner = false;
         }))
         .subscribe((notifications: Notification[]) => {
-          console.log(notifications);
           this.data.changeUserNotifications(notifications);
         });
   }
@@ -113,14 +112,12 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   updateUser(form) {
-    console.log(form.value);
     if (this.userDataUnchanged(form)) {
       this.toastService.showTemporaryWarningMessage(Messages.userInfoUpdateWarningMessage);
       return;
     }
     this.authService.updateInfo(form, this.loggedInUser).subscribe(
         (user: User) => {
-          console.log(user);
           this.data.changeCurrentUser(user);
           this.toastService.showTemporarySuccessMessage(Messages.userInfoUpdateSuccessMessage);
         },
@@ -133,7 +130,8 @@ export class ProfilePage implements OnInit, OnDestroy {
   private userDataUnchanged(form) {
     return this.loggedInUser.firstName === form.value.firstName && this.loggedInUser.lastName === form.value.lastName
         && this.compareShirtSizes(this.loggedInUser.shirtSize, form.value.shirtSize) && this.loggedInUser.shirtType === form.value.shirtType
-        && this.loggedInUser.city === form.value.city && this.loggedInUser.polishSpeaker === form.value.polishSpeaker;
+        && this.loggedInUser.city === form.value.city && this.loggedInUser.polishSpeaker === form.value.polishSpeaker
+        && this.loggedInUser.foodPreferences === form.value.foodPreferences;
   }
 
   async doRefresh(event) {

@@ -39,16 +39,13 @@ export class RegisterPage implements OnInit {
     }
     if (form.value.password != form.value.passwordConfirm) {
       this.toastService.showTemporaryErrorMessage(Messages.passwordMismatch);
-      console.log(Messages.passwordMismatch);
       return;
     }
     this.authService.getByEmail(form.value.email).subscribe(
         data => {
-          console.log(data);
           if (data === null) {
             this.authService.register(form).subscribe(
                 (response: any) => {
-                  console.log(response);
                   sessionStorage.setItem("loggedIn", 'true');
                   this.router.navigateByUrl("home").then(() => {
                     this.toastService.showTemporarySuccessMessage(Messages.registerSuccess);
@@ -62,7 +59,6 @@ export class RegisterPage implements OnInit {
                 });
           } else if (data.email === form.value.email) {
             this.toastService.showTemporaryErrorMessage(Messages.emailExists);
-            console.log(Messages.emailExists)
           }
         },
         () => {
@@ -73,9 +69,7 @@ export class RegisterPage implements OnInit {
   checkUserLocation() {
     this.geolocation.getCurrentPosition().then((resp) => {
       let distanceToPoz = this.calculateDistanceBetweenCoordinates(resp.coords, this.pozCoordinates);
-      console.log("Distance to Poznan:", distanceToPoz);
       let distanceToWro = this.calculateDistanceBetweenCoordinates(resp.coords, this.wroCoordinates);
-      console.log("Distance to Wroclaw:", distanceToWro);
       this.city = distanceToWro < distanceToPoz ? City.WRO : City.POZ
     }).catch((error) => {
       console.log('Error getting location', error);

@@ -25,6 +25,7 @@ public class User {
     private String lastName;
     private String email;
     private Boolean polishSpeaker;
+    private String foodPreferences;
     @Enumerated(EnumType.STRING)
     private ShirtType shirtType;
     @Enumerated(EnumType.STRING)

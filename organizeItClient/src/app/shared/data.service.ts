@@ -46,6 +46,5 @@ export class DataService {
 
   changeCurrentUser(user: User) {
     this.currentUserSource.next(user);
-    console.log("Current user: ", user);
   }
 }

@@ -47,8 +47,6 @@ export class AuthService {
         responseType: 'json'
       })
     };
-    console.log("Sending data:");
-    console.log(form.value);
     return this.http.post(this.REGISTER_URL, JSON.stringify(form.value), httpOptions);
   }
 
@@ -75,7 +73,6 @@ export class AuthService {
   }
 
   redirectAfterLogin(response: any, form) {
-    console.log(response);
     sessionStorage.setItem("loggedIn", 'true');
     this.toastService.showTemporarySuccessMessage(Messages.logInSuccess).then(() => {
       this.getCurrentUser().subscribe((user: User) => {

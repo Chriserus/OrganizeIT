@@ -99,7 +99,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.splashScreen.hide();
       const messaging = firebase.messaging();
       messaging.onMessage(payload => {
-        console.log("Message received. ", payload);
+        console.debug("Message received. ", payload);
         const {title, ...options} = payload.notification;
         navigator.serviceWorker.ready.then(registration => {
           registration.showNotification(title, options);
@@ -113,11 +113,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout().subscribe(response => {
-      console.log(response);
       this.toastService.showTemporarySuccessMessage(Messages.loggedOutSuccessMessage).then(() => {
         this.router.navigateByUrl("home").then(() => {
           this.data.changeCurrentUser(null);
-          console.log("User after logout:", this.loggedInUser);
         });
       });
     }, error => {
@@ -145,17 +143,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.loggedIn = false;
     sessionStorage.removeItem("loggedInUserEmail");
     sessionStorage.removeItem("loggedIn");
-  }
-
-  sendTestNotification() {
-    this.notificationService.sendNotification(this.loggedInUser,
-        "Test notification", "Test notification body").subscribe(
-        (response: any) => {
-          console.log(response);
-        },
-        (error: any) => {
-          console.log(error);
-        });
   }
 
   ngOnDestroy() {

@@ -29,7 +29,6 @@ export class CommentService {
       'author': author,
       'announcement': form.value.announcement
     };
-    console.log(jsonData);
     return this.http.post(this.COMMENTS_URL, jsonData, httpOptions);
   }
 

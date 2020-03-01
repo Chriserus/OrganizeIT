@@ -72,7 +72,6 @@ export class AdminPage implements OnInit, OnDestroy {
           this.showProjectsSpinner = false;
         }))
         .subscribe(projects => {
-          console.log(projects);
           this.data.changeProjects(projects);
         });
   }
@@ -84,7 +83,6 @@ export class AdminPage implements OnInit, OnDestroy {
           this.showUsersSpinner = false;
         }))
         .subscribe(users => {
-          console.log(users);
           this.data.changeUsers(users);
         });
   }

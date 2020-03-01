@@ -48,7 +48,6 @@ export class HomePage implements OnInit, OnDestroy {
           this.showProjectsSpinner = false;
         }))
         .subscribe(projects => {
-          console.log(projects);
           //TODO: Filter projects on backend, make an endpoint that uses clustered index
           this.data.changeProjects(projects);
         });

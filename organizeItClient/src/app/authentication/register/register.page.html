@@ -45,6 +45,11 @@
                 <ion-input name="passwordConfirm" type="password" ngModel required></ion-input>
               </ion-item>
               <ion-item>
+                <ion-label position="stacked">Food preferences</ion-label>
+                <p></p>
+                <ion-input name="foodPreferences" ngModel></ion-input>
+              </ion-item>
+              <ion-item>
                 <ion-label position="stacked">Shirt size</ion-label>
                 <ion-select name="shirtSize" ngModel required>
                   <ion-select-option *ngFor="let shirtSize of shirtSizes"

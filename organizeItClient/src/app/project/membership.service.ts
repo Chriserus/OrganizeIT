@@ -24,14 +24,11 @@ export class MembershipService {
   }
 
   acceptMembershipRequest(project: Project, potentialMember: ProjectUser) {
-    console.log("Accepting member: " + potentialMember.user.email + " to project: " + project.title);
     this.approveMemberToProject(potentialMember.user, project).subscribe(
-        response => {
-          console.log(response);
+        () => {
           this.notificationService.sendNotification(potentialMember.user, Messages.enrollmentSuccessfulNotificationTitle,
               "Owner of project " + project.title + " has accepted your enrollment submission").subscribe(
-              (response: any) => {
-                console.log(response);
+              () => {
                 this.projectService.updateProjects();
               },
               (error: any) => {
@@ -44,14 +41,11 @@ export class MembershipService {
   }
 
   rejectMembershipRequest(project: Project, potentialMember: ProjectUser, reason: string) {
-    console.log("Rejecting user: " + potentialMember.user.email + ", project: " + project.title);
     this.deleteMemberFromProject(potentialMember.user, project).subscribe(
-        response => {
-          console.log(response);
+        () => {
           this.notificationService.sendNotification(potentialMember.user, "Enrollment submission rejected",
               "Owner of project " + project.title + " has rejected your enrollment submission. " + reason).subscribe(
-              (response: any) => {
-                console.log(response);
+              () => {
                 this.projectService.updateProjects();
               },
               (error: any) => {

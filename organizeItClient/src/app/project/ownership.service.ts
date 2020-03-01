@@ -20,14 +20,11 @@ export class OwnershipService {
   }
 
   grantOwnershipToUser(project: Project, owner: User) {
-    console.log("Granting owner: " + owner.email + " to project: " + project.title);
     this.addOwnershipToUser(owner, project).subscribe(
         response => {
-          console.log(response);
           this.notificationService.sendNotification(owner, Messages.ownershipGrantedNotificationTitle,
               "You have been granted ownership rights to project: " + project.title).subscribe(
-              (response: any) => {
-                console.log(response);
+              () => {
                 this.projectService.updateProjects();
               },
               (error: any) => {

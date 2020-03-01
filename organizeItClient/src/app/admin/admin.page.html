@@ -281,6 +281,10 @@
                 <ion-card-title>{{user.firstName + " " + user.lastName}}</ion-card-title>
               </ion-card-header>
               <ion-card-content>
+                <ion-item>
+                  <ion-label position="stacked">Food preferences</ion-label>
+                  <ion-input value="{{user.foodPreferences}}" readonly="true"></ion-input>
+                </ion-item>
                 <ion-item *ngIf="user.shirtSize">
                   <ion-label position="stacked">Shirt size</ion-label>
                   <ion-input value="{{user.shirtSize.size}}" readonly="true"></ion-input>

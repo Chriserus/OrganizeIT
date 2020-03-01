@@ -116,6 +116,7 @@ public class UserController {
         if (!originalUser.getPolishSpeaker().equals(userDto.getPolishSpeaker())) {
             originalUser.setPolishSpeaker(userDto.getPolishSpeaker());
         }
+        originalUser.setFoodPreferences(userDto.getFoodPreferences());
         return userMapper.convertToDto(userService.save(originalUser));
     }
 

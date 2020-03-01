@@ -19,7 +19,6 @@ export class ThemeService {
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
       this.setAppTheme(prefersDark.matches);
       prefersDark.addEventListener("change", e => {
-        console.log("Matches:", e);
         this.setAppTheme(e.matches);
       })
     })
@@ -28,10 +27,8 @@ export class ThemeService {
   setAppTheme(dark) {
     this.darkMode = dark;
     if (this.darkMode) {
-      console.log("Dark mode");
       document.body.classList.add("dark");
     } else {
-      console.log("Light mode");
       document.body.classList.remove("dark");
     }
     this.storage.set(THEME_KEY, this.darkMode);

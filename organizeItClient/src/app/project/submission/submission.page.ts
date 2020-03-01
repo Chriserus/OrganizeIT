@@ -28,8 +28,7 @@ export class SubmissionPage implements OnInit {
         form.value.maxMembers = 1;
       }
       this.projectService.addProject(form).subscribe(
-          (response: any) => {
-            console.log(response);
+          () => {
             form.reset();
             this.toastService.showClosableInformationMessage(Messages.projectSubmittedMessage);
             this.router.navigateByUrl("profile");

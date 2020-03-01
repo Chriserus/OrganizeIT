@@ -48,17 +48,14 @@ export class BoardPage implements OnInit, OnDestroy {
           this.showCommentsSpinner = false;
         }))
         .subscribe(comments => {
-          console.log(comments);
           this.data.changeComments(comments);
         });
   }
 
   registerComment(form) {
-    console.log(form.value);
     if (!this.submitService.isButtonDisabled('submitButton')) {
       this.commentService.addComment(form, this.loggedInUser).subscribe(
           (response: any) => {
-            console.log(response);
             form.reset();
             this.getComments();
           })

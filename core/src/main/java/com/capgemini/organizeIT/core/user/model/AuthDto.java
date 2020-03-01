@@ -17,4 +17,5 @@ public class AuthDto {
     private City city;
     private ShirtSizeDto shirtSize;
     private String password;
+    private String foodPreferences;
 }

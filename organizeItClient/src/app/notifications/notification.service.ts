@@ -42,7 +42,6 @@ export class NotificationService {
             this.angularFireMessaging.requestToken
                 .subscribe(
                     newToken => {
-                      console.log('Permission granted! Save to the server!', newToken);
                       this.addPermission(newToken, user);
                     },
                     error => {

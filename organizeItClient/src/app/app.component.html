@@ -35,8 +35,14 @@
               </ion-button>
             </ion-item>
             <ion-item *ngIf="!loggedIn">
-              <ion-button [routerDirection]="'root'" [routerLink]="['/login']">Login</ion-button>
-              <ion-button [routerDirection]="'root'" [routerLink]="['/register']">Register</ion-button>
+              <ion-button [routerDirection]="'root'" [routerLink]="['/login']">
+                Login
+                <ion-icon name="log-in"></ion-icon>
+              </ion-button>
+              <ion-button [routerDirection]="'root'" [routerLink]="['/register']">
+                Register
+                <ion-icon name="person-add"></ion-icon>
+              </ion-button>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false" *ngFor="let page of publicAppPages">

@@ -249,4 +249,9 @@
             <column name="city" type="ENUM('WRO', 'POZ')"/>
         </addColumn>
     </changeSet>
+    <changeSet id="addFoodPreferencesColumnToUser" author="Chriserus">
+        <addColumn tableName="user">
+            <column name="food_preferences" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

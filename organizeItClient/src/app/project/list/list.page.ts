@@ -45,7 +45,6 @@ export class ListPage implements OnInit, OnDestroy {
           this.showProjectsSpinner = false;
         }))
         .subscribe(projects => {
-          console.log(projects);
           this.projectService.getProjects().subscribe((projects: Project[]) => {
             this.data.changeProjects(projects);
           });
@@ -53,7 +52,6 @@ export class ListPage implements OnInit, OnDestroy {
   }
 
   sendEnrollmentRequest(project: Project) {
-    console.log("Adding member: " + sessionStorage.getItem("loggedInUserEmail") + " to project: " + project.title);
     this.authService.getCurrentUser().subscribe((user: User) => {
       this.membershipService.addMemberToProject(user, project).subscribe(
           (response: any) => {
@@ -63,11 +61,9 @@ export class ListPage implements OnInit, OnDestroy {
   }
 
   private sendNotificationAboutEnrollmentToProjectOwner(response: any, project: Project) {
-    console.log(response);
     project.owners.map(ownership => ownership.user).forEach(user => this.notificationService.sendNotification(user, "Enrollment request",
         sessionStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
-        (response: any) => {
-          console.log(response);
+        () => {
           this.toastService.showClosableInformationMessage(Messages.enrollmentRequestSentMessage);
           this.getProjects();
         },

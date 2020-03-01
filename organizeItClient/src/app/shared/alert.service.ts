@@ -40,7 +40,6 @@ export class AlertService {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Canceled');
           }
         }, {
           text: 'DELETE',
@@ -49,7 +48,6 @@ export class AlertService {
             this.membershipService.deleteMemberFromProject(member, project).subscribe(() => {
               this.notificationService.sendNotification(member, Messages.removedFromProjectNotificationTitle,
                   "You are no longer a member of: \"" + project.title + "\" project").subscribe(() => {
-                console.log('Deleted!');
                 this.projectService.updateProjects();
               });
             });
@@ -60,7 +58,6 @@ export class AlertService {
           handler: () => {
             if (this.projectService.userIsProjectOwner(member, project)) {
               this.ownershipService.grantOwnershipToUser(project, member);
-              console.log('Promoted');
               this.projectService.getProjectsByOwnerOrMember(this.loggedInUser).subscribe((projects: Project[]) => {
                 this.data.changeUserProjects(projects);
               });
@@ -73,7 +70,6 @@ export class AlertService {
     });
     await alert.present();
     let result = await alert.onDidDismiss();
-    console.log(result);
   }
 
   async presentDeleteProjectAlert(project: Project) {
@@ -92,7 +88,6 @@ export class AlertService {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Canceled');
           }
         }, {
           text: 'DELETE',
@@ -100,7 +95,6 @@ export class AlertService {
           handler: data => {
             this.projectService.deleteProject(project).subscribe(
                 response => {
-                  console.log(response);
                   this.notificationService.sendNotificationToProjectMembersAboutProjectDeletion(project, data.reason);
                   this.projectService.updateProjects();
                   this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" deleted");
@@ -131,8 +125,7 @@ export class AlertService {
           text: 'VERIFY',
           handler: () => {
             this.projectService.verifyProject(project).subscribe(
-                response => {
-                  console.log(response);
+                () => {
                   this.notificationService.sendNotificationToProjectMembersAboutProjectVerification(project);
                   this.projectService.updateProjects();
                   this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" verified");
@@ -145,7 +138,6 @@ export class AlertService {
     });
     await alert.present();
     let result = await alert.onDidDismiss();
-    console.log(result);
   }
 
   async presentModifyProjectAlert(project: Project) {
@@ -187,11 +179,9 @@ export class AlertService {
         }, {
           text: 'SAVE',
           handler: data => {
-            console.log(data);
             this.projectService.modifyProjectOnDataChange(project, data);
             this.projectService.modifyProject(project).subscribe(
-                response => {
-                  console.log(response);
+                () => {
                   this.projectService.updateProjects();
                   this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" successfully modified");
                 },
@@ -234,11 +224,9 @@ export class AlertService {
         }, {
           text: 'SAVE',
           handler: data => {
-            console.log(data);
             project.city = data;
             this.projectService.modifyProject(project).subscribe(
                 response => {
-                  console.log(response);
                   this.projectService.updateProjects();
                   this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" city modified");
                 },
@@ -250,7 +238,6 @@ export class AlertService {
     });
     await alert.present();
     let result = await alert.onDidDismiss();
-    console.log(result);
   }
 
   async presentDeleteCommentAlert(comment: Comment) {
@@ -262,7 +249,6 @@ export class AlertService {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Canceled');
           }
         }, {
           text: 'DELETE',
@@ -270,7 +256,6 @@ export class AlertService {
           handler: () => {
             this.commentService.deleteComment(comment.id).subscribe(
                 response => {
-                  console.log(response);
                   this.commentService.getComments().subscribe((comments: Comment[]) => {
                     this.data.changeComments(comments);
                   });
@@ -284,7 +269,6 @@ export class AlertService {
     });
     await alert.present();
     let result = await alert.onDidDismiss();
-    console.log(result);
   }
 
   async deleteEnrollmentRequest(project: Project, potentialMember: ProjectUser) {
@@ -315,7 +299,6 @@ export class AlertService {
     });
     await alert.present();
     let result = await alert.onDidDismiss();
-    console.log(result);
   }
 
   async cancelEnrollmentRequest(project: Project) {
@@ -327,7 +310,6 @@ export class AlertService {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Canceled');
           }
         }, {
           text: 'DELETE',
@@ -335,10 +317,8 @@ export class AlertService {
           handler: () => {
             this.authService.getCurrentUser().subscribe(
                 (user: User) => {
-                  console.log(user);
                   this.membershipService.deleteMemberFromProject(user, project).subscribe(
-                      response => {
-                        console.log(response);
+                      () => {
                         this.projectService.updateProjects();
                         this.toastService.showTemporarySuccessMessage("Enrollment request for: \"" + project.title + "\" cancelled");
                       },
@@ -354,7 +334,6 @@ export class AlertService {
     });
     await alert.present();
     let result = await alert.onDidDismiss();
-    console.log(result);
   }
 
   async presentDeleteUserAlert(user: User) {
@@ -375,7 +354,6 @@ export class AlertService {
           handler: () => {
             this.authService.deleteUser(user).subscribe(
                 response => {
-                  console.log(response);
                   this.authService.getAllUsers().subscribe((users: User[]) => {
                     this.data.changeUsers(users);
                   });
@@ -389,7 +367,6 @@ export class AlertService {
     });
     await alert.present();
     let result = await alert.onDidDismiss();
-    console.log(result);
   }
 
   async presentInvalidateProjectAlert(project: Project) {
@@ -415,7 +392,6 @@ export class AlertService {
           handler: data => {
             this.projectService.invalidateProject(project).subscribe(
                 response => {
-                  console.log(response);
                   this.notificationService.sendNotificationToProjectMembersAboutProjectInvalidation(project, data.reason);
                   this.projectService.updateProjects();
                   this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" invalidated");
@@ -428,7 +404,6 @@ export class AlertService {
     });
     await alert.present();
     let result = await alert.onDidDismiss();
-    console.log(result);
   }
 
   async presentConfirmProjectAlert(project: Project) {
@@ -440,14 +415,12 @@ export class AlertService {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Canceled');
           }
         }, {
           text: 'CONFIRM',
           handler: () => {
             this.projectService.confirmProject(project).subscribe(
                 response => {
-                  console.log(response);
                   this.notificationService.sendNotificationToProjectMembersAboutProjectConfirmation(project);
                   this.projectService.updateProjects();
                   this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" confirmed");
@@ -479,14 +452,12 @@ export class AlertService {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Canceled');
           }
         }, {
           text: 'UNCONFIRM',
           handler: data => {
             this.projectService.unconfirmProject(project).subscribe(
-                response => {
-                  console.log(response);
+                () => {
                   this.notificationService.sendNotificationToProjectMembersAboutProjectUnconfirmation(project, data.reason);
                   this.projectService.updateProjects();
                   this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" unconfirmed");
@@ -499,7 +470,6 @@ export class AlertService {
     });
     await alert.present();
     let result = await alert.onDidDismiss();
-    console.log(result);
   }
 
   async presentGiveAdminRightsAlert(user: User) {
@@ -512,14 +482,12 @@ export class AlertService {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Canceled');
           }
         }, {
           text: 'PROMOTE',
           handler: () => {
             this.authService.giveAdminRights(user).subscribe(
                 response => {
-                  console.log(response);
                   this.authService.getAllUsers().subscribe((users: User[]) => {
                     this.data.changeUsers(users);
                   });
@@ -533,7 +501,6 @@ export class AlertService {
     });
     await alert.present();
     let result = await alert.onDidDismiss();
-    console.log(result);
   }
 
   async presentRevokeAdminRightsAlert(user: User) {
@@ -546,7 +513,6 @@ export class AlertService {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Canceled');
           }
         }, {
           text: 'REVOKE',
@@ -554,7 +520,6 @@ export class AlertService {
           handler: () => {
             this.authService.revokeAdminRights(user).subscribe(
                 response => {
-                  console.log(response);
                   this.authService.getAllUsers().subscribe((users: User[]) => {
                     this.data.changeUsers(users);
                   });
