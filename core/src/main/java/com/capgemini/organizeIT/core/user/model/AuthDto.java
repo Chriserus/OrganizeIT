@@ -18,5 +18,5 @@ public class AuthDto {
     private ShirtSizeDto shirtSize;
     private String password;
     private String foodPreferences;
-    private Boolean enabled;
+    private Boolean enabled = true;
 }

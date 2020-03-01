@@ -35,7 +35,7 @@ public class User {
     @JoinColumn(name = "shirtSize")
     private ShirtSize shirtSize;
     private String password;
-    private boolean enabled = false;
+    private boolean enabled = true;
     @CreationTimestamp
     private Date created;
     @UpdateTimestamp

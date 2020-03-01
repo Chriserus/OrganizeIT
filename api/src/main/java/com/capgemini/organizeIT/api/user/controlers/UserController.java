@@ -38,7 +38,6 @@ public class UserController {
     private final UserService userService;
     private final RoleService roleService;
     private final ProjectService projectService;
-    private final ShirtSizeService shirtSizeService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final ProjectMapper projectMapper;
@@ -89,7 +88,7 @@ public class UserController {
         user.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
-        createVerificationToken(user);
+//        createVerificationToken(user);
         return userMapper.convertToDto(user);
     }
 
@@ -133,48 +132,48 @@ public class UserController {
         return userMapper.convertToDto(userService.save(originalUser));
     }
 
-    @GetMapping("/api/users/registrationConfirm")
-    public String confirmRegistration(@RequestParam("token") String token) {
-        VerificationToken verificationToken = verificationTokenService.findByToken(token);
-        if (verificationToken == null) {
-            return null;
-        }
-        User user = verificationToken.getUser();
-        user.setEnabled(true);
-        userService.save(user);
-        return "Your account is now confirmed!";
-    }
+//    @GetMapping("/api/users/registrationConfirm")
+//    public String confirmRegistration(@RequestParam("token") String token) {
+//        VerificationToken verificationToken = verificationTokenService.findByToken(token);
+//        if (verificationToken == null) {
+//            return null;
+//        }
+//        User user = verificationToken.getUser();
+//        user.setEnabled(true);
+//        userService.save(user);
+//        return "Your account is now confirmed!";
+//    }
 
-    private void createVerificationToken(User user) {
-        String token = UUID.randomUUID().toString();
-        VerificationToken verificationToken = new VerificationToken();
-        verificationToken.setToken(token);
-        verificationToken.setUser(user);
-        verificationToken.calculateExpiryDate();
-        try {
-            sendVerificationEmail(verificationTokenService.save(verificationToken));
-        } catch (IOException e) {
-            log.error(e);
-        }
-    }
+//    private void createVerificationToken(User user) {
+//        String token = UUID.randomUUID().toString();
+//        VerificationToken verificationToken = new VerificationToken();
+//        verificationToken.setToken(token);
+//        verificationToken.setUser(user);
+//        verificationToken.calculateExpiryDate();
+//        try {
+//            sendVerificationEmail(verificationTokenService.save(verificationToken));
+//        } catch (IOException e) {
+//            log.error(e);
+//        }
+//    }
 
-    private void sendVerificationEmail(VerificationToken verificationToken) throws IOException {
-        Email from = new Email("shiptiday@app.com");
-        String subject = "Registration Confirmation";
-        Email to = new Email(verificationToken.getUser().getEmail());
-        Content content = new Content("text/plain",
-                "Click here to confirm your account: https://shipitday.azurewebsites.net/api/users/registrationConfirm?token=" + verificationToken.getToken());
-        Mail mail = new Mail(from, subject, to, content);
-        SendGrid sg = new SendGrid(SENDGRID_API_KEY);
-        Request request = new Request();
-        request.setMethod(Method.POST);
-        request.setEndpoint("mail/send");
-        request.setBody(mail.build());
-        Response response = sg.api(request);
-        System.out.println(response.getStatusCode());
-        System.out.println(response.getBody());
-        System.out.println(response.getHeaders());
-    }
+//    private void sendVerificationEmail(VerificationToken verificationToken) throws IOException {
+//        Email from = new Email("shiptiday@app.com");
+//        String subject = "Registration Confirmation";
+//        Email to = new Email(verificationToken.getUser().getEmail());
+//        Content content = new Content("text/plain",
+//                "Click here to confirm your account: <link>" + verificationToken.getToken());
+//        Mail mail = new Mail(from, subject, to, content);
+//        SendGrid sg = new SendGrid(SENDGRID_API_KEY);
+//        Request request = new Request();
+//        request.setMethod(Method.POST);
+//        request.setEndpoint("mail/send");
+//        request.setBody(mail.build());
+//        Response response = sg.api(request);
+//        System.out.println(response.getStatusCode());
+//        System.out.println(response.getBody());
+//        System.out.println(response.getHeaders());
+//    }
 
     private boolean validateData(@RequestBody UserDto userDto) {
         return userDto.getFirstName() == null || userDto.getFirstName().equals("")

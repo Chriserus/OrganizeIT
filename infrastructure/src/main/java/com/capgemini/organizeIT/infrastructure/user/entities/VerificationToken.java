@@ -19,8 +19,9 @@ public class VerificationToken {
     @OneToOne
     @JoinColumn(name="user")
     private User user;
-    @CreationTimestamp
     private Date expiryDate;
+    @CreationTimestamp
+    private Date created;
 
     public void calculateExpiryDate() {
         Calendar cal = Calendar.getInstance();
