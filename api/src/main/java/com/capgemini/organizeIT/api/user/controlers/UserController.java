@@ -1,16 +1,16 @@
 package com.capgemini.organizeIT.api.user.controlers;
 
 import com.capgemini.organizeIT.api.project.mappers.ProjectMapper;
+import com.capgemini.organizeIT.api.shirt.mappers.ShirtSizeMapper;
+import com.capgemini.organizeIT.api.user.mappers.UserMapper;
 import com.capgemini.organizeIT.core.project.model.ProjectDto;
 import com.capgemini.organizeIT.core.project.services.ProjectService;
 import com.capgemini.organizeIT.core.role.services.RoleService;
-import com.capgemini.organizeIT.api.shirt.mappers.ShirtSizeMapper;
 import com.capgemini.organizeIT.core.shirt.services.ShirtSizeService;
-import com.capgemini.organizeIT.infrastructure.user.entities.User;
-import com.capgemini.organizeIT.api.user.mappers.UserMapper;
 import com.capgemini.organizeIT.core.user.model.AuthDto;
 import com.capgemini.organizeIT.core.user.model.UserDto;
 import com.capgemini.organizeIT.core.user.services.UserService;
+import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserController {
     private static final String DEFAULT_ROLE = "ROLE_USER";
+    private static final String ADMIN_ROLE = "ROLE_ADMIN";
     private final UserService userService;
     private final RoleService roleService;
     private final ProjectService projectService;
@@ -76,6 +77,17 @@ public class UserController {
         User user = userMapper.convertToEntity(authDto);
         user.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userMapper.convertToDto(userService.save(user));
+    }
+
+    @PatchMapping("/api/users/{userId}")
+    public UserDto giveUserAdminRights(@PathVariable Long userId, @RequestParam boolean giveAdmin) {
+        User user = userService.findById(userId);
+        if (giveAdmin) {
+            user.getRoles().add(roleService.findByName(ADMIN_ROLE));
+        } else {
+            user.getRoles().remove(roleService.findByName(ADMIN_ROLE));
+        }
         return userMapper.convertToDto(userService.save(user));
     }
 

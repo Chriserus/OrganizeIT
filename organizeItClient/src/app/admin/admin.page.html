@@ -299,6 +299,12 @@
                                 [disabled]="true"></ion-checkbox>
                 </ion-item>
               </ion-card-content>
+              <ion-button *ngIf="!authService.userHasAdminRole(user)" expand="block"
+                          (click)="alertService.presentGiveAdminRightsAlert(user)" color="primary">Give admin rights
+              </ion-button>
+              <ion-button *ngIf="authService.userHasAdminRole(user)" expand="block"
+                          (click)="alertService.presentRevokeAdminRightsAlert(user)" color="warning">Revoke admin rights
+              </ion-button>
               <ion-button expand="block"
                           (click)="alertService.presentDeleteUserAlert(user)" color="danger">Delete user
               </ion-button>

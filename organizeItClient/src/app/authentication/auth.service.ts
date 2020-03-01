@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {ToastService} from "../shared/toast.service";
 import {ShirtSize} from "../interfaces/shirt-size";
 import {DataService} from "../shared/data.service";
+import {Project} from "../interfaces/project.model";
 
 @Injectable({
   providedIn: 'root'
@@ -103,6 +104,14 @@ export class AuthService {
 
   deleteUser(user: User) {
     return this.http.delete(this.USERS_URL + "/" + user.id)
+  }
+
+  giveAdminRights(user: User) {
+    return this.http.patch(this.USERS_URL + "/" + user.id + "?giveAdmin=" + true, {}, {responseType: "json"})
+  }
+
+  revokeAdminRights(user: User) {
+    return this.http.patch(this.USERS_URL + "/" + user.id + "?giveAdmin=" + false, {}, {responseType: "json"})
   }
 
   isValuePresentInUserFields(user, value) {

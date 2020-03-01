@@ -501,4 +501,73 @@ export class AlertService {
     let result = await alert.onDidDismiss();
     console.log(result);
   }
+
+  async presentGiveAdminRightsAlert(user: User) {
+    const alert = await this.alertController.create({
+      header: 'Promoting to administrator!',
+      subHeader: user.firstName + ' ' + user.lastName,
+      message: '<p>Email: <strong>' + user.email + '</strong></p>',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'PROMOTE',
+          handler: () => {
+            this.authService.giveAdminRights(user).subscribe(
+                response => {
+                  console.log(response);
+                  this.authService.getAllUsers().subscribe((users: User[]) => {
+                    this.data.changeUsers(users);
+                  });
+                  this.toastService.showTemporarySuccessMessage("\"" + user.email + "\" promoted to administrator");
+                },
+                error => {
+                  console.log(error);
+                });
+          }
+        }]
+    });
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+  }
+
+  async presentRevokeAdminRightsAlert(user: User) {
+    const alert = await this.alertController.create({
+      header: 'Revoking administrator rights!',
+      subHeader: user.firstName + ' ' + user.lastName,
+      message: '<p>Email: <strong>' + user.email + '</strong></p>',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Canceled');
+          }
+        }, {
+          text: 'REVOKE',
+          cssClass: 'danger',
+          handler: () => {
+            this.authService.revokeAdminRights(user).subscribe(
+                response => {
+                  console.log(response);
+                  this.authService.getAllUsers().subscribe((users: User[]) => {
+                    this.data.changeUsers(users);
+                  });
+                  this.toastService.showTemporarySuccessMessage("\"" + user.email + "\" - administrator rights revoked");
+                },
+                error => {
+                  console.log(error);
+                });
+          }
+        }]
+    });
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+  }
 }
