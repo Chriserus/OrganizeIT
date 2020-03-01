@@ -32,6 +32,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.liquibase:liquibase-core'
     runtimeOnly 'mysql:mysql-connector-java'
+    compile 'com.sendgrid:sendgrid-java:4.0.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j', version: '2.12.1', ext: 'pom'
     compile group: 'org.json', name: 'json', version: '20190722'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.1.9.RELEASE'

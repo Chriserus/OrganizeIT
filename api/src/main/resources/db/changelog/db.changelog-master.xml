@@ -254,4 +254,31 @@
             <column name="food_preferences" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+    <changeSet id="addEnabledColumnToUser" author="Chriserus">
+        <addColumn tableName="user">
+            <column name="enabled" type="boolean"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="createVerificationTokenTable" author="Chriserus">
+        <createTable tableName="verification_token">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user" type="int">
+                <constraints nullable="false" foreignKeyName="fk_verification_user" references="user(id)"/>
+            </column>
+            <column name="token" type="varchar(255)"/>
+            <column name="expiry_date" type="datetime"/>
+            <column name="created" type="datetime"/>
+        </createTable>
+        <addAutoIncrement columnDataType="int"
+                          columnName="id"
+                          tableName="verification_token"/>
+    </changeSet>
+    <changeSet id="addUniqueEmailConstraint" author="Chriserus">
+        <addUniqueConstraint
+                columnNames="email"
+                constraintName="unique_email"
+                tableName="user"/>
+    </changeSet>
 </databaseChangeLog>

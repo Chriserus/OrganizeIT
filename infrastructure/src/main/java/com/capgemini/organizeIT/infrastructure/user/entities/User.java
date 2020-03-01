@@ -23,6 +23,7 @@ public class User {
     private Long id;
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String email;
     private Boolean polishSpeaker;
     private String foodPreferences;
@@ -33,8 +34,8 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "shirtSize")
     private ShirtSize shirtSize;
-    // TODO: Cannot annotate @JsonIgnore, because it makes password null when registering new user
     private String password;
+    private boolean enabled = false;
     @CreationTimestamp
     private Date created;
     @UpdateTimestamp

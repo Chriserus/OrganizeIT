@@ -46,6 +46,10 @@ export class RegisterPage implements OnInit {
           if (data === null) {
             this.authService.register(form).subscribe(
                 (response: any) => {
+                  if(response === null){
+                    this.toastService.showTemporaryErrorMessage("Only company email is allowed!");
+                    return;
+                  }
                   sessionStorage.setItem("loggedIn", 'true');
                   this.router.navigateByUrl("home").then(() => {
                     this.toastService.showTemporarySuccessMessage(Messages.registerSuccess);

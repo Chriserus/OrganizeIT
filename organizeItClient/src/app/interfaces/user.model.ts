@@ -14,5 +14,6 @@ export interface User {
   shirtType: ShirtType;
   city: City;
   polishSpeaker: boolean;
+  enabled: boolean;
   foodPreferences?: string;
 }
