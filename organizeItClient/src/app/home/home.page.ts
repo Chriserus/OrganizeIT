@@ -17,9 +17,9 @@ export class HomePage implements OnInit, OnDestroy {
   slideOptsOne = {
     initialSlide: 0,
     slidesPerView: 1,
-    speed: 1000,
+    speed: 2500,
     autoplay: {
-      disableOnInteraction: false
+      disableOnInteraction: false,
     }
   };
 
