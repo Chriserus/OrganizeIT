@@ -30,6 +30,9 @@ public class OwnershipController {
         return projectService.findById(projectId).map(project -> {
             log.info("Owners before: {}", project.getOwners());
             User user = userService.findById(ownerId);
+            if(project.getOwners().stream().map(Ownership::getUser).collect(Collectors.toSet()).contains(user) && projectService.loggedInUserNotProjectOwner(project)){
+                return projectMapper.convertToDto(project);
+            }
             Ownership ownership = new Ownership();
             ownership.setProject(project);
             ownership.setUser(user);

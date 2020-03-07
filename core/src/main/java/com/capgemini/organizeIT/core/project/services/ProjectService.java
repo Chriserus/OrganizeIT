@@ -9,6 +9,7 @@ import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,5 +51,9 @@ public class ProjectService {
 
     public Optional<Project> findById(Long id) {
         return projectRepository.findById(id);
+    }
+
+    public boolean loggedInUserNotProjectOwner(Project project) {
+        return !userIsProjectOwner(project, userService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 }

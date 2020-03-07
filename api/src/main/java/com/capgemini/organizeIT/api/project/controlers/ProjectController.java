@@ -68,7 +68,7 @@ public class ProjectController {
     @DeleteMapping("/api/projects/{id}")
     public void deleteProject(@PathVariable Long id, Principal principal) {
         projectService.findById(id).ifPresent(project -> {
-            if (projectService.userIsProjectOwner(project, userService.findByEmail(principal.getName())) || loggedInUserIsAdmin()) {
+            if (projectService.userIsProjectOwner(project, userService.findByEmail(principal.getName())) || !userService.loggedInUserIsNotAdmin()) {
                 log.info("Deleting project: {}", project);
                 projectService.deleteById(id);
             }
@@ -78,26 +78,25 @@ public class ProjectController {
     @PutMapping("/api/projects/{id}")
     public void verifyProject(@PathVariable Long id, @RequestParam boolean verifyProject) {
         projectService.findById(id).ifPresent(project -> {
-            if (loggedInUserIsAdmin()) {
-                project.setVerified(verifyProject);
-                projectService.save(project);
-            }
+            project.setVerified(verifyProject);
+            projectService.save(project);
         });
     }
 
     @PatchMapping("/api/projects/{id}")
     public void confirmProject(@PathVariable Long id, @RequestParam boolean confirmProject) {
         projectService.findById(id).ifPresent(project -> {
-            if (loggedInUserIsAdmin() && project.getVerified()) {
-                project.setConfirmed(confirmProject);
-                projectService.save(project);
-            }
+            project.setConfirmed(confirmProject);
+            projectService.save(project);
         });
     }
 
     @PutMapping("/api/projects")
     public void modifyProject(@RequestBody ProjectDto projectDto) {
         projectService.findById(projectDto.getId()).ifPresent(project -> {
+            if (projectService.loggedInUserNotProjectOwner(project) && userService.loggedInUserIsNotAdmin()) {
+                return;
+            }
             if (!project.getTitle().equals(projectDto.getTitle())) {
                 log.info("Modifying title");
                 project.setTitle(projectDto.getTitle());
@@ -110,7 +109,7 @@ public class ProjectController {
                 log.info("Modifying technologies");
                 project.setTechnologies(projectDto.getTechnologies());
             }
-            if(projectDto.getMaxMembers() > 5){
+            if (projectDto.getMaxMembers() > 5) {
                 projectDto.setMaxMembers(5);
             }
             if (!project.getMaxMembers().equals(projectDto.getMaxMembers()) &&
@@ -130,10 +129,5 @@ public class ProjectController {
 
     private long countApprovedMembers(Project project) {
         return project.getMembers().stream().filter(Membership::getApproved).count();
-    }
-
-    //TODO: Check if it works
-    private boolean loggedInUserIsAdmin() {
-        return !SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
     }
 }

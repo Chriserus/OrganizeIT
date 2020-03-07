@@ -45,7 +45,7 @@ public class MembershipController {
     @PutMapping("/api/projects/{projectId}/memberships/{memberId}")
     public ProjectDto acceptPotentialProjectMember(@PathVariable Long projectId, @PathVariable Long memberId) {
         return projectService.findById(projectId).map(project -> {
-            if (loggedInUserNotProjectOwner(project) && !loggedInUserIsAdmin()) {
+            if (projectService.loggedInUserNotProjectOwner(project) && userService.loggedInUserIsNotAdmin()) {
                 return projectMapper.convertToDto(project);
             }
             if (memberWouldExceedMaxCapacity(project)) {
@@ -71,7 +71,7 @@ public class MembershipController {
     @DeleteMapping("/api/projects/{projectId}/memberships/{memberId}")
     public ProjectDto removeProjectMember(@PathVariable Long projectId, @PathVariable Long memberId) {
         return projectService.findById(projectId).map(project -> {
-            if (loggedInUserNotProjectOwner(project) && !loggedInUserIsAdmin()) {
+            if (projectService.loggedInUserNotProjectOwner(project) && userService.loggedInUserIsNotAdmin()) {
                 return projectMapper.convertToDto(project);
             }
             User user = userService.findById(memberId);
@@ -81,14 +81,6 @@ public class MembershipController {
             userService.save(user);
             return projectMapper.convertToDto(projectService.save(project));
         }).orElse(null);
-    }
-
-    private boolean loggedInUserNotProjectOwner(Project project) {
-        return !projectService.userIsProjectOwner(project, userService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
-    }
-
-    private boolean loggedInUserIsAdmin() {
-        return !SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
     }
 
     private Optional<Membership> extractOptionalMemberById(Long memberId, Project project) {

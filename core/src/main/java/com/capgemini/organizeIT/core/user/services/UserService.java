@@ -3,6 +3,8 @@ package com.capgemini.organizeIT.core.user.services;
 import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import com.capgemini.organizeIT.infrastructure.user.repositories.UserRepository;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,5 +36,9 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public boolean loggedInUserIsNotAdmin() {
+        return !SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 }

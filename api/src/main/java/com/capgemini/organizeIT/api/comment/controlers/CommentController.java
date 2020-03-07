@@ -4,6 +4,7 @@ package com.capgemini.organizeIT.api.comment.controlers;
 import com.capgemini.organizeIT.api.comment.mappers.CommentMapper;
 import com.capgemini.organizeIT.core.comment.model.CommentDto;
 import com.capgemini.organizeIT.core.comment.services.CommentService;
+import com.capgemini.organizeIT.core.user.services.UserService;
 import com.capgemini.organizeIT.infrastructure.comment.entities.Comment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class CommentController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
+    private final UserService userService;
 
     @GetMapping("/api/comments")
     public List<CommentDto> findAllComments() {
@@ -30,6 +32,9 @@ public class CommentController {
 
     @PostMapping("/api/comments")
     public CommentDto register(@RequestBody CommentDto commentDto) {
+        if (userService.loggedInUserIsNotAdmin()) {
+            commentDto.setAnnouncement(false);
+        }
         Comment comment = commentMapper.convertToEntity(commentDto);
         return commentMapper.convertToDto(commentService.save(comment));
     }
@@ -37,14 +42,11 @@ public class CommentController {
     @DeleteMapping("/api/comments/{id}")
     public void deleteComment(@PathVariable Long id, Principal principal) {
         commentService.findById(id).ifPresent(comment -> {
-            if (principal.getName().equals(comment.getAuthor().getEmail()) || loggedInUserIsAdmin()) {
+            if (principal.getName().equals(comment.getAuthor().getEmail()) || !userService.loggedInUserIsNotAdmin()) {
                 log.info("Deleting comment: {}", comment);
                 commentService.deleteById(id);
             }
         });
     }
 
-    private boolean loggedInUserIsAdmin() {
-        return !SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
-    }
 }

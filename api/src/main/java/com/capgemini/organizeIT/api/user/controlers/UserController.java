@@ -16,6 +16,7 @@ import com.capgemini.organizeIT.infrastructure.user.entities.VerificationToken;
 import com.sendgrid.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 public class UserController {
     private static final String DEFAULT_ROLE = "ROLE_USER";
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
-    private static final String SENDGRID_API_KEY = "";
+    //    private static final String SENDGRID_API_KEY = "";
     private final UserService userService;
     private final RoleService roleService;
     private final ProjectService projectService;
@@ -54,11 +55,6 @@ public class UserController {
     @GetMapping("/api/users")
     public List<UserDto> allUsers() {
         return userService.findAll().stream().map(userMapper::convertToDto).collect(Collectors.toList());
-    }
-
-    @GetMapping("/api/users/{userId}")
-    public UserDto user(@PathVariable final Long userId) {
-        return userMapper.convertToDto(userService.findById(userId));
     }
 
     @DeleteMapping("/api/users/{userId}")
@@ -81,7 +77,7 @@ public class UserController {
 
     @PostMapping("/api/register")
     public UserDto register(@RequestBody AuthDto authDto) {
-        if(!authDto.getEmail().endsWith("@capgemini.com")){
+        if (!authDto.getEmail().endsWith("@capgemini.com")) {
             return null;
         }
         User user = userMapper.convertToEntity(authDto);
@@ -103,10 +99,12 @@ public class UserController {
         return userMapper.convertToDto(userService.save(user));
     }
 
-    // TODO: Verify, that user is allowed to do this (logged in user sent it)
     @PutMapping("/api/users/{userId}")
     public UserDto updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
         User originalUser = userService.findById(userId);
+        if (!SecurityContextHolder.getContext().getAuthentication().getName().equals(originalUser.getEmail())) {
+            return null;
+        }
         if (validateData(userDto)) {
             return userMapper.convertToDto(originalUser);
         }

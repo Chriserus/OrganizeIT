@@ -4,6 +4,7 @@ import com.capgemini.organizeIT.core.user.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -41,7 +42,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/api/comments/**").authenticated()
+                .antMatchers("/api/notifications/**").authenticated()
+                .antMatchers("/api/projects/{projectId}/memberships/{memberId}").authenticated()
+                .antMatchers("/api/projects/{projectId}/ownerships").permitAll()
+                .antMatchers("/api/projects/{projectId}/ownerships/{ownerId}").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/projects").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/projects").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/projects/{id}").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/projects/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/projects").authenticated()
+                .antMatchers(HttpMethod.PATCH, "/api/projects/{id}").hasRole("ADMIN")
+                .antMatchers("/api/shirt-sizes").permitAll()
+                .antMatchers("/api/user").permitAll()
+                .antMatchers("/api/users").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/users/{userId}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/users/{userId}").authenticated()
+                .antMatchers("/api/users/emails/{email}/").permitAll()
+                .antMatchers("/api/users/{userId}/projects").authenticated()
+                .antMatchers(HttpMethod.PATCH, "/api/users/{userId}").hasRole("ADMIN")
+                .antMatchers("/error").permitAll()
+                .antMatchers("/api/register", "/api/login").permitAll()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
