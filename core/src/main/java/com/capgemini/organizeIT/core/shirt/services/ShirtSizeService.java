@@ -17,10 +17,6 @@ public class ShirtSizeService {
         return shirtSizeRepository.findAll();
     }
 
-    public ShirtSize findBySize(String size) {
-        return shirtSizeRepository.findBySize(size);
-    }
-
     public Optional<ShirtSize> findById(Long id) {
         return shirtSizeRepository.findById(id);
     }

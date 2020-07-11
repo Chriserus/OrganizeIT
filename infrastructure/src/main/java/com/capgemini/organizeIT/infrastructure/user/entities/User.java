@@ -32,7 +32,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private City city;
     @ManyToOne
-    @JoinColumn(name = "shirtSize")
+    @JoinColumn(name = "shirt_size")
     private ShirtSize shirtSize;
     private String password;
     private boolean enabled = true;

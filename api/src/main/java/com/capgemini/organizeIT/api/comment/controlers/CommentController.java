@@ -8,8 +8,6 @@ import com.capgemini.organizeIT.core.user.services.UserService;
 import com.capgemini.organizeIT.infrastructure.comment.entities.Comment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;

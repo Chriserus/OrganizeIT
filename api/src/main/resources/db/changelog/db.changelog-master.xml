@@ -281,4 +281,8 @@
                 constraintName="unique_email"
                 tableName="user"/>
     </changeSet>
+    <changeSet id="dropVerificationTokenTable" author="Chriserus">
+        <dropTable cascadeConstraints="true"
+                   tableName="verification_token"/>
+    </changeSet>
 </databaseChangeLog>

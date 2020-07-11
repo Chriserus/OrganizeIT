@@ -23,15 +23,6 @@ public class UserMapper {
         return user;
     }
 
-    public User convertToEntity(UserDto userDto) {
-        User user = modelMapper.map(userDto, User.class);
-        if (userDto.getId() != null) {
-            User oldUser = userService.findById(userDto.getId());
-            user.setId(oldUser.getId());
-        }
-        return user;
-    }
-
     public UserDto convertToDto(User user) {
         return modelMapper.map(user, UserDto.class);
     }

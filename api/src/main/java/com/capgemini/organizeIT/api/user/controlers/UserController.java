@@ -6,26 +6,19 @@ import com.capgemini.organizeIT.api.user.mappers.UserMapper;
 import com.capgemini.organizeIT.core.project.model.ProjectDto;
 import com.capgemini.organizeIT.core.project.services.ProjectService;
 import com.capgemini.organizeIT.core.role.services.RoleService;
-import com.capgemini.organizeIT.core.shirt.services.ShirtSizeService;
 import com.capgemini.organizeIT.core.user.model.AuthDto;
 import com.capgemini.organizeIT.core.user.model.UserDto;
 import com.capgemini.organizeIT.core.user.services.UserService;
-import com.capgemini.organizeIT.core.user.services.VerificationTokenService;
 import com.capgemini.organizeIT.infrastructure.user.entities.User;
-import com.capgemini.organizeIT.infrastructure.user.entities.VerificationToken;
-import com.sendgrid.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.security.Principal;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,7 +28,6 @@ import java.util.stream.Collectors;
 public class UserController {
     private static final String DEFAULT_ROLE = "ROLE_USER";
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
-    //    private static final String SENDGRID_API_KEY = "";
     private final UserService userService;
     private final RoleService roleService;
     private final ProjectService projectService;
@@ -43,7 +35,6 @@ public class UserController {
     private final UserMapper userMapper;
     private final ProjectMapper projectMapper;
     private final ShirtSizeMapper shirtSizeMapper;
-    private final VerificationTokenService verificationTokenService;
 
     @GetMapping("/api/user")
     public UserDto currentUser(Principal principal) {
@@ -84,7 +75,6 @@ public class UserController {
         user.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
-//        createVerificationToken(user);
         return userMapper.convertToDto(user);
     }
 
@@ -129,49 +119,6 @@ public class UserController {
         originalUser.setFoodPreferences(userDto.getFoodPreferences());
         return userMapper.convertToDto(userService.save(originalUser));
     }
-
-//    @GetMapping("/api/users/registrationConfirm")
-//    public String confirmRegistration(@RequestParam("token") String token) {
-//        VerificationToken verificationToken = verificationTokenService.findByToken(token);
-//        if (verificationToken == null) {
-//            return null;
-//        }
-//        User user = verificationToken.getUser();
-//        user.setEnabled(true);
-//        userService.save(user);
-//        return "Your account is now confirmed!";
-//    }
-
-//    private void createVerificationToken(User user) {
-//        String token = UUID.randomUUID().toString();
-//        VerificationToken verificationToken = new VerificationToken();
-//        verificationToken.setToken(token);
-//        verificationToken.setUser(user);
-//        verificationToken.calculateExpiryDate();
-//        try {
-//            sendVerificationEmail(verificationTokenService.save(verificationToken));
-//        } catch (IOException e) {
-//            log.error(e);
-//        }
-//    }
-
-//    private void sendVerificationEmail(VerificationToken verificationToken) throws IOException {
-//        Email from = new Email("shiptiday@app.com");
-//        String subject = "Registration Confirmation";
-//        Email to = new Email(verificationToken.getUser().getEmail());
-//        Content content = new Content("text/plain",
-//                "Click here to confirm your account: <link>" + verificationToken.getToken());
-//        Mail mail = new Mail(from, subject, to, content);
-//        SendGrid sg = new SendGrid(SENDGRID_API_KEY);
-//        Request request = new Request();
-//        request.setMethod(Method.POST);
-//        request.setEndpoint("mail/send");
-//        request.setBody(mail.build());
-//        Response response = sg.api(request);
-//        System.out.println(response.getStatusCode());
-//        System.out.println(response.getBody());
-//        System.out.println(response.getHeaders());
-//    }
 
     private boolean validateData(@RequestBody UserDto userDto) {
         return userDto.getFirstName() == null || userDto.getFirstName().equals("")

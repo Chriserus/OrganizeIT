@@ -14,10 +14,6 @@ import java.util.Set;
 public class PermissionService {
     private final PermissionRepository permissionRepository;
 
-    public List<Permission> findAll() {
-        return permissionRepository.findAll();
-    }
-
     public Permission save(Permission permission) {
         return permissionRepository.save(permission);
     }
