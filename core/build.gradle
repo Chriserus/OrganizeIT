@@ -2,7 +2,7 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
     id "org.springframework.boot" version "2.1.5.RELEASE" apply false
-    id "io.freefair.lombok" version "3.8.0"
+    id "io.freefair.lombok" version "5.1.0"
     id 'io.spring.dependency-management' version "1.0.6.RELEASE"
 }
 
