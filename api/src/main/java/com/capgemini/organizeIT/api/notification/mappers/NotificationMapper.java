@@ -1,11 +1,13 @@
 package com.capgemini.organizeIT.api.notification.mappers;
 
-import com.capgemini.organizeIT.infrastructure.notification.entities.Notification;
 import com.capgemini.organizeIT.core.notification.model.NotificationDto;
 import com.capgemini.organizeIT.core.notification.services.NotificationService;
+import com.capgemini.organizeIT.infrastructure.notification.entities.Notification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -15,10 +17,7 @@ public class NotificationMapper {
 
     public Notification convertToEntity(NotificationDto notificationDto) {
         Notification notification = modelMapper.map(notificationDto, Notification.class);
-        if (notificationDto.getId() != null) {
-            Notification oldNotification = notificationService.findById(notificationDto.getId()).get();
-            notification.setId(oldNotification.getId());
-        }
+        Optional.ofNullable(notificationDto.getId()).flatMap(notificationService::findById).map(Notification::getId).ifPresent(notification::setId);
         return notification;
     }
 

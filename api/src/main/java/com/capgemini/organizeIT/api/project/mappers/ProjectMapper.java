@@ -1,11 +1,13 @@
 package com.capgemini.organizeIT.api.project.mappers;
 
-import com.capgemini.organizeIT.infrastructure.project.entities.Project;
 import com.capgemini.organizeIT.core.project.model.ProjectDto;
 import com.capgemini.organizeIT.core.project.services.ProjectService;
+import com.capgemini.organizeIT.infrastructure.project.entities.Project;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -15,10 +17,7 @@ public class ProjectMapper {
 
     public Project convertToEntity(ProjectDto projectDto) {
         Project project = modelMapper.map(projectDto, Project.class);
-        if (projectDto.getId() != null) {
-            Project oldProject = projectService.findById(projectDto.getId()).get();
-            project.setId(oldProject.getId());
-        }
+        Optional.ofNullable(projectDto.getId()).flatMap(projectService::findById).map(Project::getId).ifPresent(project::setId);
         return project;
     }
 

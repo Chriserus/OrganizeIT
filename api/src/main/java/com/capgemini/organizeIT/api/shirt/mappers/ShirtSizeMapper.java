@@ -1,11 +1,13 @@
 package com.capgemini.organizeIT.api.shirt.mappers;
 
-import com.capgemini.organizeIT.infrastructure.shirt.entities.ShirtSize;
 import com.capgemini.organizeIT.core.shirt.model.ShirtSizeDto;
 import com.capgemini.organizeIT.core.shirt.services.ShirtSizeService;
+import com.capgemini.organizeIT.infrastructure.shirt.entities.ShirtSize;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -15,10 +17,7 @@ public class ShirtSizeMapper {
 
     public ShirtSize convertToEntity(ShirtSizeDto shirtSizeDto) {
         ShirtSize shirtSize = modelMapper.map(shirtSizeDto, ShirtSize.class);
-        if (shirtSizeDto.getId() != null) {
-            ShirtSize oldShirtSize = shirtSizeService.findById(shirtSizeDto.getId()).get();
-            shirtSize.setId(oldShirtSize.getId());
-        }
+        Optional.ofNullable(shirtSizeDto.getId()).flatMap(shirtSizeService::findById).map(ShirtSize::getId).ifPresent(shirtSize::setId);
         return shirtSize;
     }
 

@@ -14,10 +14,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,9 +48,7 @@ public class UserController {
 
     @GetMapping("/api/user")
     public UserDto currentUser(Principal principal) {
-        if (principal == null)
-            return null;
-        return userMapper.convertToDto(userService.findByEmail(principal.getName()));
+        return Optional.ofNullable(principal).map(Principal::getName).map(name -> userMapper.convertToDto(userService.findByEmail(name))).orElse(null);
     }
 
     @GetMapping("/api/users")
@@ -55,10 +63,7 @@ public class UserController {
 
     @GetMapping("/api/users/emails/{email}/")
     public UserDto userByEmail(@PathVariable final String email) {
-        if (userService.findByEmail(email) == null) {
-            return null;
-        }
-        return userMapper.convertToDto(userService.findByEmail(email));
+        return Optional.ofNullable(userService.findByEmail(email)).map(userMapper::convertToDto).orElse(null);
     }
 
     @GetMapping("/api/users/{userId}/projects")
