@@ -18,7 +18,7 @@ public class UserMapper {
 
     public User convertToEntity(AuthDto authDto) {
         User user = modelMapper.map(authDto, User.class);
-        Optional.ofNullable(authDto.getId()).map(userService::findById).map(User::getId).ifPresent(user::setId);
+        Optional.ofNullable(authDto.getId()).flatMap(userService::findById).map(User::getId).ifPresent(user::setId);
         return user;
     }
 

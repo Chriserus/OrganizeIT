@@ -54,6 +54,6 @@ public class ProjectService {
     }
 
     public boolean loggedInUserNotProjectOwner(Project project) {
-        return !userIsProjectOwner(project, userService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return userService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).map(user -> !userIsProjectOwner(project, user)).orElse(false);
     }
 }

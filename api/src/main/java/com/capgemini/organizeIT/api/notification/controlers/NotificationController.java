@@ -21,6 +21,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,28 +45,31 @@ public class NotificationController {
     @PostMapping("/api/notifications/permissions/{userId}")
     public PermissionDto register(@RequestBody PermissionDto permissionDto, @PathVariable Long userId) {
         Permission permission = permissionMapper.convertToEntity(permissionDto);
-        User user = userService.findById(userId);
-        permission.setHolder(user);
-        registerTokenToTopic(Set.of(permission.getToken()), user.getId());
-        log.info(permission);
-        return permissionMapper.convertToDto(permissionService.save(permission));
+        return userService.findById(userId).map(user -> {
+            permission.setHolder(user);
+            registerTokenToTopic(Set.of(permission.getToken()), user.getId());
+            log.info(permission);
+            return permissionMapper.convertToDto(permissionService.save(permission));
+        }).orElse(null);
     }
 
     @PostMapping("/api/notifications/{userId}")
     public NotificationDto sendNotificationToUser(@RequestBody Map<String, String> notificationJson, @PathVariable Long userId) {
-        User recipient = userService.findById(userId);
-        log.info("Sending notification to: {}", recipient.getEmail());
-        sendNotificationWithBodyToRecipient(notificationJson, "/topics/" + recipient.getId());
-        Notification notification = new Notification();
-        notification.setTitle(notificationJson.get("title"));
-        notification.setBody(notificationJson.get("body"));
-        notification.setRecipient(recipient);
-        return notificationMapper.convertToDto(notificationService.save(notification));
+        return userService.findById(userId).map(recipient -> {
+            log.info("Sending notification to: {}", recipient.getEmail());
+            sendNotificationWithBodyToRecipient(notificationJson, "/topics/" + recipient.getId());
+            Notification notification = new Notification();
+            notification.setTitle(notificationJson.get("title"));
+            notification.setBody(notificationJson.get("body"));
+            notification.setRecipient(recipient);
+            return notificationMapper.convertToDto(notificationService.save(notification));
+        }).orElse(null);
     }
 
     @GetMapping("/api/notifications/{userId}")
     public List<NotificationDto> getNotificationsForUser(@PathVariable final Long userId) {
-        return notificationService.findByUser(userService.findById(userId)).stream().map(notificationMapper::convertToDto).collect(Collectors.toList());
+        List<Notification> notifications = userService.findById(userId).map(notificationService::findByUser).orElse(Collections.emptyList());
+        return notifications.stream().map(notificationMapper::convertToDto).collect(Collectors.toList());
     }
 
     // TODO: Move below methods to service?

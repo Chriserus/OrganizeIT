@@ -9,6 +9,7 @@ import com.capgemini.organizeIT.core.role.services.RoleService;
 import com.capgemini.organizeIT.core.user.model.AuthDto;
 import com.capgemini.organizeIT.core.user.model.UserDto;
 import com.capgemini.organizeIT.core.user.services.UserService;
+import com.capgemini.organizeIT.infrastructure.role.entities.Role;
 import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -48,7 +50,7 @@ public class UserController {
 
     @GetMapping("/api/user")
     public UserDto currentUser(Principal principal) {
-        return Optional.ofNullable(principal).map(Principal::getName).map(name -> userMapper.convertToDto(userService.findByEmail(name))).orElse(null);
+        return Optional.ofNullable(principal).map(Principal::getName).flatMap(userService::findByEmail).map(userMapper::convertToDto).orElse(null);
     }
 
     @GetMapping("/api/users")
@@ -58,17 +60,18 @@ public class UserController {
 
     @DeleteMapping("/api/users/{userId}")
     public void deleteUser(@PathVariable final Long userId) {
-        userService.delete(userService.findById(userId));
+        userService.findById(userId).ifPresent(userService::delete);
     }
 
     @GetMapping("/api/users/emails/{email}/")
     public UserDto userByEmail(@PathVariable final String email) {
-        return Optional.ofNullable(userService.findByEmail(email)).map(userMapper::convertToDto).orElse(null);
+        return userService.findByEmail(email).map(userMapper::convertToDto).orElse(null);
     }
 
     @GetMapping("/api/users/{userId}/projects")
     public List<ProjectDto> projectsThatContainUser(@PathVariable final Long userId) {
-        return projectService.findAllThatContainUser(userService.findById(userId)).stream().map(projectMapper::convertToDto).collect(Collectors.toList());
+        return userService.findById(userId).map(user ->
+                projectService.findAllThatContainUser(user).stream().map(projectMapper::convertToDto).collect(Collectors.toList())).orElse(null);
     }
 
     @PostMapping("/api/register")
@@ -77,7 +80,7 @@ public class UserController {
             return null;
         }
         User user = userMapper.convertToEntity(authDto);
-        user.setRoles(Set.of(roleService.findByName(DEFAULT_ROLE)));
+        user.setRoles(roleService.findByName(DEFAULT_ROLE).map(Set::of).orElse(Collections.emptySet()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
         return userMapper.convertToDto(user);
@@ -85,44 +88,47 @@ public class UserController {
 
     @PatchMapping("/api/users/{userId}")
     public UserDto giveUserAdminRights(@PathVariable Long userId, @RequestParam boolean giveAdmin) {
-        User user = userService.findById(userId);
-        if (giveAdmin) {
-            user.getRoles().add(roleService.findByName(ADMIN_ROLE));
-        } else {
-            user.getRoles().remove(roleService.findByName(ADMIN_ROLE));
-        }
-        return userMapper.convertToDto(userService.save(user));
+        return userService.findById(userId).map(user -> {
+            Set<Role> userRoles = user.getRoles();
+            if (giveAdmin) {
+                roleService.findByName(ADMIN_ROLE).map(userRoles::add);
+            } else {
+                roleService.findByName(ADMIN_ROLE).map(userRoles::remove);
+            }
+            return userMapper.convertToDto(userService.save(user));
+        }).orElse(null);
     }
 
     @PutMapping("/api/users/{userId}")
     public UserDto updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
-        User originalUser = userService.findById(userId);
-        if (!SecurityContextHolder.getContext().getAuthentication().getName().equals(originalUser.getEmail())) {
-            return null;
-        }
-        if (validateData(userDto)) {
-            return userMapper.convertToDto(originalUser);
-        }
-        if (!originalUser.getFirstName().equals(userDto.getFirstName())) {
-            originalUser.setFirstName(userDto.getFirstName());
-        }
-        if (!originalUser.getLastName().equals(userDto.getLastName())) {
-            originalUser.setLastName(userDto.getLastName());
-        }
-        if (!originalUser.getShirtSize().equals(shirtSizeMapper.convertToEntity(userDto.getShirtSize()))) {
-            originalUser.setShirtSize(shirtSizeMapper.convertToEntity(userDto.getShirtSize()));
-        }
-        if (!originalUser.getShirtType().equals(userDto.getShirtType())) {
-            originalUser.setShirtType(userDto.getShirtType());
-        }
-        if (!originalUser.getCity().equals(userDto.getCity())) {
-            originalUser.setCity(userDto.getCity());
-        }
-        if (!originalUser.getPolishSpeaker().equals(userDto.getPolishSpeaker())) {
-            originalUser.setPolishSpeaker(userDto.getPolishSpeaker());
-        }
-        originalUser.setFoodPreferences(userDto.getFoodPreferences());
-        return userMapper.convertToDto(userService.save(originalUser));
+        return userService.findById(userId).map(originalUser -> {
+            if (!SecurityContextHolder.getContext().getAuthentication().getName().equals(originalUser.getEmail())) {
+                return null;
+            }
+            if (validateData(userDto)) {
+                return userMapper.convertToDto(originalUser);
+            }
+            if (!originalUser.getFirstName().equals(userDto.getFirstName())) {
+                originalUser.setFirstName(userDto.getFirstName());
+            }
+            if (!originalUser.getLastName().equals(userDto.getLastName())) {
+                originalUser.setLastName(userDto.getLastName());
+            }
+            if (!originalUser.getShirtSize().equals(shirtSizeMapper.convertToEntity(userDto.getShirtSize()))) {
+                originalUser.setShirtSize(shirtSizeMapper.convertToEntity(userDto.getShirtSize()));
+            }
+            if (!originalUser.getShirtType().equals(userDto.getShirtType())) {
+                originalUser.setShirtType(userDto.getShirtType());
+            }
+            if (!originalUser.getCity().equals(userDto.getCity())) {
+                originalUser.setCity(userDto.getCity());
+            }
+            if (!originalUser.getPolishSpeaker().equals(userDto.getPolishSpeaker())) {
+                originalUser.setPolishSpeaker(userDto.getPolishSpeaker());
+            }
+            originalUser.setFoodPreferences(userDto.getFoodPreferences());
+            return userMapper.convertToDto(userService.save(originalUser));
+        }).orElse(null);
     }
 
     private boolean validateData(@RequestBody UserDto userDto) {

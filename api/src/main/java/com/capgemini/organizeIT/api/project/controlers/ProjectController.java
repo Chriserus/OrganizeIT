@@ -1,16 +1,26 @@
 package com.capgemini.organizeIT.api.project.controlers;
 
-import com.capgemini.organizeIT.infrastructure.project.entities.Membership;
-import com.capgemini.organizeIT.infrastructure.project.entities.Ownership;
-import com.capgemini.organizeIT.infrastructure.project.entities.Project;
 import com.capgemini.organizeIT.api.project.mappers.ProjectMapper;
 import com.capgemini.organizeIT.core.project.model.ProjectDto;
 import com.capgemini.organizeIT.core.project.services.ProjectService;
-import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import com.capgemini.organizeIT.core.user.services.UserService;
+import com.capgemini.organizeIT.infrastructure.project.entities.Membership;
+import com.capgemini.organizeIT.infrastructure.project.entities.Ownership;
+import com.capgemini.organizeIT.infrastructure.project.entities.Project;
+import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.List;
@@ -42,7 +52,7 @@ public class ProjectController {
     }
 
     private void addCurrentLoggedInUserAsOwner(Project project, Principal principal) {
-        User user = userService.findByEmail(principal.getName());
+        User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new UsernameNotFoundException(principal.getName()));
         Ownership ownership = new Ownership();
         ownership.setProject(project);
         ownership.setUser(user);
@@ -53,7 +63,7 @@ public class ProjectController {
     }
 
     private void addOwnerAsProjectMember(Project project, Principal principal) {
-        User user = userService.findByEmail(principal.getName());
+        User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new UsernameNotFoundException(principal.getName()));
         Membership membership = new Membership();
         membership.setProject(project);
         membership.setUser(user);
@@ -65,12 +75,14 @@ public class ProjectController {
 
     @DeleteMapping("/api/projects/{id}")
     public void deleteProject(@PathVariable Long id, Principal principal) {
-        projectService.findById(id).ifPresent(project -> {
-            if (projectService.userIsProjectOwner(project, userService.findByEmail(principal.getName())) || !userService.loggedInUserIsNotAdmin()) {
-                log.info("Deleting project: {}", project);
-                projectService.deleteById(id);
-            }
-        });
+        projectService.findById(id).ifPresent(project ->
+                userService.findByEmail(principal.getName()).ifPresent(user -> {
+                    if (projectService.userIsProjectOwner(project, user) || !userService.loggedInUserIsNotAdmin()) {
+                        log.info("Deleting project: {}", project);
+                        projectService.deleteById(id);
+                    }
+                })
+        );
     }
 
     @PutMapping("/api/projects/{id}")

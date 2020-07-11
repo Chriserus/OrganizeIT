@@ -25,6 +25,7 @@ public class User {
     private String lastName;
     @Column(unique = true)
     private String email;
+    // TODO: Use primitives? (boolean)
     private Boolean polishSpeaker;
     private String foodPreferences;
     @Enumerated(EnumType.STRING)
