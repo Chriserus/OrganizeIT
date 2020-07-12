@@ -11,6 +11,7 @@ import {Messages} from "../../shared/Messages";
 import {MembershipService} from "../membership.service";
 import {AlertService} from "../../shared/alert.service";
 import {DataService} from "../../shared/data.service";
+import {Scope} from "../../interfaces/scope.enum";
 
 @Component({
   selector: 'app-list',
@@ -19,6 +20,7 @@ import {DataService} from "../../shared/data.service";
 })
 export class ListPage implements OnInit, OnDestroy {
   projects: Project[];
+  scope = Scope.LIST;
   private unsubscribe: Subject<Project[]> = new Subject();
   showProjectsSpinner: boolean;
 

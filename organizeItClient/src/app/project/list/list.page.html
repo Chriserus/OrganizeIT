@@ -16,6 +16,7 @@
   <ion-grid>
     <ion-row>
       <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
+        <app-project-card [project]="project" [scope]="scope"></app-project-card>
         <ion-card class="project-card">
           <ion-card-header>
             <ion-card-subtitle>
