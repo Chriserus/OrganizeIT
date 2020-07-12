@@ -1,18 +1,16 @@
 plugins {
-    id "org.springframework.boot" version "2.1.5.RELEASE"
-    id "io.freefair.lombok" version "5.1.0"
-    id 'io.spring.dependency-management' version "1.0.6.RELEASE"
+    id 'org.springframework.boot' version '2.3.1.RELEASE'
+    id 'io.freefair.lombok' version '5.1.0'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 }
 
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'java'
 apply plugin: 'application'
-mainClassName = 'com.capgemini.organizeIT.OrganizeItApplication'
 
 
 group = 'com.capgemini'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
@@ -25,25 +23,23 @@ bootJar {
 }
 
 dependencies {
-    compile project(':core')
-    compile project(':infrastructure')
+    implementation project(':core')
+    implementation project(':infrastructure')
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.liquibase:liquibase-core'
     runtimeOnly 'mysql:mysql-connector-java'
-    compile 'com.sendgrid:sendgrid-java:4.0.1'
-    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
-    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
-    compile group: 'io.springfox', name: 'springfox-bean-validators', version: '2.9.2'
-    compile group: 'org.apache.logging.log4j', name: 'log4j', version: '2.12.1', ext: 'pom'
-    compile group: 'org.json', name: 'json', version: '20190722'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.1.9.RELEASE'
-    compile 'org.modelmapper:modelmapper:2.3.6'
-//    testCompile project(':core')
-//    testCompile project(':infrastructure')
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    implementation group: 'io.springfox', name: 'springfox-bean-validators', version: '2.9.2'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j', version: '2.12.1', ext: 'pom'
+    implementation group: 'org.json', name: 'json', version: '20190722'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.1.9.RELEASE'
+    implementation 'org.modelmapper:modelmapper:2.3.6'
+//    testImplementation project(':core')
+//    testImplementation project(':infrastructure')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    testCompile group: 'com.h2database', name: 'h2', version: '1.4.199'
-
+    testImplementation group: 'com.h2database', name: 'h2', version: '1.4.199'
 }

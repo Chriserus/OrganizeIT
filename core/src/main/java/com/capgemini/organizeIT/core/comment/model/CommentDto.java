@@ -10,7 +10,7 @@ public class CommentDto {
     private Long id;
     private String content;
     private boolean announcement;
-    private UserDto author; // Here we need correct UserDto not only its id
+    private UserDto author;
     private Date created;
     private Date modified;
 }
