@@ -71,7 +71,7 @@ public class MembershipController {
     @DeleteMapping("/api/projects/{projectId}/memberships/{memberId}")
     public ProjectDto removeProjectMember(@PathVariable Long projectId, @PathVariable Long memberId) {
         return projectService.findById(projectId).map(project -> {
-            if (projectService.loggedInUserNotProjectOwner(project) && userService.loggedInUserIsNotAdmin()) {
+            if (projectService.loggedInUserNotProjectMembershipOwner(memberId) && projectService.loggedInUserNotProjectOwner(project) && userService.loggedInUserIsNotAdmin()) {
                 return projectMapper.convertToDto(project);
             }
             userService.findById(memberId).ifPresent(user ->

@@ -56,4 +56,8 @@ public class ProjectService {
     public boolean loggedInUserNotProjectOwner(Project project) {
         return userService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).map(user -> !userIsProjectOwner(project, user)).orElse(false);
     }
+
+    public boolean loggedInUserNotProjectMembershipOwner(Long memberId) {
+        return userService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).map(User::getId).map(userId -> !userId.equals(memberId)).orElse(false);
+    }
 }
