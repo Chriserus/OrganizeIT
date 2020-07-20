@@ -1,3 +1,6 @@
 export enum Scope {
-    LIST
+    LIST,
+    ADMIN_UNVERIFIED,
+    ADMIN_VERIFIED,
+    ADMIN_CONFIRMED
 }

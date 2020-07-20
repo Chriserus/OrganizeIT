@@ -17,51 +17,6 @@
     <ion-row>
       <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
         <app-project-card [project]="project" [scope]="scope"></app-project-card>
-        <ion-card class="project-card">
-          <ion-card-header>
-            <ion-card-subtitle>
-              <ion-text style="float:left;">Owner(s):
-                <p *ngFor="let owner of projectService.listOwners(project)">{{owner.firstName + " " + owner.lastName}}</p>
-              </ion-text>
-              <ion-chip style="	float: right;" color="primary" outline>
-                <ion-icon name="location" color="primary"></ion-icon>
-                <ion-label>{{project.city}}</ion-label>
-              </ion-chip>
-            </ion-card-subtitle>
-            <ion-card-title style="clear: both;">{{project.title}}
-              <ion-chip *ngIf="project.confirmed" color="success" outline>
-                <ion-icon name="star" color="success"></ion-icon>
-                <ion-label>Selected for development</ion-label>
-              </ion-chip>
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <div style="white-space:pre-wrap;">{{project.description}}</div>
-            <ion-item-divider color="white">
-            </ion-item-divider>
-            <ion-card-subtitle>Technologies: {{project.technologies}}</ion-card-subtitle>
-            <ion-item-divider color="white">
-            </ion-item-divider>
-            Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
-            <p *ngFor="let member of projectService.listApprovedMembers(project)">
-              {{member.firstName + " " + member.lastName}}
-            </p>
-            <ion-item-divider color="white">
-            </ion-item-divider>
-            <!-- custom date format:  HH:MM | d-MMM-yyyy-->
-            <ion-card-subtitle>Created: {{project.created | date: 'medium'}}</ion-card-subtitle>
-          </ion-card-content>
-          <ion-item *ngIf="!membershipService.userAlreadyEnrolled(project) && isUserLoggedIn() && !membershipService.userEnrollmentPending(project)">
-            <ion-button id="enrollButton" expand="block" (click)="sendEnrollmentRequest(project)">Enroll</ion-button>
-          </ion-item>
-          <ion-item *ngIf="membershipService.userEnrollmentPending(project)" >
-            <ion-chip color="danger" (click)="alertService.cancelEnrollmentRequest(project)" outline>
-              <ion-icon name="alarm"></ion-icon>
-              <ion-label>Enrollment request pending</ion-label>
-              <ion-icon name="close-circle"></ion-icon>
-            </ion-chip>
-          </ion-item>
-        </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>

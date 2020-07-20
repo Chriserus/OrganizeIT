@@ -9,6 +9,7 @@ import {AuthService} from "../authentication/auth.service";
 import {MembershipService} from "../project/membership.service";
 import {AlertService} from "../shared/alert.service";
 import {DataService} from "../shared/data.service";
+import {Scope} from "../interfaces/scope.enum";
 
 @Component({
   selector: 'app-admin',
@@ -30,6 +31,9 @@ export class AdminPage implements OnInit, OnDestroy {
   showUsersCard: boolean = true;
   showProjectsSpinner: boolean;
   showUsersSpinner: boolean;
+  scopeUnverified = Scope.ADMIN_UNVERIFIED;
+  scopeVerified = Scope.ADMIN_VERIFIED;
+  scopeConfirmed = Scope.ADMIN_CONFIRMED;
 
   constructor(private projectService: ProjectService, private notificationService: NotificationService,
               private authService: AuthService, private membershipService: MembershipService,

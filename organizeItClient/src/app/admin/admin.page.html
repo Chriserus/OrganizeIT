@@ -1,321 +1,133 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Admin</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Admin</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-  <ion-spinner *ngIf="showProjectsSpinner || showUsersSpinner"></ion-spinner>
-  <ion-card>
-    <ion-card-header>
-      <ion-item>
-        <ion-card-title>Unverified projects</ion-card-title>
-        <ion-toggle slot="end" color="secondary" [(ngModel)]="showUnverifiedProjects"></ion-toggle>
-      </ion-item>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-grid *ngIf="showUnverifiedProjects">
-        <ion-row>
-          <ion-col *ngFor="let project of unverifiedProjects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
-            <ion-card class="project-card">
-              <ion-card-header>
-                <ion-card-subtitle>
-                  <ion-text style="float: left;">Owner(s):
-                    <p *ngFor="let owner of projectService.listOwners(project)">
-                      {{owner.firstName + " " + owner.lastName}}
-                    </p>
-                  </ion-text>
-                  <ion-chip style="float: right;" (click)="alertService.presentModifyProjectCityAlert(project)"
-                            color="primary" outline>
-                    <ion-icon name="location" color="primary"></ion-icon>
-                    <ion-label>{{project.city}}</ion-label>
-                    <ion-icon name="create"></ion-icon>
-                  </ion-chip>
-                </ion-card-subtitle>
-                <ion-card-title style="clear: both;">{{project.title}}</ion-card-title>
-                <ion-chip *ngIf="project.verified === false" color="danger" outline>
-                  <ion-icon name="warning" color="warning"></ion-icon>
-                  <ion-label>Not verified yet</ion-label>
-                </ion-chip>
-              </ion-card-header>
-              <ion-card-content>
-                <div style="white-space:pre-wrap;">{{project.description}}</div>
-                <ion-item-divider color="white">
-                </ion-item-divider>
-                <ion-card-subtitle>Technologies: {{project.technologies}}</ion-card-subtitle>
-                <ion-item-divider color="white">
-                </ion-item-divider>
-                Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
-                <p *ngFor="let member of projectService.listApprovedMembers(project)">
-                  {{member.firstName + " " + member.lastName}}
-                </p>
-                <ion-item-divider color="white">
-                </ion-item-divider>
-                <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
-                <div *ngIf="projectHasRequests(project)">
-                  <ion-item-divider color="white">
-                  </ion-item-divider>
-                  Requests:
-                  <div *ngFor="let potentialMember of listPotentialMembers(project)">
-                    <ion-buttons>
-                      <ion-button size="small" slot="start" color="success" shape="round"
-                                  (click)="membershipService.acceptMembershipRequest(project, potentialMember)">
-                        <ion-icon name="checkmark"></ion-icon>
-                      </ion-button>
-                      <ion-button size="small" slot="start" color="danger" shape="round"
-                                  (click)="alertService.deleteEnrollmentRequest(project, potentialMember)">
-                        <ion-icon name="close"></ion-icon>
-                      </ion-button>
-                      {{potentialMember.user.email}}
-                    </ion-buttons>
-                  </div>
-                </div>
-              </ion-card-content>
-              <ion-button *ngIf="project.verified === false" expand="block"
-                          (click)="alertService.presentVerifyProjectAlert(project)" color="success">Verify project
-              </ion-button>
-              <ion-button expand="block"
-                          (click)="alertService.presentDeleteProjectAlert(project)" color="danger">Delete project
-              </ion-button>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-  <ion-card-header>
-    <ion-item>
-      <ion-card-title>Verified projects</ion-card-title>
-      <ion-toggle slot="end" color="secondary" [(ngModel)]="showVerifiedProjects"></ion-toggle>
-    </ion-item>
-  </ion-card-header>
-  <ion-card-content>
-    <ion-grid *ngIf="showVerifiedProjects">
-      <ion-row>
-        <ion-col *ngFor="let project of verifiedProjects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
-          <ion-card class="project-card">
-            <ion-card-header>
-              <ion-card-subtitle>
-                <ion-text style="float: left;">Owner(s):
-                  <p *ngFor="let owner of projectService.listOwners(project)">
-                    {{owner.firstName + " " + owner.lastName}}
-                  </p>
-                </ion-text>
-                <ion-chip style="float: right;" (click)="alertService.presentModifyProjectCityAlert(project)"
-                          color="primary" outline>
-                  <ion-icon name="location" color="primary"></ion-icon>
-                  <ion-label>{{project.city}}</ion-label>
-                  <ion-icon name="create"></ion-icon>
-                </ion-chip>
-              </ion-card-subtitle>
-              <ion-card-title style="clear: both;">{{project.title}}</ion-card-title>
-              <ion-chip *ngIf="project.verified === false" color="danger" outline>
-                <ion-icon name="warning" color="warning"></ion-icon>
-                <ion-label>Not verified yet</ion-label>
-              </ion-chip>
-            </ion-card-header>
-            <ion-card-content>
-              <div style="white-space:pre-wrap;">{{project.description}}</div>
-              <ion-item-divider color="white">
-              </ion-item-divider>
-              <ion-card-subtitle>Technologies: {{project.technologies}}</ion-card-subtitle>
-              <ion-item-divider color="white">
-              </ion-item-divider>
-              Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
-              <p *ngFor="let member of projectService.listApprovedMembers(project)">
-                {{member.firstName + " " + member.lastName}}
-              </p>
-              <ion-item-divider color="white">
-              </ion-item-divider>
-              <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
-              <div *ngIf="projectHasRequests(project)">
-                <ion-item-divider color="white">
-                </ion-item-divider>
-                Requests:
-                <ion-text *ngIf="projectService.maxMembersCapacityReached(project)" color="danger">
-                  Max members capacity reached!
-                </ion-text>
-                <div *ngFor="let potentialMember of listPotentialMembers(project)">
-                  <ion-buttons>
-                    <ion-button size="small" slot="start" color="success" shape="round"
-                                [disabled]="projectService.maxMembersCapacityReached(project)"
-                                (click)="membershipService.acceptMembershipRequest(project, potentialMember)">
-                      <ion-icon name="checkmark"></ion-icon>
-                    </ion-button>
-                    <ion-button size="small" slot="start" color="danger" shape="round"
-                                (click)="alertService.deleteEnrollmentRequest(project, potentialMember)">
-                      <ion-icon name="close"></ion-icon>
-                    </ion-button>
-                    {{potentialMember.user.email}}
-                  </ion-buttons>
-                </div>
-              </div>
-            </ion-card-content>
-            <ion-button *ngIf="!project.confirmed" expand="block"
-                        (click)="alertService.presentConfirmProjectAlert(project)" color="success">Confirm project
-            </ion-button>
-            <ion-button expand="block"
-                        (click)="alertService.presentInvalidateProjectAlert(project)" color="warning">Invalidate project
-            </ion-button>
-            <ion-button expand="block"
-                        (click)="alertService.presentDeleteProjectAlert(project)" color="danger">Delete project
-            </ion-button>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      <ion-item>
-        <ion-card-title>Confirmed projects</ion-card-title>
-        <ion-toggle slot="end" color="secondary" [(ngModel)]="showConfirmedProjects"></ion-toggle>
-      </ion-item>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-grid *ngIf="showConfirmedProjects">
-        <ion-row>
-          <ion-col *ngFor="let project of confirmedProjects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
-            <ion-card class="project-card">
-              <ion-card-header>
-                <ion-card-subtitle>
-                  <ion-text style="float: left;">Owner(s):
-                    <p *ngFor="let owner of projectService.listOwners(project)">
-                      {{owner.firstName + " " + owner.lastName}}
-                    </p>
-                  </ion-text>
-                  <ion-chip style="float: right;" (click)="alertService.presentModifyProjectCityAlert(project)"
-                            color="primary" outline>
-                    <ion-icon name="location" color="primary"></ion-icon>
-                    <ion-label>{{project.city}}</ion-label>
-                    <ion-icon name="create"></ion-icon>
-                  </ion-chip>
-                </ion-card-subtitle>
-                <ion-card-title style="clear: both;">{{project.title}}
-                  <ion-chip *ngIf="project.confirmed" color="success" outline>
-                    <ion-icon name="star" color="success"></ion-icon>
-                    <ion-label>Selected for development</ion-label>
-                  </ion-chip>
-                </ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <div style="white-space:pre-wrap;">{{project.description}}</div>
-                <ion-item-divider color="white">
-                </ion-item-divider>
-                <ion-card-subtitle>Technologies: {{project.technologies}}</ion-card-subtitle>
-                <ion-item-divider color="white">
-                </ion-item-divider>
-                Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
-                <p *ngFor="let member of projectService.listApprovedMembers(project)">
-                  {{member.firstName + " " + member.lastName}}
-                </p>
-                <ion-item-divider color="white">
-                </ion-item-divider>
-                <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
-                <div *ngIf="projectHasRequests(project)">
-                  <ion-item-divider color="white">
-                  </ion-item-divider>
-                  Requests:
-                  <ion-text *ngIf="projectService.maxMembersCapacityReached(project)" color="danger">
-                    Max members capacity reached!
-                  </ion-text>
-                  <div *ngFor="let potentialMember of listPotentialMembers(project)">
-                    <ion-buttons>
-                      <ion-button size="small" slot="start" color="success" shape="round"
-                                  [disabled]="projectService.maxMembersCapacityReached(project)"
-                                  (click)="membershipService.acceptMembershipRequest(project, potentialMember)">
-                        <ion-icon name="checkmark"></ion-icon>
-                      </ion-button>
-                      <ion-button size="small" slot="start" color="danger" shape="round"
-                                  (click)="alertService.deleteEnrollmentRequest(project, potentialMember)">
-                        <ion-icon name="close"></ion-icon>
-                      </ion-button>
-                      {{potentialMember.user.email}}
-                    </ion-buttons>
-                  </div>
-                </div>
-              </ion-card-content>
-              <ion-button *ngIf="project.confirmed" expand="block"
-                          (click)="alertService.presentUnconfirmProjectAlert(project)" color="warning">Unconfirm project
-              </ion-button>
-              <ion-button expand="block"
-                          (click)="alertService.presentDeleteProjectAlert(project)" color="danger">Delete project
-              </ion-button>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      <ion-item>
-        <ion-card-title>Users</ion-card-title>
-        <ion-toggle slot="end" color="secondary" [(ngModel)]="showUsersCard"></ion-toggle>
-      </ion-item>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-grid *ngIf="showUsersCard">
-        <!--        <ion-segment (ionChange)="segmentChanged($event)">-->
-        <!--          <ion-segment-button value="cards" checked>-->
-        <!--            <ion-label>Cards</ion-label>-->
-        <!--          </ion-segment-button>-->
-        <!--          <ion-segment-button value="table">-->
-        <!--            <ion-label>Table</ion-label>-->
-        <!--          </ion-segment-button>-->
-        <!--        </ion-segment>-->
-        <ion-searchbar (ionChange)="onSearchChange($event)"></ion-searchbar>
-        <ion-row>
-          <ion-col *ngFor="let user of users" size-xs="12" size-sm="12" size-md="6" size-lg="6">
-            <ion-card class="project-card">
-              <ion-card-header>
-                <ion-card-subtitle>{{user.email}}</ion-card-subtitle>
-                <ion-card-title>{{user.firstName + " " + user.lastName}}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-item>
-                  <ion-label position="stacked">Food preferences</ion-label>
-                  <ion-input value="{{user.foodPreferences}}" readonly="true"></ion-input>
-                </ion-item>
-                <ion-item *ngIf="user.shirtSize">
-                  <ion-label position="stacked">Shirt size</ion-label>
-                  <ion-input value="{{user.shirtSize.size}}" readonly="true"></ion-input>
-                </ion-item>
-                <ion-item>
-                  <ion-label position="stacked">Shirt type</ion-label>
-                  <ion-input value="{{user.shirtType}}" readonly="true"></ion-input>
-                </ion-item>
-                <ion-item>
-                  <ion-label position="stacked">City</ion-label>
-                  <ion-input value="{{user.city}}" readonly="true"></ion-input>
-                </ion-item>
-                <ion-item>
-                  <ion-label position="stacked">I speak Polish</ion-label>
-                  <ion-checkbox value="{{user.polishSpeaker}}" [checked]="user.polishSpeaker"
-                                [disabled]="true"></ion-checkbox>
-                </ion-item>
-              </ion-card-content>
-              <ion-button *ngIf="!authService.userHasAdminRole(user)" expand="block"
-                          (click)="alertService.presentGiveAdminRightsAlert(user)" color="primary">Give admin rights
-              </ion-button>
-              <ion-button *ngIf="authService.userHasAdminRole(user)" expand="block"
-                          (click)="alertService.presentRevokeAdminRightsAlert(user)" color="warning">Revoke admin rights
-              </ion-button>
-              <ion-button expand="block"
-                          (click)="alertService.presentDeleteUserAlert(user)" color="danger">Delete user
-              </ion-button>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <ion-spinner *ngIf="showProjectsSpinner || showUsersSpinner"></ion-spinner>
+    <ion-card>
+        <ion-card-header>
+            <ion-item>
+                <ion-card-title>Unverified projects</ion-card-title>
+                <ion-toggle slot="end" color="secondary" [(ngModel)]="showUnverifiedProjects"></ion-toggle>
+            </ion-item>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-grid *ngIf="showUnverifiedProjects">
+                <ion-row>
+                    <ion-col *ngFor="let project of unverifiedProjects" size-xs="12" size-sm="12" size-md="6"
+                             size-lg="6">
+                        <app-project-card [project]="project" [scope]="scopeUnverified"></app-project-card>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-item>
+                <ion-card-title>Verified projects</ion-card-title>
+                <ion-toggle slot="end" color="secondary" [(ngModel)]="showVerifiedProjects"></ion-toggle>
+            </ion-item>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-grid *ngIf="showVerifiedProjects">
+                <ion-row>
+                    <ion-col *ngFor="let project of verifiedProjects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
+                        <app-project-card [project]="project" [scope]="scopeVerified"></app-project-card>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-item>
+                <ion-card-title>Confirmed projects</ion-card-title>
+                <ion-toggle slot="end" color="secondary" [(ngModel)]="showConfirmedProjects"></ion-toggle>
+            </ion-item>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-grid *ngIf="showConfirmedProjects">
+                <ion-row>
+                    <ion-col *ngFor="let project of confirmedProjects" size-xs="12" size-sm="12" size-md="6"
+                             size-lg="6">
+                        <app-project-card [project]="project" [scope]="scopeConfirmed"></app-project-card>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-item>
+                <ion-card-title>Users</ion-card-title>
+                <ion-toggle slot="end" color="secondary" [(ngModel)]="showUsersCard"></ion-toggle>
+            </ion-item>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-grid *ngIf="showUsersCard">
+                <!--        <ion-segment (ionChange)="segmentChanged($event)">-->
+                <!--          <ion-segment-button value="cards" checked>-->
+                <!--            <ion-label>Cards</ion-label>-->
+                <!--          </ion-segment-button>-->
+                <!--          <ion-segment-button value="table">-->
+                <!--            <ion-label>Table</ion-label>-->
+                <!--          </ion-segment-button>-->
+                <!--        </ion-segment>-->
+                <ion-searchbar (ionChange)="onSearchChange($event)"></ion-searchbar>
+                <ion-row>
+                    <ion-col *ngFor="let user of users" size-xs="12" size-sm="12" size-md="6" size-lg="6">
+                        <ion-card class="project-card">
+                            <ion-card-header>
+                                <ion-card-subtitle>{{user.email}}</ion-card-subtitle>
+                                <ion-card-title>{{user.firstName + " " + user.lastName}}</ion-card-title>
+                            </ion-card-header>
+                            <ion-card-content>
+                                <ion-item>
+                                    <ion-label position="stacked">Food preferences</ion-label>
+                                    <ion-input value="{{user.foodPreferences}}" readonly="true"></ion-input>
+                                </ion-item>
+                                <ion-item *ngIf="user.shirtSize">
+                                    <ion-label position="stacked">Shirt size</ion-label>
+                                    <ion-input value="{{user.shirtSize.size}}" readonly="true"></ion-input>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-label position="stacked">Shirt type</ion-label>
+                                    <ion-input value="{{user.shirtType}}" readonly="true"></ion-input>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-label position="stacked">City</ion-label>
+                                    <ion-input value="{{user.city}}" readonly="true"></ion-input>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-label position="stacked">I speak Polish</ion-label>
+                                    <ion-checkbox value="{{user.polishSpeaker}}" [checked]="user.polishSpeaker"
+                                                  [disabled]="true"></ion-checkbox>
+                                </ion-item>
+                            </ion-card-content>
+                            <ion-button *ngIf="!authService.userHasAdminRole(user)" expand="block"
+                                        (click)="alertService.presentGiveAdminRightsAlert(user)" color="primary">Give
+                                admin rights
+                            </ion-button>
+                            <ion-button *ngIf="authService.userHasAdminRole(user)" expand="block"
+                                        (click)="alertService.presentRevokeAdminRightsAlert(user)" color="warning">
+                                Revoke admin rights
+                            </ion-button>
+                            <ion-button expand="block"
+                                        (click)="alertService.presentDeleteUserAlert(user)" color="danger">Delete user
+                            </ion-button>
+                        </ion-card>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
 </ion-content>
