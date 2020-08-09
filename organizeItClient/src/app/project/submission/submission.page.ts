@@ -31,9 +31,24 @@ export class SubmissionPage implements OnInit {
                 () => {
                     form.reset();
                     this.toastService.showClosableInformationMessage(Messages.projectSubmittedMessage);
+                    this.vibrationEasterEgg();
                     this.router.navigateByUrl("profile");
                 })
 
+        }
+    }
+
+    vibrationEasterEgg() {
+        if ("vibrate" in window.navigator) {
+            const timeUnitInMs = 100;
+            const dot = timeUnitInMs;
+            const dash = timeUnitInMs * 3;
+            const pause = timeUnitInMs;
+            const spaceBetweenLetters = timeUnitInMs * 3;
+            const letterG = [dash, pause, dash, pause, dot];
+            let pattern = [...letterG, spaceBetweenLetters, ...letterG];
+            console.log(pattern);
+            window.navigator.vibrate(pattern);
         }
     }
 }
