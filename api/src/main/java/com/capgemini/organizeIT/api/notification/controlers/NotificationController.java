@@ -12,6 +12,7 @@ import com.capgemini.organizeIT.infrastructure.permission.entities.Permission;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,9 +72,9 @@ public class NotificationController {
     }
 
     @GetMapping("/api/notifications/{userId}")
-    public List<NotificationDto> getNotificationsForUser(@PathVariable final Long userId) {
-        List<Notification> notifications = userService.findById(userId).map(notificationService::findByUser).orElse(Collections.emptyList());
-        return notifications.stream().map(notificationMapper::convertToDto).collect(Collectors.toList());
+    public ResponseEntity<List<NotificationDto>> getNotificationsForUser(@PathVariable final Long userId) {
+        return ResponseEntity.ok(userService.findById(userId).map(notificationService::findByUser)
+                .orElse(Collections.emptyList()).stream().map(notificationMapper::convertToDto).collect(Collectors.toList()));
     }
 
     // TODO: Move below methods to service?

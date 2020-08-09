@@ -5,6 +5,7 @@ import com.capgemini.organizeIT.core.shirt.model.ShirtSizeDto;
 import com.capgemini.organizeIT.core.shirt.services.ShirtSizeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,7 @@ public class ShirtSizeController {
     private final ShirtSizeMapper shirtSizeMapper;
 
     @GetMapping("/api/shirt-sizes")
-    public List<ShirtSizeDto> findAllProjects() {
-        return shirtSizeService.findAll().stream().map(shirtSizeMapper::convertToDto).collect(Collectors.toList());
+    public ResponseEntity<List<ShirtSizeDto>> findAllProjects() {
+        return ResponseEntity.ok(shirtSizeService.findAll().stream().map(shirtSizeMapper::convertToDto).collect(Collectors.toList()));
     }
 }

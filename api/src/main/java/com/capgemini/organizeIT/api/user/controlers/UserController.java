@@ -13,6 +13,7 @@ import com.capgemini.organizeIT.infrastructure.role.entities.Role;
 import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -54,8 +55,8 @@ public class UserController {
     }
 
     @GetMapping("/api/users")
-    public List<UserDto> allUsers() {
-        return userService.findAll().stream().map(userMapper::convertToDto).collect(Collectors.toList());
+    public ResponseEntity<List<UserDto>> allUsers() {
+        return ResponseEntity.ok(userService.findAll().stream().map(userMapper::convertToDto).collect(Collectors.toList()));
     }
 
     @DeleteMapping("/api/users/{userId}")

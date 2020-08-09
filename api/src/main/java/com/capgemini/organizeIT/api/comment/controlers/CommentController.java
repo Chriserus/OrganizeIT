@@ -8,6 +8,7 @@ import com.capgemini.organizeIT.core.user.services.UserService;
 import com.capgemini.organizeIT.infrastructure.comment.entities.Comment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,17 +31,17 @@ public class CommentController {
     private final UserService userService;
 
     @GetMapping("/api/comments")
-    public List<CommentDto> findAllComments() {
-        return commentService.findAll().stream().map(commentMapper::convertToDto).collect(Collectors.toList());
+    public ResponseEntity<List<CommentDto>> findAllComments() {
+        return ResponseEntity.ok(commentService.findAll().stream().map(commentMapper::convertToDto).collect(Collectors.toList()));
     }
 
     @PostMapping("/api/comments")
-    public CommentDto register(@RequestBody CommentDto commentDto) {
+    public ResponseEntity<CommentDto> register(@RequestBody CommentDto commentDto) {
         if (userService.loggedInUserIsNotAdmin()) {
             commentDto.setAnnouncement(false);
         }
         Comment comment = commentMapper.convertToEntity(commentDto);
-        return commentMapper.convertToDto(commentService.save(comment));
+        return ResponseEntity.ok(commentMapper.convertToDto(commentService.save(comment)));
     }
 
     @DeleteMapping("/api/comments/{id}")

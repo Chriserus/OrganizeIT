@@ -10,6 +10,7 @@ import com.capgemini.organizeIT.infrastructure.project.entities.Project;
 import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,19 +37,19 @@ public class ProjectController {
     private final UserService userService;
 
     @GetMapping("/api/projects")
-    public List<ProjectDto> findAllProjects() {
-        return projectService.findAllSortByDateNewFirst().stream().map(projectMapper::convertToDto).collect(Collectors.toList());
+    public ResponseEntity<List<ProjectDto>> findAllProjects() {
+        return ResponseEntity.ok(projectService.findAllSortByDateNewFirst().stream().map(projectMapper::convertToDto).collect(Collectors.toList()));
     }
 
     @PostMapping("/api/projects")
-    public ProjectDto addProject(@RequestBody ProjectDto projectDto, @RequestParam(required = false) boolean joinProject, Principal principal) {
+    public ResponseEntity<ProjectDto> addProject(@RequestBody ProjectDto projectDto, @RequestParam(required = false) boolean joinProject, Principal principal) {
         log.info(projectDto);
         Project project = projectMapper.convertToEntity(projectDto);
         addCurrentLoggedInUserAsOwner(project, principal);
         if (joinProject) {
             addOwnerAsProjectMember(project, principal);
         }
-        return projectMapper.convertToDto(projectService.save(project));
+        return ResponseEntity.ok(projectMapper.convertToDto(projectService.save(project)));
     }
 
     private void addCurrentLoggedInUserAsOwner(Project project, Principal principal) {
