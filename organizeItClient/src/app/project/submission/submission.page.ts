@@ -7,33 +7,33 @@ import {ToastService} from "../../shared/toast.service";
 import {Messages} from "../../shared/Messages";
 
 @Component({
-  selector: 'app-submission',
-  templateUrl: './submission.page.html',
-  styleUrls: ['./submission.page.scss'],
+    selector: 'app-submission',
+    templateUrl: './submission.page.html',
+    styleUrls: ['./submission.page.scss'],
 })
 export class SubmissionPage implements OnInit {
-  joinAsMember = true;
+    joinAsMember = true;
 
-  constructor(private projectService: ProjectService, private authService: AuthService, private  router: Router,
-              private toastService: ToastService, private submitService: SubmitService) {
-  }
-
-  ngOnInit() {
-  }
-
-  // TODO: Add notification sending to admins?
-  registerProject(form) {
-    if (!this.submitService.isButtonDisabled('submitButton')) {
-      if (form.value.maxMembers === 0) {
-        form.value.maxMembers = 1;
-      }
-      this.projectService.addProject(form).subscribe(
-          () => {
-            form.reset();
-            this.toastService.showClosableInformationMessage(Messages.projectSubmittedMessage);
-            this.router.navigateByUrl("profile");
-          })
-
+    constructor(private projectService: ProjectService, private authService: AuthService, private  router: Router,
+                private toastService: ToastService, private submitService: SubmitService) {
     }
-  }
+
+    ngOnInit() {
+    }
+
+    // TODO: Add notification sending to admins?
+    registerProject(form) {
+        if (!this.submitService.isButtonDisabled('submitButton')) {
+            if (form.value.maxMembers === 0) {
+                form.value.maxMembers = 1;
+            }
+            this.projectService.addProject(form).subscribe(
+                () => {
+                    form.reset();
+                    this.toastService.showClosableInformationMessage(Messages.projectSubmittedMessage);
+                    this.router.navigateByUrl("profile");
+                })
+
+        }
+    }
 }

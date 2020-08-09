@@ -1,4 +1,4 @@
 export interface ShirtSize {
-  id: number;
-  size: string;
+    id: number;
+    size: string;
 }

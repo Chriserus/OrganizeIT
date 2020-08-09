@@ -11,63 +11,63 @@ import {AlertService} from "../../shared/alert.service";
 import {DataService} from "../../shared/data.service";
 
 @Component({
-  selector: 'app-board',
-  templateUrl: './board.page.html',
-  styleUrls: ['./board.page.scss'],
+    selector: 'app-board',
+    templateUrl: './board.page.html',
+    styleUrls: ['./board.page.scss'],
 })
 export class BoardPage implements OnInit, OnDestroy {
-  comments: Comment[] = [];
-  private unsubscribe: Subject<Project[]> = new Subject();
-  public loggedInUser: User;
-  announcement: boolean;
-  showCommentsSpinner: boolean;
+    comments: Comment[] = [];
+    private unsubscribe: Subject<Project[]> = new Subject();
+    public loggedInUser: User;
+    announcement: boolean;
+    showCommentsSpinner: boolean;
 
-  constructor(private commentService: CommentService, public authService: AuthService, public alertService: AlertService,
-              private submitService: SubmitService, private data: DataService) {
-    this.announcement = false;
-    this.data.currentComments.subscribe(comments => this.comments = comments);
-    this.data.currentUser.subscribe(user => this.loggedInUser = user);
-    this.authService.getCurrentUser().subscribe((user: User) => this.data.changeCurrentUser(user));
-  }
-
-  ngOnInit() {
-    this.data.currentComments.subscribe(comments => this.comments = comments);
-    this.data.currentUser.subscribe(user => this.loggedInUser = user);
-    this.getComments();
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
-  }
-
-  getComments() {
-    this.showCommentsSpinner = true;
-    this.commentService.getComments().pipe(takeUntil(this.unsubscribe))
-        .pipe(finalize(async () => {
-          this.showCommentsSpinner = false;
-        }))
-        .subscribe(comments => {
-          this.data.changeComments(comments);
-        });
-  }
-
-  registerComment(form) {
-    if (!this.submitService.isButtonDisabled('submitButton')) {
-      this.commentService.addComment(form, this.loggedInUser).subscribe(
-          (response: any) => {
-            form.reset();
-            this.getComments();
-          })
+    constructor(private commentService: CommentService, public authService: AuthService, public alertService: AlertService,
+                private submitService: SubmitService, private data: DataService) {
+        this.announcement = false;
+        this.data.currentComments.subscribe(comments => this.comments = comments);
+        this.data.currentUser.subscribe(user => this.loggedInUser = user);
+        this.authService.getCurrentUser().subscribe((user: User) => this.data.changeCurrentUser(user));
     }
-  }
 
-  loggedInUserIsAuthor(comment: Comment) {
-    return sessionStorage.getItem("loggedInUserEmail") === comment.author.email;
-  }
+    ngOnInit() {
+        this.data.currentComments.subscribe(comments => this.comments = comments);
+        this.data.currentUser.subscribe(user => this.loggedInUser = user);
+        this.getComments();
+    }
 
-  async doRefresh(event) {
-    this.getComments();
-    event.target.complete();
-  }
+    ngOnDestroy() {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+    }
+
+    getComments() {
+        this.showCommentsSpinner = true;
+        this.commentService.getComments().pipe(takeUntil(this.unsubscribe))
+            .pipe(finalize(async () => {
+                this.showCommentsSpinner = false;
+            }))
+            .subscribe(comments => {
+                this.data.changeComments(comments);
+            });
+    }
+
+    registerComment(form) {
+        if (!this.submitService.isButtonDisabled('submitButton')) {
+            this.commentService.addComment(form, this.loggedInUser).subscribe(
+                (response: any) => {
+                    form.reset();
+                    this.getComments();
+                })
+        }
+    }
+
+    loggedInUserIsAuthor(comment: Comment) {
+        return sessionStorage.getItem("loggedInUserEmail") === comment.author.email;
+    }
+
+    async doRefresh(event) {
+        this.getComments();
+        event.target.complete();
+    }
 }

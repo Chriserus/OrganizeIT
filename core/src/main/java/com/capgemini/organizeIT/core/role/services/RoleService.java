@@ -4,7 +4,6 @@ import com.capgemini.organizeIT.infrastructure.role.entities.Role;
 import com.capgemini.organizeIT.infrastructure.role.repositories.RoleRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,7 +15,7 @@ public class RoleService {
         this.roleRepository = roleRepository;
     }
 
-    public Optional<Role> findByName(String name){
+    public Optional<Role> findByName(String name) {
         return roleRepository.findByName(name);
     }
 }

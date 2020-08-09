@@ -1,40 +1,44 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Login</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Login</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle></ion-card-subtitle>
-      <ion-card-title>Login to your account!</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <form #form="ngForm" (ngSubmit)="login(form)">
-        <ion-grid>
-          <ion-row>
-            <ion-col>
-              <ion-item>
-                <ion-label position="stacked">Email</ion-label>
-                <p></p>
-                <ion-input name="email" type="email" pattern="^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(capgemini|cap)\.com$" ngModel required></ion-input>
-              </ion-item>
-              <ion-item>
-                <ion-label position="stacked">Password</ion-label>
-                <p></p>
-                <ion-input name="password" type="password" ngModel required (keyup.enter)="login(form)"></ion-input>
-              </ion-item>
-              <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid" expand="block">Login
-              </ion-button>
-              If you don't have an account, please <a routerLink='/register'>register</a> first!
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </form>
-    </ion-card-content>
-  </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-subtitle></ion-card-subtitle>
+            <ion-card-title>Login to your account!</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <form #form="ngForm" (ngSubmit)="login(form)">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label position="stacked">Email</ion-label>
+                                <p></p>
+                                <ion-input name="email" type="email"
+                                           pattern="^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(capgemini|cap)\.com$"
+                                           ngModel required></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="stacked">Password</ion-label>
+                                <p></p>
+                                <ion-input name="password" type="password" ngModel required
+                                           (keyup.enter)="login(form)"></ion-input>
+                            </ion-item>
+                            <ion-button id="submitButton" size="large" type="submit" [disabled]="form.invalid"
+                                        expand="block">Login
+                            </ion-button>
+                            If you don't have an account, please <a routerLink='/register'>register</a> first!
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </form>
+        </ion-card-content>
+    </ion-card>
 </ion-content>

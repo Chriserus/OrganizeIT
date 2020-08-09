@@ -1,4 +1,4 @@
 export enum City {
-  WRO = 'WRO',
-  POZ = 'POZ'
+    WRO = 'WRO',
+    POZ = 'POZ'
 }

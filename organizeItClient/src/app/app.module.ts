@@ -21,31 +21,31 @@ import {IonicStorageModule} from "@ionic/storage";
 import {FormsModule} from "@angular/forms";
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(),
-    IonicStorageModule.forRoot(),
-    AppRoutingModule,
-    HttpClientModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
-    ServiceWorkerModule.register('combined-sw.js', {
-      enabled: environment.production
-    }),
-    FormsModule
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    Firebase,
-    AngularFirestore,
-    Geolocation,
-    AngularFireMessaging,
-    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
-  ],
-  bootstrap: [AppComponent]
+    declarations: [AppComponent],
+    entryComponents: [],
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot(),
+        IonicStorageModule.forRoot(),
+        AppRoutingModule,
+        HttpClientModule,
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFirestoreModule,
+        ServiceWorkerModule.register('combined-sw.js', {
+            enabled: environment.production
+        }),
+        FormsModule
+    ],
+    providers: [
+        StatusBar,
+        SplashScreen,
+        Firebase,
+        AngularFirestore,
+        Geolocation,
+        AngularFireMessaging,
+        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

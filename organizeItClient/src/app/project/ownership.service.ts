@@ -9,34 +9,34 @@ import {Messages} from "../shared/Messages";
 import {ProjectService} from "./project.service";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class OwnershipService {
-  readonly PROJECTS_URL = '/api/projects';
-  readonly OWNERSHIP_URL = '/ownerships';
+    readonly PROJECTS_URL = '/api/projects';
+    readonly OWNERSHIP_URL = '/ownerships';
 
-  constructor(private http: HttpClient, private alertController: AlertController, private authService: AuthService,
-              private notificationService: NotificationService, private projectService: ProjectService) {
-  }
+    constructor(private http: HttpClient, private alertController: AlertController, private authService: AuthService,
+                private notificationService: NotificationService, private projectService: ProjectService) {
+    }
 
-  grantOwnershipToUser(project: Project, owner: User) {
-    this.addOwnershipToUser(owner, project).subscribe(
-        response => {
-          this.notificationService.sendNotification(owner, Messages.ownershipGrantedNotificationTitle,
-              "You have been granted ownership rights to project: " + project.title).subscribe(
-              () => {
-                this.projectService.updateProjects();
-              },
-              (error: any) => {
+    grantOwnershipToUser(project: Project, owner: User) {
+        this.addOwnershipToUser(owner, project).subscribe(
+            response => {
+                this.notificationService.sendNotification(owner, Messages.ownershipGrantedNotificationTitle,
+                    "You have been granted ownership rights to project: " + project.title).subscribe(
+                    () => {
+                        this.projectService.updateProjects();
+                    },
+                    (error: any) => {
+                        console.log(error);
+                    });
+            },
+            error => {
                 console.log(error);
-              });
-        },
-        error => {
-          console.log(error);
-        });
-  }
+            });
+    }
 
-  addOwnershipToUser(owner: User, project: Project) {
-    return this.http.post<Project>(this.PROJECTS_URL + "/" + project.id + this.OWNERSHIP_URL + "/" + owner.id, {}, {responseType: 'json'});
-  }
+    addOwnershipToUser(owner: User, project: Project) {
+        return this.http.post<Project>(this.PROJECTS_URL + "/" + project.id + this.OWNERSHIP_URL + "/" + owner.id, {}, {responseType: 'json'});
+    }
 }

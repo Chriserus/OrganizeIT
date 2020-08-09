@@ -1,8 +1,8 @@
 package com.capgemini.organizeIT.infrastructure.user.entities;
 
+import com.capgemini.organizeIT.infrastructure.project.entities.Membership;
 import com.capgemini.organizeIT.infrastructure.project.entities.Ownership;
 import com.capgemini.organizeIT.infrastructure.role.entities.Role;
-import com.capgemini.organizeIT.infrastructure.project.entities.Membership;
 import com.capgemini.organizeIT.infrastructure.shirt.entities.ShirtSize;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -11,7 +11,20 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.Set;
 

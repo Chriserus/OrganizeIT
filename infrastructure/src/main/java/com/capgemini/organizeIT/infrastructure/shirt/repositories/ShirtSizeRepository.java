@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface ShirtSizeRepository extends JpaRepository<ShirtSize, Long> {
     List<ShirtSize> findAll();
+
     ShirtSize findBySize(String size);
 }
 

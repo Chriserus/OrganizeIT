@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SubmitService {
 
-  constructor() { }
+    constructor() {
+    }
 
-  isButtonDisabled(id: string) {
-    return (document.getElementById(id) as HTMLButtonElement).disabled;
-  }
+    isButtonDisabled(id: string) {
+        return (document.getElementById(id) as HTMLButtonElement).disabled;
+    }
 }

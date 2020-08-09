@@ -1,24 +1,24 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Projects list</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Projects list</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-  <ion-spinner *ngIf="showProjectsSpinner"></ion-spinner>
-  <ion-card-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
-        <app-project-card [project]="project" [scope]="scope"></app-project-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  </ion-card-content>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <ion-spinner *ngIf="showProjectsSpinner"></ion-spinner>
+    <ion-card-content>
+        <ion-grid>
+            <ion-row>
+                <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
+                    <app-project-card [project]="project" [scope]="scope"></app-project-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card-content>
 </ion-content>

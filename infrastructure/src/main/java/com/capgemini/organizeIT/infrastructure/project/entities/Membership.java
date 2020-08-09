@@ -2,7 +2,9 @@ package com.capgemini.organizeIT.infrastructure.project.entities;
 
 import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 

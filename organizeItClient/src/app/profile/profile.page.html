@@ -1,102 +1,107 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>My profile</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>My profile</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-  <ion-spinner *ngIf="showProjectsSpinner || showNotificationsSpinner"></ion-spinner>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>My projects</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-grid>
-        <ion-row>
-          <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
-            <app-project-card [project]="project"></app-project-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Notification log</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-        <ion-list>
-          <ion-item *ngFor="let notification of notifications|slice:0:10">
-            <ion-label>
-              <h2>{{notification.title}}</h2>
-              <h3>{{notification.body}}</h3>
-              <p>{{notification.created | date: 'HH:mm:SS | d-MMM-yyyy'}}</p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Update my data</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <form #form="ngForm" (ngSubmit)="updateUser(form)">
-        <ion-grid>
-          <ion-row>
-            <ion-col>
-              <ion-item>
-                <ion-label position="stacked">First name</ion-label>
-                <ion-input name="firstName" autocapitalize="words" value="{{firstName}}" [(ngModel)]="firstName"
-                           required></ion-input>
-              </ion-item>
-              <ion-item>
-                <ion-label position="stacked">Last name</ion-label>
-                <ion-input name="lastName" autocapitalize="words" value="{{lastName}}" [(ngModel)]="lastName"
-                           required></ion-input>
-              </ion-item>
-              <ion-item>
-                <ion-label position="stacked">Food preferences</ion-label>
-                <ion-input name="foodPreferences" value="{{foodPreferences}}" [(ngModel)]="foodPreferences"
-                           ></ion-input>
-              </ion-item>
-              <ion-item *ngIf="shirtSize">
-                <ion-label position="stacked">Shirt size</ion-label>
-                <ion-select name="shirtSize"  [(ngModel)]="shirtSize" [compareWith]="compareShirtSizes" required>
-                  <ion-select-option *ngFor="let shirtSize of shirtSizes"
-                                     [value]="shirtSize">{{shirtSize.size}}</ion-select-option>
-                </ion-select>
-              </ion-item>
-              <ion-item>
-                <ion-label position="stacked">Shirt type</ion-label>
-                <ion-select name="shirtType" value="{{shirtType}}" [(ngModel)]="shirtType" required>
-                  <ion-select-option *ngFor="let shirtType of shirtTypes"
-                                     [value]="shirtType">{{shirtType}}</ion-select-option>
-                </ion-select>
-              </ion-item>
-              <ion-item>
-                <!-- TODO: Add localization from registration here -->
-                <ion-label position="stacked">City</ion-label>
-                <ion-select name="city" value="{{city}}" [(ngModel)]="city" required>
-                  <ion-select-option *ngFor="let city of cities"
-                                     [value]="city">{{city}}</ion-select-option>
-                </ion-select>
-              </ion-item>
-              <ion-item>
-                <ion-label>I speak Polish</ion-label>
-                <ion-checkbox name="polishSpeaker" slot="end" value="{{polishSpeaker}}}" [(ngModel)]="polishSpeaker"></ion-checkbox>
-              </ion-item>
-              <ion-button id="submitButton" type="submit" [disabled]="form.invalid">Update</ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </form>
-    </ion-card-content>
-  </ion-card>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <ion-spinner *ngIf="showProjectsSpinner || showNotificationsSpinner"></ion-spinner>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>My projects</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col *ngFor="let project of projects" size-xs="12" size-sm="12" size-md="6" size-lg="6">
+                        <app-project-card [project]="project"></app-project-card>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>Notification log</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-list>
+                <ion-item *ngFor="let notification of notifications|slice:0:10">
+                    <ion-label>
+                        <h2>{{notification.title}}</h2>
+                        <h3>{{notification.body}}</h3>
+                        <p>{{notification.created | date: 'HH:mm:SS | d-MMM-yyyy'}}</p>
+                    </ion-label>
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>Update my data</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <form #form="ngForm" (ngSubmit)="updateUser(form)">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label position="stacked">First name</ion-label>
+                                <ion-input name="firstName" autocapitalize="words" value="{{firstName}}"
+                                           [(ngModel)]="firstName"
+                                           required></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="stacked">Last name</ion-label>
+                                <ion-input name="lastName" autocapitalize="words" value="{{lastName}}"
+                                           [(ngModel)]="lastName"
+                                           required></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="stacked">Food preferences</ion-label>
+                                <ion-input name="foodPreferences" value="{{foodPreferences}}"
+                                           [(ngModel)]="foodPreferences"
+                                ></ion-input>
+                            </ion-item>
+                            <ion-item *ngIf="shirtSize">
+                                <ion-label position="stacked">Shirt size</ion-label>
+                                <ion-select name="shirtSize" [(ngModel)]="shirtSize" [compareWith]="compareShirtSizes"
+                                            required>
+                                    <ion-select-option *ngFor="let shirtSize of shirtSizes"
+                                                       [value]="shirtSize">{{shirtSize.size}}</ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="stacked">Shirt type</ion-label>
+                                <ion-select name="shirtType" value="{{shirtType}}" [(ngModel)]="shirtType" required>
+                                    <ion-select-option *ngFor="let shirtType of shirtTypes"
+                                                       [value]="shirtType">{{shirtType}}</ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                            <ion-item>
+                                <!-- TODO: Add localization from registration here -->
+                                <ion-label position="stacked">City</ion-label>
+                                <ion-select name="city" value="{{city}}" [(ngModel)]="city" required>
+                                    <ion-select-option *ngFor="let city of cities"
+                                                       [value]="city">{{city}}</ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label>I speak Polish</ion-label>
+                                <ion-checkbox name="polishSpeaker" slot="end" value="{{polishSpeaker}}}"
+                                              [(ngModel)]="polishSpeaker"></ion-checkbox>
+                            </ion-item>
+                            <ion-button id="submitButton" type="submit" [disabled]="form.invalid">Update</ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </form>
+        </ion-card-content>
+    </ion-card>
 </ion-content>

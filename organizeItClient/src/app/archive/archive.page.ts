@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-archive',
-  templateUrl: './archive.page.html',
-  styleUrls: ['./archive.page.scss'],
+    selector: 'app-archive',
+    templateUrl: './archive.page.html',
+    styleUrls: ['./archive.page.scss'],
 })
 export class ArchivePage implements OnInit {
 
-  constructor() { }
+    constructor() {
+    }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
 }

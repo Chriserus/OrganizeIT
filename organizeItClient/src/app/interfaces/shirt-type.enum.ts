@@ -1,5 +1,5 @@
 export enum ShirtType {
-  M = 'M',
-  F = 'F'
+    M = 'M',
+    F = 'F'
 }
 

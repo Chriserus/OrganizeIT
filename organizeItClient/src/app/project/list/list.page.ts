@@ -14,72 +14,72 @@ import {DataService} from "../../shared/data.service";
 import {Scope} from "../../interfaces/scope.enum";
 
 @Component({
-  selector: 'app-list',
-  templateUrl: 'list.page.html',
-  styleUrls: ['list.page.scss']
+    selector: 'app-list',
+    templateUrl: 'list.page.html',
+    styleUrls: ['list.page.scss']
 })
 export class ListPage implements OnInit, OnDestroy {
-  projects: Project[];
-  scope = Scope.LIST;
-  private unsubscribe: Subject<Project[]> = new Subject();
-  showProjectsSpinner: boolean;
+    projects: Project[];
+    scope = Scope.LIST;
+    private unsubscribe: Subject<Project[]> = new Subject();
+    showProjectsSpinner: boolean;
 
-  constructor(private projectService: ProjectService, private notificationService: NotificationService,
-              private authService: AuthService, private membershipService: MembershipService,
-              private toastService: ToastService, private alertService: AlertService, private data: DataService) {
-    this.data.currentProjects.subscribe(projects => this.projects = projects.filter(project => project.verified));
-  }
+    constructor(private projectService: ProjectService, private notificationService: NotificationService,
+                private authService: AuthService, private membershipService: MembershipService,
+                private toastService: ToastService, private alertService: AlertService, private data: DataService) {
+        this.data.currentProjects.subscribe(projects => this.projects = projects.filter(project => project.verified));
+    }
 
-  ngOnInit() {
-    this.data.currentProjects.subscribe(projects => this.projects = projects.filter(project => project.verified));
-    this.getProjects();
-  }
+    ngOnInit() {
+        this.data.currentProjects.subscribe(projects => this.projects = projects.filter(project => project.verified));
+        this.getProjects();
+    }
 
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
-  }
+    ngOnDestroy() {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+    }
 
-  getProjects() {
-    this.showProjectsSpinner = true;
-    this.projectService.getProjects().pipe(takeUntil(this.unsubscribe))
-        .pipe(finalize(async () => {
-          this.showProjectsSpinner = false;
-        }))
-        .subscribe(projects => {
-          this.projectService.getProjects().subscribe((projects: Project[]) => {
-            this.data.changeProjects(projects);
-          });
-        });
-  }
+    getProjects() {
+        this.showProjectsSpinner = true;
+        this.projectService.getProjects().pipe(takeUntil(this.unsubscribe))
+            .pipe(finalize(async () => {
+                this.showProjectsSpinner = false;
+            }))
+            .subscribe(projects => {
+                this.projectService.getProjects().subscribe((projects: Project[]) => {
+                    this.data.changeProjects(projects);
+                });
+            });
+    }
 
-  sendEnrollmentRequest(project: Project) {
-    this.authService.getCurrentUser().subscribe((user: User) => {
-      this.membershipService.addMemberToProject(user, project).subscribe(
-          (response: any) => {
-            this.sendNotificationAboutEnrollmentToProjectOwner(response, project);
-          });
-    })
-  }
+    sendEnrollmentRequest(project: Project) {
+        this.authService.getCurrentUser().subscribe((user: User) => {
+            this.membershipService.addMemberToProject(user, project).subscribe(
+                (response: any) => {
+                    this.sendNotificationAboutEnrollmentToProjectOwner(response, project);
+                });
+        })
+    }
 
-  private sendNotificationAboutEnrollmentToProjectOwner(response: any, project: Project) {
-    project.owners.map(ownership => ownership.user).forEach(user => this.notificationService.sendNotification(user, "Enrollment request",
-        sessionStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
-        () => {
-          this.toastService.showClosableInformationMessage(Messages.enrollmentRequestSentMessage);
-          this.getProjects();
-        },
-        (error: any) => {
-          console.log(error);
-        }))
-  }
+    private sendNotificationAboutEnrollmentToProjectOwner(response: any, project: Project) {
+        project.owners.map(ownership => ownership.user).forEach(user => this.notificationService.sendNotification(user, "Enrollment request",
+            sessionStorage.getItem("loggedInUserEmail") + " wants to join your project").subscribe(
+            () => {
+                this.toastService.showClosableInformationMessage(Messages.enrollmentRequestSentMessage);
+                this.getProjects();
+            },
+            (error: any) => {
+                console.log(error);
+            }))
+    }
 
-  isUserLoggedIn(): boolean {
-    return JSON.parse(sessionStorage.getItem("loggedIn"));
-  }
+    isUserLoggedIn(): boolean {
+        return JSON.parse(sessionStorage.getItem("loggedIn"));
+    }
 
-  async doRefresh(event) {
-    this.getProjects();
-    event.target.complete();
-  }
+    async doRefresh(event) {
+        this.getProjects();
+        event.target.complete();
+    }
 }

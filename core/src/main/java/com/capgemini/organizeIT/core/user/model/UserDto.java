@@ -1,9 +1,9 @@
 package com.capgemini.organizeIT.core.user.model;
 
-import com.capgemini.organizeIT.core.shirt.model.ShirtSizeDto;
 import com.capgemini.organizeIT.core.project.model.MembershipDto;
 import com.capgemini.organizeIT.core.project.model.OwnershipDto;
 import com.capgemini.organizeIT.core.role.model.RoleDto;
+import com.capgemini.organizeIT.core.shirt.model.ShirtSizeDto;
 import com.capgemini.organizeIT.infrastructure.user.entities.City;
 import com.capgemini.organizeIT.infrastructure.user.entities.ShirtType;
 import com.fasterxml.jackson.annotation.JsonIgnore;

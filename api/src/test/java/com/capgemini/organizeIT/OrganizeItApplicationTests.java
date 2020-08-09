@@ -1,7 +1,7 @@
 package com.capgemini.organizeIT;
 
-import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import com.capgemini.organizeIT.core.user.services.UserService;
+import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

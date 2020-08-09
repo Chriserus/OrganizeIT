@@ -1,19 +1,23 @@
 package com.capgemini.organizeIT.api.notification.controlers;
 
 import com.capgemini.organizeIT.api.notification.mappers.NotificationMapper;
-import com.capgemini.organizeIT.infrastructure.notification.entities.Notification;
+import com.capgemini.organizeIT.api.permission.mappers.PermissionMapper;
 import com.capgemini.organizeIT.core.notification.model.NotificationDto;
 import com.capgemini.organizeIT.core.notification.services.NotificationService;
-import com.capgemini.organizeIT.infrastructure.permission.entities.Permission;
-import com.capgemini.organizeIT.api.permission.mappers.PermissionMapper;
 import com.capgemini.organizeIT.core.permission.model.PermissionDto;
 import com.capgemini.organizeIT.core.permission.services.PermissionService;
-import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import com.capgemini.organizeIT.core.user.services.UserService;
+import com.capgemini.organizeIT.infrastructure.notification.entities.Notification;
+import com.capgemini.organizeIT.infrastructure.permission.entities.Permission;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.net.URI;

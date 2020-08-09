@@ -1,18 +1,18 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {RouterModule, Routes} from '@angular/router';
 
-import { IonicModule } from '@ionic/angular';
+import {IonicModule} from '@ionic/angular';
 
-import { AdminPage } from './admin.page';
+import {AdminPage} from './admin.page';
 import {ComponentsModule} from "../shared/components/components.module";
 
 const routes: Routes = [
-  {
-    path: '',
-    component: AdminPage
-  }
+    {
+        path: '',
+        component: AdminPage
+    }
 ];
 
 @NgModule({
@@ -23,6 +23,7 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         ComponentsModule
     ],
-  declarations: [AdminPage]
+    declarations: [AdminPage]
 })
-export class AdminPageModule {}
+export class AdminPageModule {
+}

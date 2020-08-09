@@ -1,117 +1,122 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Home</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Home</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <img class="welcome-card" src="../../assets/banner.png" alt=""/>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Newest projects:</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-spinner *ngIf="showProjectsSpinner"></ion-spinner>
-      <ion-slides pager="true" [options]="slideOptsOne"> <!-- scrollbar -->
-        <ion-slide *ngFor="let project of projects">
-          <ion-card-subtitle>Owner(s):</ion-card-subtitle>
-          <ion-card-subtitle *ngFor="let owner of projectService.listOwners(project)">
-            {{owner.firstName + " " + owner.lastName}}
-          </ion-card-subtitle>
-          <ion-card-title class="title-font-size" >{{project.title}}</ion-card-title>
-          <ion-text color="dark" class="project-description">
-            {{project.description}}
-          </ion-text>
-          <ion-card-subtitle *ngIf="project.technologies">Technologies: {{project.technologies}}</ion-card-subtitle>
-          <p></p>
-          <ion-card-subtitle>Members:</ion-card-subtitle>
-          <ion-card-subtitle *ngFor="let member of projectService.listApprovedMembers(project)">
-            {{member.firstName + " " + member.lastName}}
-          </ion-card-subtitle>
-          <br/>
-        </ion-slide>
-      </ion-slides>
-    </ion-card-content>
-  </ion-card>
+    <img class="welcome-card" src="../../assets/banner.png" alt=""/>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>Newest projects:</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-spinner *ngIf="showProjectsSpinner"></ion-spinner>
+            <ion-slides pager="true" [options]="slideOptsOne"> <!-- scrollbar -->
+                <ion-slide *ngFor="let project of projects">
+                    <ion-card-subtitle>Owner(s):</ion-card-subtitle>
+                    <ion-card-subtitle *ngFor="let owner of projectService.listOwners(project)">
+                        {{owner.firstName + " " + owner.lastName}}
+                    </ion-card-subtitle>
+                    <ion-card-title class="title-font-size">{{project.title}}</ion-card-title>
+                    <ion-text color="dark" class="project-description">
+                        {{project.description}}
+                    </ion-text>
+                    <ion-card-subtitle *ngIf="project.technologies">
+                        Technologies: {{project.technologies}}</ion-card-subtitle>
+                    <p></p>
+                    <ion-card-subtitle>Members:</ion-card-subtitle>
+                    <ion-card-subtitle *ngFor="let member of projectService.listApprovedMembers(project)">
+                        {{member.firstName + " " + member.lastName}}
+                    </ion-card-subtitle>
+                    <br/>
+                </ion-slide>
+            </ion-slides>
+        </ion-card-content>
+    </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>About Ship It Day</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-text color="dark" class="project-description">Ship IT Day is an internal hackathon which gives you an
-        opportunity of showing your creativity and skills, getting to know other employees, exchanging experience and
-        having fun, for which you might not have time in other circumstances. <br/>
-        <br/>On April the 3rd in Business Garden Wrocław and Business Garden Poznań you and your team will have a chance
-        to create/design/test/play around with a tool which you would like to implement or get to know more. Some of
-        them could be later developed and used in our company.<br/>
-        <br/>Ship IT Day is open for any kind of technology project.<br/>
-        <br/>Rewards for winners!<br/>
-        <br/>Create an account and register a project or join an existing one!
-      </ion-text>
-    </ion-card-content>
-  </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>About Ship It Day</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-text color="dark" class="project-description">Ship IT Day is an internal hackathon which gives you an
+                opportunity of showing your creativity and skills, getting to know other employees, exchanging
+                experience and
+                having fun, for which you might not have time in other circumstances. <br/>
+                <br/>On April the 3rd in Business Garden Wrocław and Business Garden Poznań you and your team will have
+                a chance
+                to create/design/test/play around with a tool which you would like to implement or get to know more.
+                Some of
+                them could be later developed and used in our company.<br/>
+                <br/>Ship IT Day is open for any kind of technology project.<br/>
+                <br/>Rewards for winners!<br/>
+                <br/>Create an account and register a project or join an existing one!
+            </ion-text>
+        </ion-card-content>
+    </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Regulations</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-text color="dark" class="project-description">
-        <ion-list>
-          <ion-item>
-            Every employee from Wrocław and Poznań can participate in this event.
-          </ion-item>
-          <ion-item>
-            Apply using this application - register your own project or join an existing one.
-          </ion-item>
-          <ion-item>
-            Build a group of 1-5 people.
-          </ion-item>
-          <ion-item>
-            We have limited number of spots: 42, so if more people sign up, we will choose projects selected for further development.
-          </ion-item>
-          <ion-item>
-            We will provide lunch and snacks during the hackathon on April the 3rd.
-          </ion-item>
-          <ion-item>
-            It is required to have an approval for participation from your PDL and Project Lead.
-          </ion-item>
-          <ion-item>
-            When applying for the event you agree to be photographed and filmed during the event.
-          </ion-item>
-          <ion-item>
-            <div>For more details, calendar, information meetings visit our <a
-                    href="https://capgemini.sharepoint.com/sites/craftsmanship/SitePages/ShipITDay2020.aspx"
-                    target="_blank" title="Craftsmanship Community">website</a></div>
-          </ion-item>
-        </ion-list>
-      </ion-text>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>About author</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-buttons>
-          <ion-button class="social-media-icon" size="small" slot="start" color="black" shape="round"
-                      href="https://github.com/Chriserus" target="_blank">
-            <ion-icon name="logo-github"></ion-icon>
-          </ion-button>
-          <ion-button class="social-media-icon" size="small" slot="start" color="primary" shape="round"
-                      href="https://www.linkedin.com/in/krzysztof-borowiecki/" target="_blank">
-            <ion-icon name="logo-linkedin"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-item>
-      <ion-item>
-        Krzysztof Borowiecki - Junior Software Engineer in Capgemini
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>Regulations</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-text color="dark" class="project-description">
+                <ion-list>
+                    <ion-item>
+                        Every employee from Wrocław and Poznań can participate in this event.
+                    </ion-item>
+                    <ion-item>
+                        Apply using this application - register your own project or join an existing one.
+                    </ion-item>
+                    <ion-item>
+                        Build a group of 1-5 people.
+                    </ion-item>
+                    <ion-item>
+                        We have limited number of spots: 42, so if more people sign up, we will choose projects selected
+                        for further development.
+                    </ion-item>
+                    <ion-item>
+                        We will provide lunch and snacks during the hackathon on April the 3rd.
+                    </ion-item>
+                    <ion-item>
+                        It is required to have an approval for participation from your PDL and Project Lead.
+                    </ion-item>
+                    <ion-item>
+                        When applying for the event you agree to be photographed and filmed during the event.
+                    </ion-item>
+                    <ion-item>
+                        <div>For more details, calendar, information meetings visit our <a
+                                href="https://capgemini.sharepoint.com/sites/craftsmanship/SitePages/ShipITDay2020.aspx"
+                                target="_blank" title="Craftsmanship Community">website</a></div>
+                    </ion-item>
+                </ion-list>
+            </ion-text>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>About author</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-item>
+                <ion-buttons>
+                    <ion-button class="social-media-icon" size="small" slot="start" color="black" shape="round"
+                                href="https://github.com/Chriserus" target="_blank">
+                        <ion-icon name="logo-github"></ion-icon>
+                    </ion-button>
+                    <ion-button class="social-media-icon" size="small" slot="start" color="primary" shape="round"
+                                href="https://www.linkedin.com/in/krzysztof-borowiecki/" target="_blank">
+                        <ion-icon name="logo-linkedin"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
+            </ion-item>
+            <ion-item>
+                Krzysztof Borowiecki - Junior Software Engineer in Capgemini
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
 </ion-content>

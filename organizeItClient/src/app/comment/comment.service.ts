@@ -4,35 +4,35 @@ import {Comment} from "../interfaces/comment.model";
 import {User} from "../interfaces/user.model";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class CommentService {
 
-  readonly COMMENTS_URL = '/api/comments/';
+    readonly COMMENTS_URL = '/api/comments/';
 
-  constructor(private http: HttpClient) {
-  }
+    constructor(private http: HttpClient) {
+    }
 
-  getComments() {
-    return this.http.get<Comment[]>(this.COMMENTS_URL, {responseType: 'json'});
-  }
+    getComments() {
+        return this.http.get<Comment[]>(this.COMMENTS_URL, {responseType: 'json'});
+    }
 
-  addComment(form: any, author: User) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        responseType: 'json'
-      })
-    };
-    let jsonData = {
-      'content': form.value.content,
-      'author': author,
-      'announcement': form.value.announcement
-    };
-    return this.http.post(this.COMMENTS_URL, jsonData, httpOptions);
-  }
+    addComment(form: any, author: User) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                responseType: 'json'
+            })
+        };
+        let jsonData = {
+            'content': form.value.content,
+            'author': author,
+            'announcement': form.value.announcement
+        };
+        return this.http.post(this.COMMENTS_URL, jsonData, httpOptions);
+    }
 
-  deleteComment(id: number) {
-    return this.http.delete(this.COMMENTS_URL + id)
-  }
+    deleteComment(id: number) {
+        return this.http.delete(this.COMMENTS_URL + id)
+    }
 }
