@@ -7,11 +7,11 @@
                 </p>
             </ion-text>
             <ion-chip style="float: right;"
-                      (click)="isProjectOwner(project) && alertService.presentModifyProjectCityAlert(project)"
+                      (click)="isProjectOwnerOrAdmin(project) && alertService.presentModifyProjectCityAlert(project)"
                       color="primary" outline>
                 <ion-icon name="location" color="primary"></ion-icon>
                 <ion-label>{{project.city}}</ion-label>
-                <ion-icon *ngIf="isProjectOwner(project)" name="create"></ion-icon>
+                <ion-icon *ngIf="isProjectOwnerOrAdmin(project)" name="create"></ion-icon>
             </ion-chip>
         </ion-card-subtitle>
         <ion-card-title style="clear: both;">{{project.title}}
@@ -34,7 +34,7 @@
         </ion-item-divider>
         Members ({{projectService.countApprovedMembers(project)}}/{{project.maxMembers}}):
         <ion-chip color="primary" *ngFor="let member of projectService.listApprovedMembers(project)"
-                  (click)="projectService.userIsProjectOwner(loggedInUser, project) || alertService.presentMemberOptionsAlert(project, member)">
+                  (click)="isProjectOwnerOrAdmin(project) || alertService.presentMemberOptionsAlert(project, member)">
             <ion-icon name="person"></ion-icon>
             <ion-label>{{member.firstName + " " + member.lastName}}</ion-label>
         </ion-chip>
@@ -42,9 +42,9 @@
         </ion-item-divider>
         <!-- custom date format:  HH:MM | d-MMM-yyyy-->
         <!-- TODO: Choose one-->
-        <ion-card-subtitle>Created: {{project.created | date: 'medium'}}</ion-card-subtitle>
+<!--        <ion-card-subtitle>Created: {{project.created | date: 'medium'}}</ion-card-subtitle>-->
         <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
-        <div *ngIf="!isList && projectHasRequests(project) && isProjectOwner(project)">
+        <div *ngIf="!isList && projectHasRequests(project) && isProjectOwnerOrAdmin(project)">
             <ion-item-divider color="white">
             </ion-item-divider>
             Requests:
@@ -91,10 +91,10 @@
     <ion-button *ngIf="isAdminConfirmed && project.confirmed" expand="block"
                 (click)="alertService.presentUnconfirmProjectAlert(project)" color="warning">Unconfirm project
     </ion-button>
-    <ion-button *ngIf="!isList && isProjectOwner(project)" id="modifyButton" expand="block"
+    <ion-button *ngIf="!isList && isProjectOwnerOrAdmin(project)" id="modifyButton" expand="block"
                 (click)="alertService.presentModifyProjectAlert(project)">Modify project
     </ion-button>
-    <ion-button *ngIf="!isList && isProjectOwner(project)" id="deleteButton" expand="block"
+    <ion-button *ngIf="!isList && isProjectOwnerOrAdmin(project)" id="deleteButton" expand="block"
                 (click)="alertService.presentDeleteProjectAlert(project)" color="danger">Delete project
     </ion-button>
 </ion-card>

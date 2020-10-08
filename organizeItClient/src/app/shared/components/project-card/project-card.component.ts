@@ -56,6 +56,10 @@ export class ProjectCardComponent implements OnInit {
         return project.owners.map(owner => owner.user.email).filter(userEmail => userEmail === sessionStorage.getItem("loggedInUserEmail")).length != 0
     }
 
+    isProjectOwnerOrAdmin(project: Project) {
+        return this.authService.userHasAdminRole(this.loggedInUser) || project.owners.map(owner => owner.user.email).filter(userEmail => userEmail === sessionStorage.getItem("loggedInUserEmail")).length != 0
+    }
+
     listPotentialMembers(project: Project) {
         return project.members.filter(member => !member.approved);
     }
