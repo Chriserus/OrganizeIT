@@ -57,7 +57,7 @@ export class ProjectCardComponent implements OnInit {
     }
 
     isProjectOwnerOrAdmin(project: Project) {
-        return this.authService.userHasAdminRole(this.loggedInUser) || project.owners.map(owner => owner.user.email).filter(userEmail => userEmail === sessionStorage.getItem("loggedInUserEmail")).length != 0
+        return this.authService.userHasAdminRole(this.loggedInUser) || this.isProjectOwner(project)
     }
 
     listPotentialMembers(project: Project) {
