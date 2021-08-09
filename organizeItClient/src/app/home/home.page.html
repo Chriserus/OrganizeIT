@@ -40,6 +40,29 @@
 
     <ion-card>
         <ion-card-header>
+            <ion-card-title>Announcements</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-list>
+                <ion-row *ngFor="let announcement of announcements|slice:0:10">
+                    <ion-col>
+                        <ion-card>
+                            <ion-card-content>
+                                <ion-item>{{announcement.content}}</ion-item>
+                                <ion-item>
+                                    <ion-card-subtitle>{{announcement.author.firstName + " " + announcement.author.lastName}}
+                                        , {{announcement.created | date: 'medium'}}</ion-card-subtitle>
+                                </ion-item>
+                            </ion-card-content>
+                        </ion-card>
+                    </ion-col>
+                </ion-row>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-card-header>
             <ion-card-title>About Ship It Day</ion-card-title>
         </ion-card-header>
         <ion-card-content>
@@ -97,6 +120,7 @@
             </ion-text>
         </ion-card-content>
     </ion-card>
+
     <ion-card>
         <ion-card-header>
             <ion-card-title>About author</ion-card-title>
@@ -115,7 +139,7 @@
                 </ion-buttons>
             </ion-item>
             <ion-item>
-                Krzysztof Borowiecki - Junior Software Engineer in Capgemini
+                Krzysztof Borowiecki
             </ion-item>
         </ion-card-content>
     </ion-card>
