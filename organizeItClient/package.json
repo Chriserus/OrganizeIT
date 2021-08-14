@@ -1,8 +1,7 @@
 {
   "name": "organizeItClient",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "Krzysztof Borowiecki",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -73,7 +72,7 @@
     "tslint": "~5.17.0",
     "typescript": "~3.7.5"
   },
-  "description": "An Ionic project",
+  "description": "ShipItDayApp project",
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},

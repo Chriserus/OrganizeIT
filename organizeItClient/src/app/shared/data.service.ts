@@ -19,6 +19,8 @@ export class DataService {
     currentUserNotifications = this.userNotificationsSource.asObservable();
     private commentsSource = new BehaviorSubject([]);
     currentComments = this.commentsSource.asObservable();
+    private announcementsSource = new BehaviorSubject([]);
+    currentAnnouncements = this.announcementsSource.asObservable();
     private currentUserSource = new BehaviorSubject<User>(null);
     currentUser = this.currentUserSource.asObservable();
 
@@ -39,6 +41,10 @@ export class DataService {
 
     changeComments(comments: Comment[]) {
         this.commentsSource.next(comments)
+    }
+
+    changeAnnouncements(announcements: Comment[]) {
+        this.announcementsSource.next(announcements)
     }
 
     changeUserNotifications(notifications: Notification[]) {

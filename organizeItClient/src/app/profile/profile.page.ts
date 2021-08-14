@@ -33,8 +33,8 @@ export class ProfilePage implements OnInit, OnDestroy {
     shirtType: ShirtType;
     city: City;
     shirtSizes: ShirtSize[];
-    shirtTypes: ShirtType[] = [ShirtType.M, ShirtType.F];
-    cities: City[] = [City.WRO, City.POZ];
+    shirtTypes: ShirtType[] = Object.values(ShirtType);
+    cities: City[] = Object.values(City);
     polishSpeaker: boolean;
     showProjectsSpinner: boolean;
     showNotificationsSpinner: boolean;

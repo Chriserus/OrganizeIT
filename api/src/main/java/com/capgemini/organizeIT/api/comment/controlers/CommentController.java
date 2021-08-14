@@ -30,6 +30,11 @@ public class CommentController {
     private final CommentMapper commentMapper;
     private final UserService userService;
 
+    @GetMapping("/api/announcements")
+    public ResponseEntity<List<CommentDto>> findAllAnnouncements() {
+        return ResponseEntity.ok(commentService.findAll().stream().map(commentMapper::convertToDto).filter(CommentDto::isAnnouncement).collect(Collectors.toList()));
+    }
+
     @GetMapping("/api/comments")
     public ResponseEntity<List<CommentDto>> findAllComments() {
         return ResponseEntity.ok(commentService.findAll().stream().map(commentMapper::convertToDto).collect(Collectors.toList()));

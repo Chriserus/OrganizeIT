@@ -200,21 +200,16 @@ export class AlertService {
     async presentModifyProjectCityAlert(project: Project) {
         const alert = await this.alertController.create({
             header: 'Modifying city!',
-            inputs: [
-                {
-                    name: 'wro',
+            inputs: Object.keys(City).map(city => {
+                return {
+                    name: city,
                     type: 'radio',
-                    label: 'Wro',
-                    value: City.WRO,
-                    checked: project.city === City.WRO
-                },
-                {
-                    name: 'poz',
-                    type: 'radio',
-                    label: 'Poz',
-                    value: City.POZ,
-                    checked: project.city === City.POZ
-                }],
+                    label: city,
+                    value: city,
+                    checked: project.city === city
+                }
+            })
+            ,
             buttons: [
                 {
                     text: 'Cancel',

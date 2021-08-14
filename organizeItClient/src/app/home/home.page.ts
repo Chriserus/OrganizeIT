@@ -5,7 +5,7 @@ import {Comment} from '../interfaces/comment.model';
 import {Subject} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
 import {DataService} from "../shared/data.service";
-import {CommentService} from "../comment/comment.service";
+import {AnnouncementService} from "../comment/announcement.service";
 
 @Component({
     selector: 'app-home',
@@ -26,20 +26,20 @@ export class HomePage implements OnInit, OnDestroy {
         }
     };
 
-    constructor(public projectService: ProjectService, public commentService: CommentService, private data: DataService) {
+    constructor(public projectService: ProjectService, public announcementService: AnnouncementService, private data: DataService) {
         this.getProjects();
         this.getAnnouncements();
         this.data.currentProjects.subscribe(projects => {
             this.projects = projects.filter(project => project.verified);
         });
-        this.data.currentComments.subscribe(comments => this.announcements = comments.filter(comment => comment.announcement));
+        this.data.currentAnnouncements.subscribe(announcements => this.announcements = announcements);
     }
 
     ngOnInit() {
         this.data.currentProjects.subscribe(projects => {
             this.projects = projects.filter(project => project.verified);
         });
-        this.data.currentComments.subscribe(comments => this.announcements = comments.filter(comment => comment.announcement));
+        this.data.currentAnnouncements.subscribe(announcements => this.announcements = announcements);
     }
 
     ngOnDestroy() {
@@ -60,10 +60,7 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
     getAnnouncements() {
-        this.commentService.getComments().pipe(takeUntil(this.unsubscribe))
-            .subscribe(comments => {
-                //TODO: Filter comments on backend, make an endpoint that uses clustered index
-                this.data.changeComments(comments);
-            });
+        this.announcementService.getAnnouncements().pipe(takeUntil(this.unsubscribe))
+            .subscribe(announcements => this.data.changeAnnouncements(announcements));
     }
 }

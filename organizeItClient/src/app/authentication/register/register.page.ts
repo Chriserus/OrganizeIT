@@ -18,8 +18,8 @@ export class RegisterPage implements OnInit {
     readonly pozCoordinates = {latitude: 52.406376, longitude: 16.925167};
     readonly wroCoordinates = {latitude: 51.107883, longitude: 17.038538};
     shirtSizes: ShirtSize[];
-    shirtTypes: ShirtType[] = [ShirtType.M, ShirtType.F];
-    cities: City[] = [City.WRO, City.POZ];
+    shirtTypes: ShirtType[] = Object.values(ShirtType);
+    cities: City[] = Object.values(City);
     city: City;
     polishSpeaker = true;
 
