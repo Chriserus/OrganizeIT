@@ -94,13 +94,13 @@ export class AlertService {
                     cssClass: 'danger',
                     handler: data => {
                         this.projectService.deleteProject(project).subscribe(
-                            response => {
+                            () => {
                                 this.notificationService.sendNotificationToProjectMembersAboutProjectDeletion(project, data.reason);
                                 this.projectService.updateProjects();
                                 this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" deleted");
                             },
-                            error => {
-                                console.log(error);
+                            () => {
+                                this.toastService.showTemporaryErrorMessage("\"" + project.title + "\" not deleted");
                             });
                     }
                 }]
@@ -130,8 +130,8 @@ export class AlertService {
                                 this.projectService.updateProjects();
                                 this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" verified");
                             },
-                            error => {
-                                console.log(error);
+                            () => {
+                                this.toastService.showTemporaryErrorMessage("\"" + project.title + "\" not verified");
                             });
                     }
                 }]
@@ -186,8 +186,8 @@ export class AlertService {
                                 this.projectService.updateProjects();
                                 this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" successfully modified");
                             },
-                            error => {
-                                console.log(error);
+                            () => {
+                                this.toastService.showTemporaryErrorMessage("\"" + project.title + "\" not modified");
                             });
                     }
                 }]
@@ -227,12 +227,12 @@ export class AlertService {
                     handler: data => {
                         project.city = data;
                         this.projectService.modifyProject(project).subscribe(
-                            response => {
+                            () => {
                                 this.projectService.updateProjects();
                                 this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" city modified");
                             },
-                            error => {
-                                console.log(error);
+                            () => {
+                                this.toastService.showTemporaryErrorMessage("\"" + project.title + "\" city not modified");
                             });
                     }
                 }]
@@ -256,14 +256,14 @@ export class AlertService {
                     cssClass: 'danger',
                     handler: () => {
                         this.commentService.deleteComment(comment.id).subscribe(
-                            response => {
+                            () => {
                                 this.commentService.getComments().subscribe((comments: Comment[]) => {
                                     this.data.changeComments(comments);
                                 });
                                 this.toastService.showTemporarySuccessMessage(Messages.commentDeletedSuccessfullyMessage);
                             },
-                            error => {
-                                console.log(error);
+                            () => {
+                                this.toastService.showTemporaryErrorMessage(Messages.commentDeletedErrorMessage);
                             });
                     }
                 }]
@@ -323,8 +323,8 @@ export class AlertService {
                                         this.projectService.updateProjects();
                                         this.toastService.showTemporarySuccessMessage("Enrollment request for: \"" + project.title + "\" cancelled");
                                     },
-                                    error => {
-                                        console.log(error);
+                                    () => {
+                                        this.toastService.showTemporaryErrorMessage("Enrollment request for: \"" + project.title + "\" not cancelled");
                                     });
                             },
                             error => {
@@ -354,14 +354,14 @@ export class AlertService {
                     cssClass: 'danger',
                     handler: () => {
                         this.authService.deleteUser(user).subscribe(
-                            response => {
+                            () => {
                                 this.authService.getAllUsers().subscribe((users: User[]) => {
                                     this.data.changeUsers(users);
                                 });
                                 this.toastService.showTemporarySuccessMessage("\"" + user.email + "\" deleted");
                             },
-                            error => {
-                                console.log(error);
+                            () => {
+                                this.toastService.showTemporaryErrorMessage("\"" + user.email + "\" not deleted");
                             });
                     }
                 }]
@@ -392,13 +392,13 @@ export class AlertService {
                     text: 'INVALIDATE',
                     handler: data => {
                         this.projectService.invalidateProject(project).subscribe(
-                            response => {
+                            () => {
                                 this.notificationService.sendNotificationToProjectMembersAboutProjectInvalidation(project, data.reason);
                                 this.projectService.updateProjects();
                                 this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" invalidated");
                             },
-                            error => {
-                                console.log(error);
+                            () => {
+                                this.toastService.showTemporaryErrorMessage("\"" + project.title + "\" not invalidated");
                             });
                     }
                 }]
@@ -421,13 +421,13 @@ export class AlertService {
                     text: 'CONFIRM',
                     handler: () => {
                         this.projectService.confirmProject(project).subscribe(
-                            response => {
+                            () => {
                                 this.notificationService.sendNotificationToProjectMembersAboutProjectConfirmation(project);
                                 this.projectService.updateProjects();
                                 this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" confirmed");
                             },
-                            error => {
-                                console.log(error);
+                            () => {
+                                this.toastService.showTemporaryErrorMessage("\"" + project.title + "\" not confirmed");
                             });
                     }
                 }]
@@ -463,8 +463,8 @@ export class AlertService {
                                 this.projectService.updateProjects();
                                 this.toastService.showTemporarySuccessMessage("\"" + project.title + "\" unconfirmed");
                             },
-                            error => {
-                                console.log(error);
+                            () => {
+                                this.toastService.showTemporaryErrorMessage("\"" + project.title + "\" not unconfirmed");
                             });
                     }
                 }]
@@ -488,14 +488,14 @@ export class AlertService {
                     text: 'PROMOTE',
                     handler: () => {
                         this.authService.giveAdminRights(user).subscribe(
-                            response => {
+                            () => {
                                 this.authService.getAllUsers().subscribe((users: User[]) => {
                                     this.data.changeUsers(users);
                                 });
                                 this.toastService.showTemporarySuccessMessage("\"" + user.email + "\" promoted to administrator");
                             },
-                            error => {
-                                console.log(error);
+                            () => {
+                                this.toastService.showTemporaryErrorMessage("\"" + user.email + "\" not promoted to administrator");
                             });
                     }
                 }]
@@ -520,14 +520,14 @@ export class AlertService {
                     cssClass: 'danger',
                     handler: () => {
                         this.authService.revokeAdminRights(user).subscribe(
-                            response => {
+                            () => {
                                 this.authService.getAllUsers().subscribe((users: User[]) => {
                                     this.data.changeUsers(users);
                                 });
                                 this.toastService.showTemporarySuccessMessage("\"" + user.email + "\" - administrator rights revoked");
                             },
-                            error => {
-                                console.log(error);
+                            () => {
+                                this.toastService.showTemporaryErrorMessage("\"" + user.email + "\" - administrator rights not revoked");
                             });
                     }
                 }]

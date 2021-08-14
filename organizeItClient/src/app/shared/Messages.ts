@@ -9,6 +9,7 @@ export const Messages = {
     loggedOutErrorMessage: 'Logging out unsuccessful',
     serverUnavailable: 'Server unavailable',
     commentDeletedSuccessfullyMessage: 'Comment successfully deleted',
+    commentDeletedErrorMessage: 'Comment was not deleted',
     enrollmentSuccessfulNotificationTitle: 'Enrollment successful',
     projectDeletedNotificationTitle: 'Project deleted',
     projectVerifiedNotificationTitle: 'Project verified',
