@@ -9,3 +9,22 @@ ion-spinner {
   display: block;
   margin: auto;
 }
+
+.modify-project-alert .alert-wrapper {
+  min-width: 50%;
+  height: 50vh;
+
+  .alert-input-group {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    :nth-child(2) {
+      flex: 4;
+
+      textarea {
+        height: 100%;
+      }
+    }
+  }
+}

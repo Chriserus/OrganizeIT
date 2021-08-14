@@ -143,6 +143,7 @@ export class AlertService {
     async presentModifyProjectAlert(project: Project) {
         const alert = await this.alertController.create({
             header: 'Modifying project!',
+            cssClass: 'modify-project-alert',
             inputs: [
                 {
                     name: 'title',
