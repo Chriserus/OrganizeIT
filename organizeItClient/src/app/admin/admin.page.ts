@@ -10,6 +10,8 @@ import {MembershipService} from "../project/membership.service";
 import {AlertService} from "../shared/alert.service";
 import {DataService} from "../shared/data.service";
 import {Scope} from "../interfaces/scope.enum";
+import {EventService} from "../event/event.service";
+import {saveAs} from 'file-saver';
 
 @Component({
     selector: 'app-admin',
@@ -37,7 +39,7 @@ export class AdminPage implements OnInit, OnDestroy {
 
     constructor(private projectService: ProjectService, private notificationService: NotificationService,
                 public authService: AuthService, private membershipService: MembershipService,
-                public alertService: AlertService, private data: DataService) {
+                public alertService: AlertService, public eventService: EventService, private data: DataService) {
         this.data.currentProjects.subscribe(projects => {
             this.projects = projects;
             this.unverifiedProjects = projects.filter(project => !project.verified);
@@ -121,5 +123,13 @@ export class AdminPage implements OnInit, OnDestroy {
                 return this.authService.isValuePresentInUserFields(user, value);
             })
         }
+    }
+
+    exportEvent() {
+        this.eventService.exportEvent().subscribe((data: any) => {
+            const blob = new Blob([data], {type: 'application/octet-stream'});
+            const fileName = 'event.csv';
+            saveAs(blob, fileName);
+        })
     }
 }

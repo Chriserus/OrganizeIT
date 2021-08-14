@@ -12,6 +12,9 @@
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <ion-spinner *ngIf="showProjectsSpinner || showUsersSpinner"></ion-spinner>
+    <ion-button expand="block"
+                (click)="exportEvent()" color="primary">Export event
+    </ion-button>
     <ion-card>
         <ion-card-header>
             <ion-item>
@@ -130,7 +133,8 @@
                                         (click)="alertService.presentDeleteUserAlert(user)" color="danger">Delete user
                             </ion-button>
                             <ion-button expand="block" *ngIf="user.deleted"
-                                        (click)="alertService.presentRestoreUserAlert(user)" color="warning">Restore user
+                                        (click)="alertService.presentRestoreUserAlert(user)" color="warning">Restore
+                                user
                             </ion-button>
                         </ion-card>
                     </ion-col>

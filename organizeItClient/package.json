@@ -36,6 +36,7 @@
     "cordova-plugin-firebasex": "^6.1.0",
     "cordova-plugin-geolocation": "^4.0.2",
     "core-js": "^2.6.11",
+    "file-saver": "^2.0.5",
     "firebase": "^6.6.2",
     "rxjs": "^6.5.4",
     "tslib": "^1.9.0",

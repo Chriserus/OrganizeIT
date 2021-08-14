@@ -2,6 +2,7 @@ package com.capgemini.organizeIT.core.user.services;
 
 import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import com.capgemini.organizeIT.infrastructure.user.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,13 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-
-    public UserService(final UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public List<User> findAll() {
         return userRepository.findAll(Sort.by(Sort.Direction.DESC, "created"));
