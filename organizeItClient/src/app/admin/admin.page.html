@@ -88,7 +88,12 @@
                         <ion-card class="project-card">
                             <ion-card-header>
                                 <ion-card-subtitle>{{user.email}}</ion-card-subtitle>
-                                <ion-card-title>{{user.firstName + " " + user.lastName}}</ion-card-title>
+                                <ion-card-title style="clear: both;">{{user.firstName + " " + user.lastName}}
+                                    <ion-chip *ngIf="user.deleted" color="danger" outline>
+                                        <ion-icon name="warning" color="warning"></ion-icon>
+                                        <ion-label>Deleted</ion-label>
+                                    </ion-chip>
+                                </ion-card-title>
                             </ion-card-header>
                             <ion-card-content>
                                 <ion-item>
@@ -121,8 +126,11 @@
                                         (click)="alertService.presentRevokeAdminRightsAlert(user)" color="warning">
                                 Revoke admin rights
                             </ion-button>
-                            <ion-button expand="block"
+                            <ion-button expand="block" *ngIf="!user.deleted"
                                         (click)="alertService.presentDeleteUserAlert(user)" color="danger">Delete user
+                            </ion-button>
+                            <ion-button expand="block" *ngIf="user.deleted"
+                                        (click)="alertService.presentRestoreUserAlert(user)" color="warning">Restore user
                             </ion-button>
                         </ion-card>
                     </ion-col>

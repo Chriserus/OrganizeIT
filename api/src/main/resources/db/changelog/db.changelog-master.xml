@@ -285,4 +285,9 @@
         <dropTable cascadeConstraints="true"
                    tableName="verification_token"/>
     </changeSet>
+    <changeSet id="addDeletedColumnToUser" author="Chriserus">
+        <addColumn tableName="user">
+            <column name="deleted" type="boolean"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

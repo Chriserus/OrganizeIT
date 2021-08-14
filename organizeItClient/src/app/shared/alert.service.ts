@@ -365,6 +365,38 @@ export class AlertService {
         let result = await alert.onDidDismiss();
     }
 
+    async presentRestoreUserAlert(user: User) {
+        const alert = await this.alertController.create({
+            header: 'Restoring user!',
+            subHeader: user.firstName + ' ' + user.lastName,
+            message: '<p>Email: <strong>' + user.email + '</strong></p>',
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Canceled');
+                    }
+                }, {
+                    text: 'RESTORE',
+                    handler: () => {
+                        this.authService.restoreUser(user).subscribe(
+                            () => {
+                                this.authService.getAllUsers().subscribe((users: User[]) => {
+                                    this.data.changeUsers(users);
+                                });
+                                this.toastService.showTemporarySuccessMessage("\"" + user.email + "\" restored");
+                            },
+                            () => {
+                                this.toastService.showTemporaryErrorMessage("\"" + user.email + "\" not restored");
+                            });
+                    }
+                }]
+        });
+        await alert.present();
+        let result = await alert.onDidDismiss();
+    }
+
     async presentInvalidateProjectAlert(project: Project) {
         const alert = await this.alertController.create({
             header: 'Invalidating project project!',

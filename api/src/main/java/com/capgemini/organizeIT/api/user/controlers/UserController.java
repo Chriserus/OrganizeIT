@@ -64,6 +64,11 @@ public class UserController {
         userService.findById(userId).ifPresent(userService::delete);
     }
 
+    @PutMapping("/api/users/{userId}/restore")
+    public void restoreUser(@PathVariable final Long userId) {
+        userService.findById(userId).ifPresent(userService::restore);
+    }
+
     @GetMapping("/api/users/emails/{email}/")
     public UserDto userByEmail(@PathVariable final String email) {
         return userService.findByEmail(email).map(userMapper::convertToDto).orElse(null);

@@ -102,6 +102,10 @@ export class AuthService {
         return this.http.delete(this.USERS_URL + "/" + user.id)
     }
 
+    restoreUser(user: User) {
+        return this.http.put(this.USERS_URL + "/" + user.id + "/restore", {})
+    }
+
     giveAdminRights(user: User) {
         return this.http.patch(this.USERS_URL + "/" + user.id + "?giveAdmin=" + true, {}, {responseType: "json"})
     }

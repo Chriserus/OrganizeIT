@@ -36,8 +36,8 @@ export class AdminPage implements OnInit, OnDestroy {
     scopeConfirmed = Scope.ADMIN_CONFIRMED;
 
     constructor(private projectService: ProjectService, private notificationService: NotificationService,
-                private authService: AuthService, private membershipService: MembershipService,
-                private alertService: AlertService, private data: DataService) {
+                public authService: AuthService, private membershipService: MembershipService,
+                public alertService: AlertService, private data: DataService) {
         this.data.currentProjects.subscribe(projects => {
             this.projects = projects;
             this.unverifiedProjects = projects.filter(project => !project.verified);
