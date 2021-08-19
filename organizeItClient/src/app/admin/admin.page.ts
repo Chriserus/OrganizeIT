@@ -69,8 +69,8 @@ export class AdminPage implements OnInit, OnDestroy {
 
     onRenderItems(event) {
         console.log(`Moving item from ${event.detail.from} to ${event.detail.to}`);
-        let draggedItem = this.shirtSizes.splice(event.detail.from,1)[0];
-        this.shirtSizes.splice(event.detail.to,0,draggedItem)
+        let draggedItem = this.shirtSizes.splice(event.detail.from, 1)[0];
+        this.shirtSizes.splice(event.detail.to, 0, draggedItem)
         //this.listItems = reorderArray(this.listItems, event.detail.from, event.detail.to);
         event.detail.complete();
     }
@@ -156,4 +156,11 @@ export class AdminPage implements OnInit, OnDestroy {
             saveAs(blob, fileName);
         })
     }
+
+    archiveEvent() {
+        this.eventService.archiveEvent("Awesome event").subscribe((data: any) => {
+            console.log(data);
+        })
+    }
+
 }

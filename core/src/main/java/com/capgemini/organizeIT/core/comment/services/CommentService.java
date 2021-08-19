@@ -15,8 +15,16 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
+    public List<Comment> findAllByArchivedFalse() {
+        return commentRepository.findAllByArchivedFalse();
+    }
+
     public List<Comment> findAll() {
         return commentRepository.findAll(Sort.by(Sort.Direction.DESC, "created"));
+    }
+
+    public List<Comment> findAllAnnouncements() {
+        return commentRepository.findAllByAnnouncementTrue(Sort.by(Sort.Direction.DESC, "created"));
     }
 
     public Comment save(Comment comment) {

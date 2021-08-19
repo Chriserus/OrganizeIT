@@ -15,6 +15,9 @@
     <ion-button expand="block"
                 (click)="exportEvent()" color="primary">Export user data
     </ion-button>
+    <ion-button expand="block"
+                (click)="archiveEvent()" color="primary">Archive current event
+    </ion-button>
     <ion-list>
         <ion-reorder-group (ionItemReorder)="onRenderItems($event)" disabled="false">
             <ion-item *ngFor="let shirtSize of shirtSizes">

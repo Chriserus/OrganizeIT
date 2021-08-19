@@ -295,4 +295,46 @@
             <column name="deleted" type="boolean"/>
         </dropColumn>
     </changeSet>
+    <changeSet id="createEventTable" author="Chriserus">
+        <createTable tableName="event">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)"/>
+            <column name="created" type="datetime"/>
+            <column name="modified" type="datetime"/>
+        </createTable>
+        <addAutoIncrement columnDataType="int"
+                          columnName="id"
+                          tableName="event"/>
+    </changeSet>
+    <changeSet id="addArchivedColumnToProject" author="Chriserus">
+        <addColumn tableName="project">
+            <column name="archived" type="boolean"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="addArchivedColumnToComment" author="Chriserus">
+        <addColumn tableName="comment">
+            <column name="archived" type="boolean"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="addEventColumnToProject" author="Chriserus">
+        <addColumn tableName="project">
+            <column name="event_id" type="int">
+                <constraints foreignKeyName="fk_project_event" references="event(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="addEventColumnToComment" author="Chriserus">
+        <addColumn tableName="comment">
+            <column name="event_id" type="int">
+                <constraints foreignKeyName="fk_comment_event" references="event(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="addBannerColumnToEvent" author="Chriserus">
+        <addColumn tableName="event">
+            <column name="banner" type="longblob"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

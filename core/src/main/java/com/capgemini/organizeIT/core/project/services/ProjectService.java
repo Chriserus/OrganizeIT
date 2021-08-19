@@ -23,6 +23,10 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final UserService userService;
 
+    public List<Project> findAllByArchivedFalse() {
+        return projectRepository.findAllByArchivedFalse();
+    }
+
     public List<Project> findAllThatContainUser(User user) {
         return findAllSortByDateNewFirst().stream()
                 .filter(project -> projectContainsMember(user, project) || userIsProjectOwner(project, user))

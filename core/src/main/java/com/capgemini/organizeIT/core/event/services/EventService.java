@@ -1,8 +1,12 @@
 package com.capgemini.organizeIT.core.event.services;
 
+import com.capgemini.organizeIT.infrastructure.comment.repositories.CommentRepository;
+import com.capgemini.organizeIT.infrastructure.event.entities.Event;
+import com.capgemini.organizeIT.infrastructure.event.repositories.EventRepository;
 import com.capgemini.organizeIT.infrastructure.project.entities.Membership;
 import com.capgemini.organizeIT.infrastructure.project.entities.Ownership;
 import com.capgemini.organizeIT.infrastructure.project.entities.Project;
+import com.capgemini.organizeIT.infrastructure.project.repositories.ProjectRepository;
 import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import com.capgemini.organizeIT.infrastructure.user.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,7 +27,12 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class EventService {
 
+    private final EventRepository eventRepository;
     private final UserRepository userRepository;
+
+    public Optional<Event> findById(Long id) {
+        return eventRepository.findById(id);
+    }
 
     public InputStreamResource exportCSV() {
         ByteArrayInputStream byteArrayOutputStream;
@@ -95,5 +101,9 @@ public class EventService {
         } else {
             return "UNVERIFIED";
         }
+    }
+
+    public Event save(Event event) {
+        return eventRepository.save(event);
     }
 }
