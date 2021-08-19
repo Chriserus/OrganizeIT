@@ -49,7 +49,6 @@ public class User {
     private ShirtSize shirtSize;
     private String password;
     private Boolean enabled = true;
-    private Boolean deleted;
     @CreationTimestamp
     private Date created;
     @UpdateTimestamp

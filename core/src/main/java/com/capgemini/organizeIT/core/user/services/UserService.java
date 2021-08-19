@@ -26,13 +26,7 @@ public class UserService {
     }
 
     public void delete(User user) {
-        user.setDeleted(true);
-        userRepository.save(user);
-    }
-
-    public void restore(User user) {
-        user.setDeleted(false);
-        userRepository.save(user);
+        userRepository.delete(user);
     }
 
     public Optional<User> findById(Long id) {

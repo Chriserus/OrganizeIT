@@ -26,7 +26,6 @@ public class UserDto {
     private City city;
     private ShirtSizeDto shirtSize;
     private Boolean enabled;
-    private Boolean deleted;
     private Date created;
     private Date modified;
     private Set<RoleDto> roles;

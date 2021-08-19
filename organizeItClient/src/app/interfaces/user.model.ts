@@ -15,6 +15,5 @@ export interface User {
     city: City;
     polishSpeaker: boolean;
     enabled: boolean;
-    deleted: boolean;
     foodPreferences?: string;
 }

@@ -290,4 +290,9 @@
             <column name="deleted" type="boolean"/>
         </addColumn>
     </changeSet>
+    <changeSet id="dropDeletedColumnFromUser" author="Chriserus">
+        <dropColumn tableName="user">
+            <column name="deleted" type="boolean"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>
