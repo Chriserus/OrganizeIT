@@ -1,6 +1,7 @@
 package com.capgemini.organizeIT.infrastructure.notification.repositories;
 
 import com.capgemini.organizeIT.infrastructure.notification.entities.Notification;
+import com.capgemini.organizeIT.infrastructure.user.entities.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -14,4 +15,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     Set<Notification> findLast10ByRecipient_Id(Long id);
     //First10ByCreatedDesc
+
+    void deleteAllByRecipient(User recipient);
 }
