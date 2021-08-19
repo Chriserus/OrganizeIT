@@ -12,6 +12,7 @@ import {DataService} from "../shared/data.service";
 import {Scope} from "../interfaces/scope.enum";
 import {EventService} from "../event/event.service";
 import {saveAs} from 'file-saver';
+import {ShirtSize} from "../interfaces/shirt-size";
 
 @Component({
     selector: 'app-admin',
@@ -36,6 +37,7 @@ export class AdminPage implements OnInit, OnDestroy {
     scopeUnverified = Scope.ADMIN_UNVERIFIED;
     scopeVerified = Scope.ADMIN_VERIFIED;
     scopeConfirmed = Scope.ADMIN_CONFIRMED;
+    shirtSizes: ShirtSize[];
 
     constructor(private projectService: ProjectService, private notificationService: NotificationService,
                 public authService: AuthService, private membershipService: MembershipService,
@@ -50,6 +52,9 @@ export class AdminPage implements OnInit, OnDestroy {
             this.users = users;
             this.usersCopy = users;
         });
+        this.authService.getAllShirtSizes().subscribe(shirtSizes => {
+            this.shirtSizes = shirtSizes;
+        });
     }
 
     ngOnInit() {
@@ -60,6 +65,25 @@ export class AdminPage implements OnInit, OnDestroy {
         });
         this.getProjects();
         this.getUsers();
+    }
+
+    onRenderItems(event) {
+        console.log(`Moving item from ${event.detail.from} to ${event.detail.to}`);
+        let draggedItem = this.shirtSizes.splice(event.detail.from,1)[0];
+        this.shirtSizes.splice(event.detail.to,0,draggedItem)
+        //this.listItems = reorderArray(this.listItems, event.detail.from, event.detail.to);
+        event.detail.complete();
+    }
+
+    onDeleteItem(item) {
+        const index = this.shirtSizes.indexOf(item, 0);
+        if (index > -1) {
+            this.shirtSizes.splice(index, 1);
+        }
+    }
+
+    getList() {
+        console.table(this.shirtSizes);
     }
 
     isUserLoggedIn() {

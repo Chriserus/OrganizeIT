@@ -15,6 +15,26 @@
     <ion-button expand="block"
                 (click)="exportEvent()" color="primary">Export user data
     </ion-button>
+    <ion-list>
+        <ion-reorder-group (ionItemReorder)="onRenderItems($event)" disabled="false">
+            <ion-item *ngFor="let shirtSize of shirtSizes">
+                <ion-button
+                        fill="clear" slot="end" color="danger"
+                        (click)="onDeleteItem(shirtSize)">
+                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-button>
+                <ion-label>
+                    {{shirtSize.size}}
+                </ion-label>
+                <ion-reorder slot="start"></ion-reorder>
+            </ion-item>
+        </ion-reorder-group>
+    </ion-list>
+    <ion-list>
+        <ion-button (click)="getList()">
+            Get Updated List
+        </ion-button>
+    </ion-list>
     <ion-card>
         <ion-card-header>
             <ion-item>
