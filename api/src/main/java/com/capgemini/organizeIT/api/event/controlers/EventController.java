@@ -1,6 +1,7 @@
 package com.capgemini.organizeIT.api.event.controlers;
 
 import com.capgemini.organizeIT.api.event.mappers.EventMapper;
+import com.capgemini.organizeIT.core.banner.services.BannerService;
 import com.capgemini.organizeIT.core.comment.services.CommentService;
 import com.capgemini.organizeIT.core.event.model.EventDto;
 import com.capgemini.organizeIT.core.event.services.EventService;
@@ -25,9 +26,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;
+    private final EventMapper eventMapper;
     private final ProjectService projectService;
     private final CommentService commentService;
-    private final EventMapper eventMapper;
+    private final BannerService bannerService;
 
     @GetMapping(value = "/api/event", produces = "text/csv")
     public ResponseEntity<InputStreamResource> exportEvent() {
@@ -54,6 +56,7 @@ public class EventController {
             comment.setEvent(event);
             comment.setArchived(true);
         });
+        event.setBanner(bannerService.findActiveBanner().orElse(null));
         eventService.save(event);
         return ResponseEntity.ok(eventMapper.convertToDto(event));
     }

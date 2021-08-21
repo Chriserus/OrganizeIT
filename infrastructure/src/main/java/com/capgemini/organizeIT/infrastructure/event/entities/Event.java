@@ -1,5 +1,6 @@
 package com.capgemini.organizeIT.infrastructure.event.entities;
 
+import com.capgemini.organizeIT.infrastructure.banner.entities.Banner;
 import com.capgemini.organizeIT.infrastructure.comment.entities.Comment;
 import com.capgemini.organizeIT.infrastructure.project.entities.Project;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,8 +21,8 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @Lob
-    private byte[] banner;
+    @ManyToOne
+    private Banner banner;
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

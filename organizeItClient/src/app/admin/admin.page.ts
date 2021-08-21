@@ -13,6 +13,7 @@ import {Scope} from "../interfaces/scope.enum";
 import {EventService} from "../event/event.service";
 import {saveAs} from 'file-saver';
 import {ShirtSize} from "../interfaces/shirt-size";
+import {BannerService} from "../banner/banner.service";
 
 @Component({
     selector: 'app-admin',
@@ -41,7 +42,8 @@ export class AdminPage implements OnInit, OnDestroy {
 
     constructor(private projectService: ProjectService, private notificationService: NotificationService,
                 public authService: AuthService, private membershipService: MembershipService,
-                public alertService: AlertService, public eventService: EventService, private data: DataService) {
+                public alertService: AlertService, public eventService: EventService,
+                public bannerService: BannerService, private data: DataService) {
         this.data.currentProjects.subscribe(projects => {
             this.projects = projects;
             this.unverifiedProjects = projects.filter(project => !project.verified);
@@ -163,4 +165,38 @@ export class AdminPage implements OnInit, OnDestroy {
         })
     }
 
+    getCurrentBanner() {
+        return this.bannerService.getActiveBanner().subscribe((data: any) => {
+            console.log(data);
+        })
+    }
+
+    loadImageFromDevice(event) {
+
+        const file = event.target.files[0];
+
+        const reader = new FileReader();
+
+        reader.readAsArrayBuffer(file);
+
+        reader.onload = () => {
+
+            // get the blob of the image:
+            let blob: Blob = new Blob([new Uint8Array((reader.result as ArrayBuffer))]);
+
+            this.bannerService.addBanner(blob, file.name).subscribe(result => {
+                console.log(result);
+            })
+
+            // create blobURL, such that we could use it in an image element:
+            let blobURL: string = URL.createObjectURL(blob);
+
+        };
+
+        reader.onerror = (error) => {
+
+            //handle errors
+
+        };
+    };
 }

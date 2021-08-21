@@ -18,6 +18,15 @@
     <ion-button expand="block"
                 (click)="archiveEvent()" color="primary">Archive current event
     </ion-button>
+    <ion-button expand="block"
+                (click)="getCurrentBanner()" color="primary">Get current banner
+    </ion-button>
+    <ion-button expand="full">
+        <ion-icon lazy="true" slot="start" name="image"></ion-icon>
+        <ion-label slot="end">Upload Image</ion-label>
+        <input type="file" (change)="loadImageFromDevice($event)" id="file-input"
+               accept="image/png, image/jpeg">
+    </ion-button>
     <ion-list>
         <ion-reorder-group (ionItemReorder)="onRenderItems($event)" disabled="false">
             <ion-item *ngFor="let shirtSize of shirtSizes">

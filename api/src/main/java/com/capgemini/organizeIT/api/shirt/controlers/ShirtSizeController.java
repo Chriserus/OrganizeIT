@@ -22,7 +22,7 @@ public class ShirtSizeController {
     private final ShirtSizeMapper shirtSizeMapper;
 
     @GetMapping("/api/shirt-sizes")
-    public ResponseEntity<List<ShirtSizeDto>> findAllProjects() {
+    public ResponseEntity<List<ShirtSizeDto>> findAllShirtSizes() {
         return ResponseEntity.ok(shirtSizeService.findAll().stream().map(shirtSizeMapper::convertToDto).collect(Collectors.toList()));
     }
 }

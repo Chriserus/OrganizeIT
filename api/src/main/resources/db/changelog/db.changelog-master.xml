@@ -337,4 +337,35 @@
             <column name="banner" type="longblob"/>
         </addColumn>
     </changeSet>
+    <changeSet id="dropBannerColumnFromEvent" author="Chriserus">
+        <dropColumn tableName="event">
+            <column name="banner" type="longblob"/>
+        </dropColumn>
+    </changeSet>
+    <changeSet id="createBannerTable" author="Chriserus">
+        <createTable tableName="banner">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="file" type="longblob"/>
+            <column name="active" type="boolean"/>
+            <column name="created" type="datetime"/>
+            <column name="modified" type="datetime"/>
+        </createTable>
+        <addAutoIncrement columnDataType="int"
+                          columnName="id"
+                          tableName="banner"/>
+    </changeSet>
+    <changeSet id="addBannerReferenceColumnToEvent" author="Chriserus">
+        <addColumn tableName="event">
+            <column name="banner_id" type="int">
+                <constraints foreignKeyName="fk_banner" references="banner(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="addNameColumnToBanner" author="Chriserus">
+        <addColumn tableName="banner">
+            <column name="name" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
