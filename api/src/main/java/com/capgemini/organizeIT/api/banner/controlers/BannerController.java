@@ -6,11 +6,16 @@ import com.capgemini.organizeIT.core.banner.services.BannerService;
 import com.capgemini.organizeIT.infrastructure.banner.entities.Banner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @CrossOrigin
@@ -34,9 +39,37 @@ public class BannerController {
         return ResponseEntity.ok(bannerMapper.convertToDto(banner));
     }
 
+    @GetMapping("/api/banner/{id}")
+    public ResponseEntity<InputStreamResource> getBanner(@PathVariable Long id) {
+        Banner banner = bannerService.findById(id).orElse(new Banner());
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + banner.getName());
+        return new ResponseEntity<>(bannerService.getBannerFile(banner), headers, HttpStatus.OK);
+    }
+
+    @PostMapping("/api/banner/{id}")
+    public ResponseEntity<BannerDto> setNewActiveBanner(@PathVariable Long id) {
+        bannerService.findAll().forEach(banner -> banner.setActive(false));
+        Banner banner = bannerService.findById(id).orElse(new Banner());
+        banner.setActive(true);
+        bannerService.save(banner);
+        return ResponseEntity.ok(bannerMapper.convertToDto(banner));
+    }
+
+    @DeleteMapping("/api/banner/{id}")
+    public void deleteBanner(@PathVariable Long id) {
+        bannerService.deleteById(id);
+    }
+
     @GetMapping("/api/banner")
-    public ResponseEntity<BannerDto> activeBanner() {
+    public ResponseEntity<BannerDto> getActiveBanner() {
         return ResponseEntity.ok(bannerMapper.convertToDto(bannerService.findActiveBanner().orElse(null)));
+    }
+
+    @GetMapping("/api/banners")
+    public ResponseEntity<List<BannerDto>> getAllBanners() {
+        return ResponseEntity.ok(bannerService.findAll().stream().map(bannerMapper::convertToDto)
+                .peek(bannerDto -> bannerDto.setFile(null)).collect(Collectors.toList()));
     }
 
 }

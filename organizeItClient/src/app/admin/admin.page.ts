@@ -14,6 +14,7 @@ import {EventService} from "../event/event.service";
 import {saveAs} from 'file-saver';
 import {ShirtSize} from "../interfaces/shirt-size";
 import {BannerService} from "../banner/banner.service";
+import {Banner} from "../interfaces/banner";
 
 @Component({
     selector: 'app-admin',
@@ -39,6 +40,9 @@ export class AdminPage implements OnInit, OnDestroy {
     scopeVerified = Scope.ADMIN_VERIFIED;
     scopeConfirmed = Scope.ADMIN_CONFIRMED;
     shirtSizes: ShirtSize[];
+    banners: Banner[];
+    activeBanner?: Banner;
+    newBannerId: number;
 
     constructor(private projectService: ProjectService, private notificationService: NotificationService,
                 public authService: AuthService, private membershipService: MembershipService,
@@ -57,6 +61,7 @@ export class AdminPage implements OnInit, OnDestroy {
         this.authService.getAllShirtSizes().subscribe(shirtSizes => {
             this.shirtSizes = shirtSizes;
         });
+        this.refreshBannerList();
     }
 
     ngOnInit() {
@@ -171,6 +176,13 @@ export class AdminPage implements OnInit, OnDestroy {
         })
     }
 
+    refreshBannerList() {
+        this.bannerService.getAllBanners().subscribe(banners => {
+            this.banners = banners;
+            this.activeBanner = banners.filter(banner => banner.active)[0];
+        })
+    }
+
     loadImageFromDevice(event) {
 
         const file = event.target.files[0];
@@ -186,10 +198,12 @@ export class AdminPage implements OnInit, OnDestroy {
 
             this.bannerService.addBanner(blob, file.name).subscribe(result => {
                 console.log(result);
+                this.refreshBannerList();
             })
 
             // create blobURL, such that we could use it in an image element:
             let blobURL: string = URL.createObjectURL(blob);
+            console.log(blobURL);
 
         };
 
@@ -199,4 +213,31 @@ export class AdminPage implements OnInit, OnDestroy {
 
         };
     };
+
+    getFileUrl(blob: Blob) {
+        return window.URL.createObjectURL(blob);
+    }
+
+    getBanner(banner: Banner) {
+        this.bannerService.getBanner(banner.id).subscribe((data: any) => {
+            const blob = new Blob([data], {type: 'application/octet-stream'});
+            saveAs(blob, banner.name);
+        })
+    }
+
+    setNewActiveBanner() {
+        this.bannerService.setActiveBanner(this.newBannerId).subscribe(() => {
+            this.refreshBannerList();
+        });
+    }
+
+    setNewActiveBannerId(event: any) {
+        this.newBannerId = event.detail.value;
+    }
+
+    removeBanner(banner: Banner) {
+        this.bannerService.deleteBanner(banner.id).subscribe(() => {
+            this.refreshBannerList();
+        })
+    }
 }
