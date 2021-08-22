@@ -14,5 +14,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     List<Comment> findAllByArchivedFalse();
 
-    List<Comment> findAllByAnnouncementTrue(Sort sort);
+    List<Comment> findAllByAnnouncementTrueAndArchivedFalse(Sort sort);
 }

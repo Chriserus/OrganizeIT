@@ -12,16 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -38,7 +29,7 @@ public class ProjectController {
 
     @GetMapping("/api/projects")
     public ResponseEntity<List<ProjectDto>> findAllProjects() {
-        return ResponseEntity.ok(projectService.findAllSortByDateNewFirst().stream().map(projectMapper::convertToDto).collect(Collectors.toList()));
+        return ResponseEntity.ok(projectService.findAllByArchivedFalseSortByDateNewFirst().stream().map(projectMapper::convertToDto).collect(Collectors.toList()));
     }
 
     @PostMapping("/api/projects")

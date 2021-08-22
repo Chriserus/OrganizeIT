@@ -12,6 +12,7 @@ export interface Project {
     maxMembers: number;
     verified: boolean;
     confirmed: boolean;
+    archived: boolean;
     city: City;
     created?: string;
     modified?: string;

@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Event} from "../interfaces/event";
 
 @Injectable({
     providedIn: 'root'
@@ -22,10 +23,9 @@ export class EventService {
                 responseType: 'json'
             })
         };
-        let jsonData = {
-            'title': title,
-            // TODO: Banner here
-            'banner': "BANNER"
+
+        let jsonData: Event = {
+            title,
         };
         return this.http.post(this.EVENTS_URL, jsonData, httpOptions);
     }

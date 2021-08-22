@@ -24,7 +24,7 @@ public class CommentService {
     }
 
     public List<Comment> findAllAnnouncements() {
-        return commentRepository.findAllByAnnouncementTrue(Sort.by(Sort.Direction.DESC, "created"));
+        return commentRepository.findAllByAnnouncementTrueAndArchivedFalse(Sort.by(Sort.Direction.DESC, "created"));
     }
 
     public Comment save(Comment comment) {

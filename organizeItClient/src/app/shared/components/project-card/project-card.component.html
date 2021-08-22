@@ -23,6 +23,10 @@
                 <ion-icon name="warning" color="warning"></ion-icon>
                 <ion-label>Not verified yet</ion-label>
             </ion-chip>
+            <ion-chip *ngIf="project.archived" color="danger" outline>
+                <ion-icon name="warning" color="warning"></ion-icon>
+                <ion-label>Archived</ion-label>
+            </ion-chip>
         </ion-card-title>
     </ion-card-header>
     <ion-card-content>
@@ -42,7 +46,7 @@
         </ion-item-divider>
         <!-- custom date format:  HH:MM | d-MMM-yyyy-->
         <!-- TODO: Choose one-->
-<!--        <ion-card-subtitle>Created: {{project.created | date: 'medium'}}</ion-card-subtitle>-->
+        <!--        <ion-card-subtitle>Created: {{project.created | date: 'medium'}}</ion-card-subtitle>-->
         <ion-card-subtitle>Created: {{project.created | date: 'HH:MM | d-MMM-yyyy'}}</ion-card-subtitle>
         <div *ngIf="!isList && projectHasRequests(project) && isProjectOwnerOrAdmin(project)">
             <ion-item-divider color="white">

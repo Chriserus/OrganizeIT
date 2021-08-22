@@ -20,6 +20,7 @@ public class ProjectDto {
     private Integer maxMembers = 1;
     private boolean verified = false;
     private boolean confirmed = false;
+    private boolean archived = false;
     private City city;
     private Date created;
     private Date modified;

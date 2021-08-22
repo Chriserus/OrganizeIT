@@ -43,6 +43,7 @@ export class AdminPage implements OnInit, OnDestroy {
     banners: Banner[];
     activeBanner?: Banner;
     newBannerId: number;
+    eventTitle: string;
 
     constructor(private projectService: ProjectService, private notificationService: NotificationService,
                 public authService: AuthService, private membershipService: MembershipService,
@@ -166,7 +167,7 @@ export class AdminPage implements OnInit, OnDestroy {
     }
 
     archiveEvent() {
-        this.eventService.archiveEvent("Awesome event").subscribe((data: any) => {
+        this.eventService.archiveEvent(this.eventTitle).subscribe((data: any) => {
             console.log(data);
         })
     }

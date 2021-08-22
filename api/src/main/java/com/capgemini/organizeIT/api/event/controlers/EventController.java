@@ -44,7 +44,7 @@ public class EventController {
     public ResponseEntity<EventDto> addEvent(@RequestBody EventDto eventDto) {
         log.info("Creating event with title: {}", eventDto.getTitle());
         Event event = eventMapper.convertToEntity(eventDto);
-        List<Project> projects = projectService.findAllByArchivedFalse();
+        List<Project> projects = projectService.findAllByArchivedFalseSortByDateNewFirst();
         event.setProjects(new HashSet<>(projects));
         projects.forEach(project -> {
             project.setEvent(event);

@@ -23,10 +23,6 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final UserService userService;
 
-    public List<Project> findAllByArchivedFalse() {
-        return projectRepository.findAllByArchivedFalse();
-    }
-
     public List<Project> findAllThatContainUser(User user) {
         return findAllSortByDateNewFirst().stream()
                 .filter(project -> projectContainsMember(user, project) || userIsProjectOwner(project, user))
@@ -43,6 +39,10 @@ public class ProjectService {
 
     public List<Project> findAllSortByDateNewFirst() {
         return projectRepository.findAll(Sort.by(Sort.Direction.DESC, "created"));
+    }
+
+    public List<Project> findAllByArchivedFalseSortByDateNewFirst() {
+        return projectRepository.findAllByArchivedFalse(Sort.by(Sort.Direction.DESC, "created"));
     }
 
     public Project save(Project project) {

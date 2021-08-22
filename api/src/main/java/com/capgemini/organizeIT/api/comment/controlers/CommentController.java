@@ -31,7 +31,7 @@ public class CommentController {
 
     @GetMapping("/api/comments")
     public ResponseEntity<List<CommentDto>> findAllComments() {
-        return ResponseEntity.ok(commentService.findAll().stream().map(commentMapper::convertToDto).collect(Collectors.toList()));
+        return ResponseEntity.ok(commentService.findAllByArchivedFalse().stream().map(commentMapper::convertToDto).collect(Collectors.toList()));
     }
 
     @PostMapping("/api/comments")
