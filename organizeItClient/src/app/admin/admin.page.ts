@@ -169,6 +169,7 @@ export class AdminPage implements OnInit, OnDestroy {
     archiveEvent() {
         this.eventService.archiveEvent(this.eventTitle).subscribe((data: any) => {
             console.log(data);
+            this.eventTitle = "";
         })
     }
 

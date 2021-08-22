@@ -9,7 +9,7 @@ const THEME_KEY = "selected-app-theme";
     providedIn: 'root'
 })
 export class ThemeService {
-    darkMode = false;
+    darkMode = true;
 
     constructor(private platform: Platform, private storage: Storage, private statusBar: StatusBar) {
         this.platform.ready().then(() => {
