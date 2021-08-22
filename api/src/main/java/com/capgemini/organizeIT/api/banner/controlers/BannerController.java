@@ -6,9 +6,8 @@ import com.capgemini.organizeIT.core.banner.services.BannerService;
 import com.capgemini.organizeIT.infrastructure.banner.entities.Banner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,12 +38,12 @@ public class BannerController {
         return ResponseEntity.ok(bannerMapper.convertToDto(banner));
     }
 
-    @GetMapping("/api/banner/{id}")
-    public ResponseEntity<InputStreamResource> getBanner(@PathVariable Long id) {
+    @GetMapping(value = "/api/banner/{id}", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] getBanner(@PathVariable Long id) {
         Banner banner = bannerService.findById(id).orElse(new Banner());
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + banner.getName());
-        return new ResponseEntity<>(bannerService.getBannerFile(banner), headers, HttpStatus.OK);
+        return banner.getFile();
     }
 
     @PostMapping("/api/banner/{id}")

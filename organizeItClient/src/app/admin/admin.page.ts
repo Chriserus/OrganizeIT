@@ -171,8 +171,8 @@ export class AdminPage implements OnInit, OnDestroy {
     }
 
     getCurrentBanner() {
-        return this.bannerService.getActiveBanner().subscribe((data: any) => {
-            console.log(data);
+        return this.bannerService.getActiveBanner().subscribe(banner => {
+            this.getBanner(banner);
         })
     }
 

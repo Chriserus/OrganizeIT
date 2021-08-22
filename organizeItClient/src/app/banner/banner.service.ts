@@ -13,7 +13,7 @@ export class BannerService {
     }
 
     getBanner(id: number) {
-        return this.http.get(this.BANNER_URL + "/" + id, {responseType: 'arraybuffer'})
+        return this.http.get(this.BANNER_URL + "/" + id, {responseType: 'blob'})
     }
 
     getActiveBanner() {
