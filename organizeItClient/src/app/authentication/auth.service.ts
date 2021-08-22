@@ -20,7 +20,7 @@ export class AuthService {
     readonly USER_BY_USERNAME_URL = '/api/users/emails/';
     interval;
 
-    constructor(private http: HttpClient, private  router: Router, private toastService: ToastService, public data: DataService) {
+    constructor(private http: HttpClient, private router: Router, private toastService: ToastService, public data: DataService) {
     }
 
     getCurrentUser() {
@@ -93,6 +93,25 @@ export class AuthService {
     getAllShirtSizes() {
         return this.http.get<ShirtSize[]>(this.SHIRT_SIZES_URL, {responseType: 'json'})
     }
+
+    getAllActiveShirtSizes() {
+        return this.http.get<ShirtSize[]>(this.SHIRT_SIZES_URL + "/active", {responseType: 'json'})
+    }
+
+    setShirtSizes(shirtSizes: ShirtSize[]) {
+        return this.http.patch<ShirtSize[]>(this.SHIRT_SIZES_URL, shirtSizes, {responseType: 'json'})
+    }
+
+    compareShirtSizes = (shirtSize1, shirtSize2) => {
+        const sortedSizes = ['XXXS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL', 'XXXXXL'];
+        if (sortedSizes.indexOf(shirtSize1.size) < sortedSizes.indexOf((shirtSize2.size))) {
+            return -1;
+        }
+        if (sortedSizes.indexOf(shirtSize1.size) > sortedSizes.indexOf((shirtSize2.size))) {
+            return 1;
+        }
+        return 0;
+    };
 
     getAllUsers() {
         return this.http.get<User[]>(this.USERS_URL, {responseType: "json"})

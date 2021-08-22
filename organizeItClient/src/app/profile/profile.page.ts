@@ -45,8 +45,8 @@ export class ProfilePage implements OnInit, OnDestroy {
         this.data.currentUserProjects.subscribe(projects => this.projects = projects);
         this.data.currentUser.subscribe(user => this.loggedInUser = user);
         this.data.currentUserNotifications.subscribe(notifications => this.notifications = notifications);
-        this.authService.getAllShirtSizes().subscribe((shirtSizes: ShirtSize[]) => {
-            this.shirtSizes = shirtSizes;
+        this.authService.getAllActiveShirtSizes().subscribe((shirtSizes: ShirtSize[]) => {
+            this.shirtSizes = shirtSizes.sort(this.authService.compareShirtSizes);
             this.authService.getCurrentUser().subscribe((user: User) => {
                 this.loggedInUser = user;
                 this.firstName = user.firstName;

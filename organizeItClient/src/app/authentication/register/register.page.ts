@@ -23,13 +23,13 @@ export class RegisterPage implements OnInit {
     city: City;
     polishSpeaker = true;
 
-    constructor(private authService: AuthService, private  router: Router, private toastService: ToastService,
+    constructor(private authService: AuthService, private router: Router, private toastService: ToastService,
                 private geolocation: Geolocation, private submitService: SubmitService) {
     }
 
     ngOnInit() {
-        this.authService.getAllShirtSizes().subscribe(shirtSizes => {
-            this.shirtSizes = shirtSizes;
+        this.authService.getAllActiveShirtSizes().subscribe(shirtSizes => {
+            this.shirtSizes = shirtSizes.sort(this.authService.compareShirtSizes);
         });
     }
 

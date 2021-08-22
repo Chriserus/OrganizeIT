@@ -59,7 +59,8 @@ export class AdminPage implements OnInit, OnDestroy {
             this.usersCopy = users;
         });
         this.authService.getAllShirtSizes().subscribe(shirtSizes => {
-            this.shirtSizes = shirtSizes;
+            this.shirtSizes = shirtSizes.sort(authService.compareShirtSizes);
+            console.table(this.shirtSizes);
         });
         this.refreshBannerList();
     }
@@ -238,6 +239,20 @@ export class AdminPage implements OnInit, OnDestroy {
     removeBanner(banner: Banner) {
         this.bannerService.deleteBanner(banner.id).subscribe(() => {
             this.refreshBannerList();
+        })
+    }
+
+    changeShirtSizeActive(event: any) {
+        let checked = event.detail.checked;
+        let shirtSize = event.detail.value;
+        let index = this.shirtSizes.indexOf(shirtSize);
+        this.shirtSizes[index].active = checked;
+        console.table(this.shirtSizes)
+    }
+
+    updateShirtSizes() {
+        this.authService.setShirtSizes(this.shirtSizes).subscribe(data => {
+            console.log(data);
         })
     }
 }

@@ -18,26 +18,27 @@
     <ion-button expand="block"
                 (click)="archiveEvent()" color="primary">Archive current event
     </ion-button>
-    <ion-list>
-        <ion-reorder-group (ionItemReorder)="onRenderItems($event)" disabled="false">
-            <ion-item *ngFor="let shirtSize of shirtSizes">
-                <ion-button
-                        fill="clear" slot="end" color="danger"
-                        (click)="onDeleteItem(shirtSize)">
-                    <ion-icon slot="icon-only" name="trash"></ion-icon>
-                </ion-button>
-                <ion-label>
-                    {{shirtSize.size}}
-                </ion-label>
-                <ion-reorder slot="start"></ion-reorder>
+    <ion-card *ngIf="shirtSizes">
+        <ion-card-header>
+            <ion-item>
+                <ion-card-title>Shirt sizes</ion-card-title>
             </ion-item>
-        </ion-reorder-group>
-    </ion-list>
-    <ion-list>
-        <ion-button (click)="getList()">
-            Get Updated List
-        </ion-button>
-    </ion-list>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-list>
+                <ion-item *ngFor="let shirtSize of shirtSizes">
+                    <ion-label>{{shirtSize.size}}</ion-label>
+                    <ion-checkbox slot="end" [value]="shirtSize" [(ngModel)]="shirtSize.active"
+                                  (ionChange)="changeShirtSizeActive($event)"></ion-checkbox>
+                </ion-item>
+                <ion-item>
+                    <ion-button (click)="updateShirtSizes()">
+                        Save changes
+                    </ion-button>
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
     <ion-card>
         <ion-card-header>
             <ion-item>

@@ -14,4 +14,5 @@ public class ShirtSize {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String size;
+    private Boolean active = true;
 }

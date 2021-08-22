@@ -6,4 +6,5 @@ import lombok.Data;
 public class ShirtSizeDto {
     private Long id;
     private String size;
+    private Boolean active;
 }

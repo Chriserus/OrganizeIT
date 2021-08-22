@@ -17,7 +17,15 @@ public class ShirtSizeService {
         return shirtSizeRepository.findAll();
     }
 
+    public List<ShirtSize> findAllActive() {
+        return shirtSizeRepository.findAllByActiveTrue();
+    }
+
     public Optional<ShirtSize> findById(Long id) {
         return shirtSizeRepository.findById(id);
+    }
+
+    public List<ShirtSize> saveAll(List<ShirtSize> shirtSizes) {
+        return shirtSizeRepository.saveAll(shirtSizes);
     }
 }

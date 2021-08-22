@@ -368,4 +368,31 @@
             <column name="name" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+    <changeSet id="additionalShirtSizesToShirtSizeTable" author="Chriserus">
+        <insert tableName="shirt_size">
+            <column name="size" value="XXXS"/>
+        </insert>
+        <insert tableName="shirt_size">
+            <column name="size" value="XXS"/>
+        </insert>
+        <insert tableName="shirt_size">
+            <column name="size" value="XXXL"/>
+        </insert>
+        <insert tableName="shirt_size">
+            <column name="size" value="XXXXL"/>
+        </insert>
+        <insert tableName="shirt_size">
+            <column name="size" value="XXXXXL"/>
+        </insert>
+    </changeSet>
+    <changeSet id="addActiveColumnToShirtSize" author="Chriserus">
+        <addColumn tableName="shirt_size">
+            <column name="active" type="boolean"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="activateAllShirtSizes" author="Chriserus">
+        <update tableName="shirt_size">
+            <column name="active" valueBoolean="true"/>
+        </update>
+    </changeSet>
 </databaseChangeLog>
